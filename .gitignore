@@ -1,0 +1,14 @@
+.DS_Store
+Thumbs.db
+/bower_components
+.env
+.idea
+/.vscode
+/.vagrant
+npm-debug.log
+sftp-config.json
+.phpstorm.meta.php
+_ide_helper_models.php
+/storage/app/backup
+/storage/cache_keys.json
+node_modules
