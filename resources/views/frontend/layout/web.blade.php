@@ -47,11 +47,11 @@
 
 <body>
 
-    @include('frontend.layout.navbar')
+    {{-- @include('frontend.layout.navbar') --}}
 
     @yield('content')
     
-    @include('frontend.layout.footer')
+    {{-- @include('frontend.layout.footer') --}}
 
 
     <a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>

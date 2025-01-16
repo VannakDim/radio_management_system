@@ -9,10 +9,10 @@
 @endsection
 
 @section('content')
-    @include('frontend.layout.slider')
+    {{-- @include('frontend.layout.slider') --}}
 
     <!-- ======= About Us Section ======= -->
-    <section id="about-us" class="about-us">
+    {{-- <section id="about-us" class="about-us">
         <div class="container" data-aos="fade-up">
 
             <div class="row content">
@@ -47,10 +47,10 @@
             </div>
 
         </div>
-    </section><!-- End About Us Section -->
+    </section> --}}
 
     <!-- ======= Services Section ======= -->
-    <section id="services" class="services section-bg">
+    {{-- <section id="services" class="services section-bg">
         <div class="container" data-aos="fade-up">
 
             <div class="section-title">
@@ -75,14 +75,14 @@
             </div>
 
         </div>
-    </section><!-- End Services Section -->
+    </section><!-- End Services Section --> --}}
 
     <!-- ======= Portfolio Section ======= -->
-    <section id="portfolio" class="portfolio">
+    <section id="portfolio" class="portfolio" style="margin-top: 50px">
         <div class="container">
 
             <div class="section-title" data-aos="fade-up">
-                <h2>Portfolio</h2>
+                <h2>Inventory list</h2>
             </div>
 
             <div class="row" data-aos="fade-up">
@@ -119,7 +119,7 @@
     </section><!-- End Portfolio Section -->
 
     <!-- ======= Our Clients Section ======= -->
-    <section id="clients" class="clients">
+    {{-- <section id="clients" class="clients">
         <div class="container" data-aos="fade-up">
 
             <div class="section-title">
@@ -187,7 +187,7 @@
             </div>
 
         </div>
-    </section><!-- End Our Clients Section -->
+    </section><!-- End Our Clients Section --> --}}
 @endsection
 
 @section('style')
