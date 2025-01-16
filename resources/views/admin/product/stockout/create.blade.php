@@ -109,6 +109,7 @@
                                     </button>
                                     <a href="{{ route('all.product') }}" class="btn btn-secondary float-right"
                                         style="margin-right: 6px">Back</a>
+                                    
                                 </form>
                             </div>
                         </div>

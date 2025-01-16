@@ -13,6 +13,10 @@ class StockOut extends Model
         'note',
     ];
 
+    public function stockOutDetails()
+    {
+        return $this->hasMany(StockOutDetail::class);
+    }
     public function user()
     {
         return $this->belongsTo(User::class);

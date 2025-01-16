@@ -108,8 +108,9 @@
                                                             aria-expanded="false" data-display="static"></a>
                                                         <ul class="dropdown-menu dropdown-menu-right"
                                                             aria-labelledby="dropdown-recent-order1">
+
                                                             <li class="dropdown-item">
-                                                                <a href="#">View</a>
+                                                                <a href="{{ route('stockout.pdf', $stock->id) }}">PDF</a>
                                                             </li>
                                                             <li class="dropdown-item">
                                                                 <a href="#">Remove</a>
