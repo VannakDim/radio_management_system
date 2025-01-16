@@ -109,7 +109,7 @@
                                     </button>
                                     <a href="{{ route('all.product') }}" class="btn btn-secondary float-right"
                                         style="margin-right: 6px">Back</a>
-                                    
+
                                 </form>
                             </div>
                         </div>
@@ -171,7 +171,15 @@
                 success: function(response) {
                     // Hide loading indicator
                     $('#loading').hide();
-                    window.location.href = '/product/stock-out/show/' + response.id;
+                    // window.location.href = '/product/stock-out/show/' + response.id;
+                    // Open a popup window for the print view
+                    var popup = window.open('/product/stock-out/show/' + response.id,
+                        'PrintWindow', 'width=800,height=600');
+
+                    // Focus on the popup and wait for it to load
+                    popup.onload = function() {
+                        popup.print();
+                    };
                     alert(response.message);
                 },
                 error: function(xhr) {

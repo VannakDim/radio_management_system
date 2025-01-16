@@ -20,7 +20,9 @@ use App\Models\StockInDetail;
 use App\Models\StockOut;
 use App\Models\StockOutDetail;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 
 
 Route::get('/', [HomeController::class, 'home'])->name('home');
@@ -37,7 +39,7 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', function () {
+    Route::get('/dashboard', function (Request $request) {
         $data = ProductModel::with('brand')->get()->map(function ($model) {
             $stockIn = StockInDetail::where('product_model_id', $model->id)->sum('quantity');
             $stockOut = StockOutDetail::where('product_model_id', $model->id)->sum('quantity');
@@ -50,7 +52,10 @@ Route::middleware([
             ];
         });
         $users = User::all();
-        $stockOut = StockOut::all();
+        $stockOut = StockOut::orderBy('created_at', 'desc')->paginate(5); // 10 items per page
+        if ($request->ajax()) {
+            return view('admin.partials.stock', compact('stockOut'))->render();
+        }
         return view('admin.index', compact('users', 'data', 'stockOut'));
     })->name('dashboard');
 

@@ -82,46 +82,10 @@
                                 </div>
                             </div>
                             <div class="card-body pt-0 pb-5">
-                                <table class="table card-table table-responsive table-responsive-large" style="width:100%">
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Receiver</th>
-                                            <th class="d-none d-md-table-cell">Giver</th>
-                                            <th class="d-none d-md-table-cell">Date</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach ($stockOut as $stock)
-                                            <tr>
-                                                <td>{{ $stock->id }}</td>
-                                                <td>{{ $stock->receiver }}</td>
-                                                <td>{{ $stock->user->name }}</td>
-                                                <td>{{ $stock->created_at->diffForHumans() }}</td>
-                                            
-                                                <td class="text-right">
-                                                    <div class="dropdown show d-inline-block widget-dropdown">
-                                                        <a class="dropdown-toggle icon-burger-mini" href=""
-                                                            role="button" id="dropdown-recent-order1"
-                                                            data-toggle="dropdown" aria-haspopup="true"
-                                                            aria-expanded="false" data-display="static"></a>
-                                                        <ul class="dropdown-menu dropdown-menu-right"
-                                                            aria-labelledby="dropdown-recent-order1">
-
-                                                            <li class="dropdown-item">
-                                                                <a href="{{ route('stockout.show', $stock->id) }}">PDF</a>
-                                                            </li>
-                                                            <li class="dropdown-item">
-                                                                <a href="#">Remove</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
+                                <!-- resources/views/stock_out/index.blade.php -->
+                                <div id="pagination-data">
+                                    @include('admin.partials.stock')
+                                </div>
                             </div>
                         </div>
                     </div>
