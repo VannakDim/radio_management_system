@@ -19,9 +19,9 @@
 @section('content')
 <div class="container" style="padding: 0 20px">
     <div class="row" style="margin-bottom: 20px">
-        <img src="/image/leterhead/head.png" alt="" width="100%">
+        <img src="/image/leterhead/head.png" alt="" width="90%">
     </div>
-    <h4 class="battambang text-center mb-10">បញ្ចីប្រគល់វិទ្យុទាក់ទង</h4>
+    <h4 class="battambang text-center my-5" style="font-weight: bold;">បញ្ចីប្រគល់វិទ្យុទាក់ទង</h4>
     {{-- <p class="battambang"><strong>អ្នកទទួល:</strong> {{ $stockOut->receiver }}</p>
     <p class="battambang"><strong>អ្នកប្រគល់:</strong> {{ $stockOut->user->name }}</p>
     <p><strong>Date:</strong> {{ \Carbon\Carbon::now()->format('Y-m-d H:i:s') }}</p> --}}
