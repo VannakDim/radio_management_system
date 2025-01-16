@@ -15,6 +15,9 @@ use App\Http\Controllers\StockOutController;
 use App\Http\Controllers\TeamController;
 use App\Http\Controllers\UserAuthController;
 use App\Models\ProductModel;
+use App\Models\StockInDetail;
+use App\Models\StockOut;
+use App\Models\StockOutDetail;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
@@ -34,8 +37,20 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/dashboard', function () {
+        $data = ProductModel::with('brand')->get()->map(function ($model) {
+            $stockIn = StockInDetail::where('product_model_id', $model->id)->sum('quantity');
+            $stockOut = StockOutDetail::where('product_model_id', $model->id)->sum('quantity');
+            return [
+                'id' => $model->id,
+                'model_name' => $model->name,
+                'image' => $model->image,
+                'brand_name' => $model->brand->brand_name,
+                'available_stock' => $stockIn - $stockOut,
+            ];
+        });
         $users = User::all();
-        return view('admin.index', compact('users'));
+        $stockOut = StockOut::all();
+        return view('admin.index', compact('users', 'data', 'stockOut'));
     })->name('dashboard');
 
     Route::get('/slider/all', [SliderController::class, 'index'])->name('all.slider');

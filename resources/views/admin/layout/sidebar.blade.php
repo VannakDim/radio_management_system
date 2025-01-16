@@ -15,7 +15,7 @@
                         <path class="logo-fill-white" fill="#FFF" d="M11 4v25l8 4V0z" />
                     </g>
                 </svg>
-                <span class="brand-name">កូនខ្មែរ Dashboard</span>
+                <span class="brand-name">វាយោទិព្វ Dashboard</span>
             </a>
         </div>
         <!-- begin sidebar scrollbar -->
@@ -41,7 +41,7 @@
                     $product = ['product', 'model', 'category'];
                     $home = ['brand'];
                 @endphp
-                <li class="has-sub @if (in_array($url, $home)) expand active @endif">
+                {{-- <li class="has-sub @if (in_array($url, $home)) expand active @endif">
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#home"
                         aria-expanded="false" aria-controls="dashboard">
                         <i class="fa-solid fa-house"></i>
@@ -157,7 +157,7 @@
                             </li>
                         </div>
                     </ul>
-                </li>
+                </li> --}}
 
                 <li class="has-sub @if (in_array($url, $product)) expand active @endif">
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#products"
