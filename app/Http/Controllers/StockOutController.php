@@ -46,6 +46,6 @@ class StockOutController extends Controller
                 'quantity' => $item['quantity'],
             ]);
         }
-        return response()->json(['message' => 'Successful!']);
+        return response()->json(['message' => 'Successful!', 'id' => $stock_out->id]);
     }
 }

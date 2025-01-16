@@ -122,7 +122,7 @@ Route::middleware([
 
     Route::get('/product/stock-out', [StockOutController::class, 'create'])->name('stockout.create');
     Route::post('/product/stock-out/store', [StockOutController::class, 'store'])->name('stockout.store');
-    Route::get('/product/stock-out/pdf/{id}', [ExportToPdf::class, 'exportStockOutPdf'])->name('stockout.pdf');
+    Route::get('/product/stock-out/show/{id}', [ExportToPdf::class, 'exportStockOutPdf'])->name('stockout.show');
 
     
 

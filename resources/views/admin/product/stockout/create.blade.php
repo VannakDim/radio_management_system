@@ -171,9 +171,8 @@
                 success: function(response) {
                     // Hide loading indicator
                     $('#loading').hide();
+                    window.location.href = '/product/stock-out/show/' + response.id;
                     alert(response.message);
-                    window.location.href =
-                        '{{ route('stockout.create') }}'; // Redirect to the "home" route
                 },
                 error: function(xhr) {
                     // Hide loading indicator

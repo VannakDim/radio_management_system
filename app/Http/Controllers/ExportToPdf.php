@@ -16,6 +16,5 @@ public function exportStockOutPdf($id)
     $pdf = PDF::loadView('admin.formpdf.stockout', compact('stockOut'));
 
     return view('admin.formpdf.stockout', compact('stockOut'));
-    // return $pdf->download('stock_out_' . $stockOut->created_at. $stockOut->id . '.pdf');
 }
 }
