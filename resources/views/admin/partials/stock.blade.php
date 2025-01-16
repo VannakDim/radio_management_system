@@ -4,9 +4,9 @@
         <tr>
             <th scope="col">#</th>
             <th>Receiver</th>
-            <th class="d-none d-md-table-cell">Giver</th>
-            <th class="d-none d-md-table-cell">Date</th>
-            <th></th>
+            <th>Giver</th>
+            <th>Date</th>
+            <th class="d-none d-md-table-cell">Note</th>
         </tr>
     </thead>
     <tbody>
@@ -19,6 +19,7 @@
                 <td>{{ $stock->receiver }}</td>
                 <td>{{ $stock->user->name }}</td>
                 <td>{{ $stock->created_at->diffForHumans() }}</td>
+                <td class="d-none d-md-table-cell">{{ $stock->note }}</td>
 
                 <td class="text-right">
                     <div class="dropdown show d-inline-block widget-dropdown">

@@ -43,6 +43,7 @@
                     <td>{{ $item->product->name }}</td>
                     <td>{{ $item->quantity }}</td>
                     <td>{{ $item->product->type }}</td>
+                    <td>{{ $stockOut->note }}</td>
                 </tr>
             @endforeach
         </tbody>
