@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Models\ProductModel;
 use App\Models\StockOut;
 use App\Models\StockOutDetail;
+use App\Models\StockOutProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,7 +16,7 @@ class StockOutController extends Controller
     public function create()
     {
         $models = ProductModel::all();
-        return view('admin.product.stockout.create',compact('models'));
+        return view('admin.product.stockout.create', compact('models'));
     }
 
     public function store(Request $request)
@@ -34,18 +36,23 @@ class StockOutController extends Controller
             sleep(1);
         }
         $stock_out->save();
-
         // Decode the items JSON
         $items = json_decode($request->input('items'), true);
 
         // Loop through the items and save them to the database
         foreach ($items as $item) {
-            StockOutDetail::create([
-                'stock_out_id' => $stock_out->id,
-                'product_model_id' => $item['model_id'],
-                'quantity' => $item['quantity'],
-            ]);
+            $product = Product::firstOrCreate(['PID' => $item['serial_number']], ['model_id' => $item['model_id']]);
+            if ($product) {
+                StockOutProduct::create([
+                    'stock_out_id' => $stock_out->id,
+                    'product_id' => $product->id,
+                ]);
+            } else {
+                return response()->json(['message' => 'Product not found!']);
+            }
         }
+
+
         return response()->json(['message' => 'Successful!', 'id' => $stock_out->id]);
     }
 }

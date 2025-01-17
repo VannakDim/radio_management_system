@@ -19,9 +19,9 @@
 @section('content')
 <div class="container" style="padding: 0 20px">
     <div class="row" style="margin-bottom: 20px">
-        <img src="/image/leterhead/head.png" alt="" width="90%">
+        <img src="/image/leterhead/head.png" alt="" width="100%">
     </div>
-    <h4 class="battambang text-center my-5" style="font-weight: bold;">បញ្ចីប្រគល់វិទ្យុទាក់ទង</h4>
+    <h5 class="battambang text-center my-5" style="font-weight: bold;">បញ្ចីប្រគល់វិទ្យុទាក់ទង</h5>
     {{-- <p class="battambang"><strong>អ្នកទទួល:</strong> {{ $stockOut->receiver }}</p>
     <p class="battambang"><strong>អ្នកប្រគល់:</strong> {{ $stockOut->user->name }}</p>
     <p><strong>Date:</strong> {{ \Carbon\Carbon::now()->format('Y-m-d H:i:s') }}</p> --}}
@@ -29,21 +29,21 @@
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th width=90>ល.រ</th>
+                <th class="text-center" width=90>ល.រ</th>
+                <th>លេខសម្គាល់</th>
                 <th>ម៉ូដែល</th>
-                <th>ចំនួន</th>
                 <th>ប្រភេទ</th>
                 <th>ផ្សេងៗ</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($stockOut->stockOutDetails as $key => $item)
+            @foreach ($stockOut->products as $key => $item)
                 <tr>
-                    <td>{{ $key + 1 }}</td>
-                    <td>{{ $item->product->name }}</td>
-                    <td>{{ $item->quantity }}</td>
-                    <td>{{ $item->product->type }}</td>
-                    <td>{{ $stockOut->note }}</td>
+                    <td class="text-center">{{ $key + 1 }}</td>
+                    <td>{{ $item->product->PID }}</td>
+                    <td>{{ $item->product->model->name }}</td>
+                    <td>{{ $item->product->model->type }}</td>
+                    <td></td>
                 </tr>
             @endforeach
         </tbody>

@@ -4,28 +4,25 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class StockOut extends Model
+class StockOutProduct extends Model
 {
     protected $fillable = [
         'stock_out_id',
-        'product_model_id',
-        'quantity',
+        'product_id',
         'note',
     ];
 
-    public function stockOutDetails()
+    public function stockOut()
     {
-        return $this->hasMany(StockOutDetail::class);
+        return $this->belongsTo(StockOut::class);
     }
 
-    public function products()
+    public function product()
     {
-        return $this->hasMany(StockOutProduct::class);
+        return $this->belongsTo(Product::class,'product_id','id');
     }
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-
-
 }

@@ -40,7 +40,7 @@
                                                     id="exampleInputEmail1" placeholder="Purpose or unit">
                                             </div>
 
-                                            <label for="model">Product detail:</label>
+                                            <label for="model">Product list:</label>
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
@@ -55,8 +55,8 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <input type="text" class="form-control" id="serial_number"
-                                                            placeholder="Serial number">
+                                                        <input type="number" class="form-control" id="quantity"
+                                                            placeholder="Quantity" min="1">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
@@ -69,7 +69,7 @@
                                                     <tr>
                                                         <th>Model ID</th>
                                                         <th>Model name</th>
-                                                        <th>S/N</th>
+                                                        <th>Quantity</th>
                                                         <th>Actions</th>
                                                     </tr>
                                                 </thead>
@@ -81,7 +81,7 @@
                                             <input type="hidden" name="items" id="itemsInput" required>
 
                                             <div class="form-group">
-                                                <label for="exampleInputEmail1">Photo</label>
+                                                <label for="exampleInputEmail1">Invoice image</label>
                                                 <input type="file" name="image" id="input-image" class="form-control">
                                             </div>
                                         </div>
@@ -199,17 +199,18 @@
             const modelId = document.getElementById('model').value;
             const modelText = document.getElementById('model').options[document.getElementById('model').selectedIndex]
                 .text;
-            const serial_number = document.getElementById('serial_number').value;
+            const quantity = document.getElementById('quantity').value;
 
-            if (!modelId || !serial_number) {
-                alert('Please fill the product and serial_number.');
+            if (!modelId || !quantity) {
+                alert('Please fill the product and quantity.');
                 return;
             }
 
             // Add item to the array
             items.push({
                 model_id: modelId,
-                serial_number: serial_number
+                model_text: modelText,
+                quantity: quantity
             });
 
             // Update the table
@@ -217,7 +218,7 @@
 
             // Clear the form fields
             // document.getElementById('model').value = '';
-            document.getElementById('serial_number').value = '';
+            document.getElementById('quantity').value = '';
         }
 
         // Function to update the table with added items
@@ -230,7 +231,7 @@
                 row.innerHTML = `
                 <td>${item.model_id}</td>
                 <td>${item.model_text}</td>
-                <td>${item.serial_number}</td>
+                <td>${item.quantity}</td>
                 <td>
                     <button type="button" class="btn btn-danger btn-sm" onclick="removeItem(${index})">Remove</button>
                 </td>
