@@ -209,6 +209,7 @@
             // Add item to the array
             items.push({
                 model_id: modelId,
+                model_text: modelText,
                 serial_number: serial_number
             });
 
