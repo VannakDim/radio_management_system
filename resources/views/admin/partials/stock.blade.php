@@ -31,9 +31,7 @@
                             <li class="dropdown-item">
                                 <a href="{{ route('stockout.show', $stock->id) }}" target="_blank" rel="noopener noreferrer" onclick="openPrintPopup(event, this.href)">Print</a>
                             </li>
-                            <li class="dropdown-item">
-                                <a href="#">Remove</a>
-                            </li>
+                            
                         </ul>
                     </div>
                 </td>

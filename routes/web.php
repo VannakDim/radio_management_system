@@ -19,6 +19,7 @@ use App\Models\ProductModel;
 use App\Models\StockInDetail;
 use App\Models\StockOut;
 use App\Models\StockOutDetail;
+use App\Models\StockOutProduct;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -42,7 +43,9 @@ Route::middleware([
     Route::get('/dashboard', function (Request $request) {
         $data = ProductModel::with('brand')->get()->map(function ($model) {
             $stockIn = StockInDetail::where('product_model_id', $model->id)->sum('quantity');
-            $stockOut = StockOutDetail::where('product_model_id', $model->id)->sum('quantity');
+            $stockOut = StockOutProduct::whereHas('product', function ($query) use ($model) {
+                $query->where('model_id', $model->id);
+            })->count('id');
             return [
                 'id' => $model->id,
                 'model_name' => $model->name,

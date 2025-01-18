@@ -60,9 +60,6 @@
                                                             <li class="dropdown-item">
                                                                 <a href="#">View</a>
                                                             </li>
-                                                            <li class="dropdown-item">
-                                                                <a href="#">Remove</a>
-                                                            </li>
                                                         </ul>
                                                     </div>
                                                 </td>

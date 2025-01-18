@@ -1,7 +1,7 @@
 @extends('frontend.layout.web')
 
 @section('style')
-    <style>
+    {{-- <style>
         @font-face {
             font-family: 'battambang';
             src: url('{{ public_path('font/KhmerOSBattambang-Regular.ttf') }}') format('truetype');
@@ -13,7 +13,7 @@
             font-family: 'battambang', sans-serif !important;
             word-spacing: 0;
         }
-    </style>
+    </style> --}}
 @endsection
 
 @section('content')
@@ -22,9 +22,6 @@
         <img src="/image/leterhead/head.png" alt="" width="100%">
     </div>
     <h5 class="battambang text-center my-5" style="font-weight: bold;">បញ្ចីប្រគល់វិទ្យុទាក់ទង</h5>
-    {{-- <p class="battambang"><strong>អ្នកទទួល:</strong> {{ $stockOut->receiver }}</p>
-    <p class="battambang"><strong>អ្នកប្រគល់:</strong> {{ $stockOut->user->name }}</p>
-    <p><strong>Date:</strong> {{ \Carbon\Carbon::now()->format('Y-m-d H:i:s') }}</p> --}}
 
     <table class="table table-bordered">
         <thead>

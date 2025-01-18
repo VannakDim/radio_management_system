@@ -3,6 +3,9 @@
     width: 192px;
 }
 
+a{
+    text-decoration: none !important;
+}
 
 .kh-koulen{
     font-family: "Koulen", sans-serif !important;
@@ -38,6 +41,11 @@
   background-position-x: center;
   background-position-y: center;
   height: 300px;
+}
+
+
+.dropdown-menu.show {
+  width: 80px;
 }
 
 @media (max-width: 768px) {

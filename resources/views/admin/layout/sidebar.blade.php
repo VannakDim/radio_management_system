@@ -15,7 +15,7 @@
                         <path class="logo-fill-white" fill="#FFF" d="M11 4v25l8 4V0z" />
                     </g>
                 </svg>
-                <span class="brand-name">វាយោទិព្វ Dashboard</span>
+                <span class="brand-name">SPM-TELECOM</span>
             </a>
         </div>
         <!-- begin sidebar scrollbar -->
