@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BorrowDetail;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\ProductModel;
@@ -18,6 +19,7 @@ class ProductController extends Controller
         $data = ProductModel::with('brand')->get()->map(function ($model) {
             $stockIn = StockInDetail::where('product_model_id', $model->id)->sum('quantity');
             $stockOut = StockOutDetail::where('product_model_id', $model->id)->sum('quantity');
+            // $borrow = BorrowDetail::where('product_model_id', $model->id)->sum('quantity');
             return [
                 'id' => $model->id,
                 'model_name' => $model->name,

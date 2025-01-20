@@ -6,7 +6,7 @@
     <!-- Setup and start animation! -->
     <script>
         var typed = new Typed('.welcome-text', {
-            strings: ['WELCOME TO <i>KON KHMER</i> code.', 'WE ARE HERE TO SUPPORT YOUR BUSINESS.'],
+            strings: ['<i>សូមស្វាគមន៍មកកាន់</i>ប្រព័ន្ធគ្រប់គ្រងសម្ភារៈបច្ចេកទេស', 'យើងនៅទីនេះដើម្បីជួយលោកអ្នកក្នុងការស្វែងរកដំណោះស្រាយចំពោះបញ្ហា'],
             typeSpeed: 70,
             backSpeed: 30,
             loop: true,
@@ -24,7 +24,7 @@
                         <!-- Recent Order Table -->
                         <div class="card card-table-border-none" id="recent-orders">
                             <div class="card-header justify-content-between">
-                                <h2><strong>PRODUCT AVAILABLE</strong></h2>
+                                <h2 class="badge badge-primary"><strong>PRODUCT AVAILABLE</strong></h2>
                                 {{-- <div class="date-range-report ">
                                     <span></span>
                                 </div> --}}
@@ -37,6 +37,7 @@
                                             <th>Product Model</th>
                                             <th class="d-none d-md-table-cell">Brand</th>
                                             <th class="d-none d-md-table-cell">Available</th>
+                                            <th class="d-none d-md-table-cell">Borrowed</th>
                                             <th></th>
                                         </tr>
                                     </thead>
@@ -49,6 +50,7 @@
                                                 </td>
                                                 <td>{{ $stock['brand_name'] }}</td>
                                                 <td>{{ $stock['available_stock'] }}</td>
+                                                <td><span class="badge badge-danger">{{$stock['borrow']}}</span></td>
                                                 <td class="text-right">
                                                     <div class="dropdown show d-inline-block widget-dropdown">
                                                         <a class="dropdown-toggle icon-burger-mini" href=""
@@ -73,7 +75,7 @@
                         {{-- Stock Out Report --}}
                         <div class="card card-table-border-none" id="recent-orders">
                             <div class="card-header justify-content-between">
-                                <h2><strong>STOCK OUT REPORT</strong></h2>
+                                <h2 class="badge badge-warning"><strong>STOCK OUT REPORT</strong></h2>
                                 <div class="date-range-report ">
                                     <span></span>
                                 </div>
@@ -82,6 +84,22 @@
                                 <!-- resources/views/stock_out/index.blade.php -->
                                 <div id="pagination-data">
                                     @include('admin.partials.stock')
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- Stock Out Report --}}
+                        <div class="card card-table-border-none" id="recent-orders">
+                            <div class="card-header justify-content-between">
+                                <h2 class="badge badge-danger"><strong>BORROWING REPORT</strong></h2>
+                                <div class="date-range-report ">
+                                    <span></span>
+                                </div>
+                            </div>
+                            <div class="card-body pt-0 pb-5">
+                                <!-- resources/views/stock_out/index.blade.php -->
+                                <div id="pagination-data">
+                                    @include('admin.partials.borrow')
                                 </div>
                             </div>
                         </div>

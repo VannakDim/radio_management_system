@@ -1,4 +1,4 @@
-<!-- resources/views/stock_out/partials/table.blade.php -->
+
 <table class="table card-table table-responsive table-responsive-large" style="width:100%">
     <thead>
         <tr>
@@ -12,15 +12,15 @@
     </thead>
     <tbody>
         @php
-            $index = ($stockOut->currentPage() - 1) * $stockOut->perPage() + 1;
+            $index = ($borrows->currentPage() - 1) * $borrows->perPage() + 1;
         @endphp
-        @foreach ($stockOut as $stock)
+        @foreach ($borrows as $borrow)
             <tr>
                 <td>{{ $index++ }}</td>
-                <td>{{ $stock->receiver }}</td>
-                <td>{{ $stock->user->name }}</td>
-                <td>{{ $stock->created_at->diffForHumans() }}</td>
-                <td class="d-none d-md-table-cell">{{ $stock->note }}</td>
+                <td>{{ $borrow->receiver }}</td>
+                <td>{{ $borrow->user->name }}</td>
+                <td>{{ $borrow->created_at->diffForHumans() }}</td>
+                <td class="d-none d-md-table-cell">{{ $borrow->note }}</td>
 
                 <td class="text-right">
                     <div class="dropdown show d-inline-block widget-dropdown">
@@ -30,7 +30,7 @@
                         <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-recent-order1">
 
                             <li class="dropdown-item">
-                                <a href="{{ route('stockout.show', $stock->id) }}" target="_blank" rel="noopener noreferrer" onclick="openPrintPopup(event, this.href)">Print</a>
+                                <a href="{{ route('borrow.show', $borrow->id) }}" target="_blank" rel="noopener noreferrer" onclick="openPrintPopup(event, this.href)">Print</a>
                             </li>
                             
                         </ul>
@@ -40,15 +40,13 @@
         @endforeach
     </tbody>
 </table>
-
-
 <!-- Custom Pagination Bar -->
 <div class="pagination-container text-center">
     <div class="pagination-buttons">
-        {{ $stockOut->links('vendor.pagination.custom') }}
+        {{ $borrows->links('vendor.pagination.custom') }}
     </div>
     <div class="pagination-description mt-2">
-        <p>Showing {{ $stockOut->firstItem() }} to {{ $stockOut->lastItem() }} of {{ $stockOut->total() }} results</p>
+        <p>Showing {{ $borrows->firstItem() }} to {{ $borrows->lastItem() }} of {{ $borrows->total() }} results</p>
     </div>
 </div>
 

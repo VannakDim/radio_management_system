@@ -21,7 +21,7 @@
     <div class="row" style="margin-bottom: 20px">
         <img src="/image/leterhead/head.png" alt="" width="100%">
     </div>
-    <h5 class="battambang text-center my-5" style="font-weight: bold;">បញ្ចីប្រគល់វិទ្យុទាក់ទង</h5>
+    <h5 class="battambang text-center my-5" style="font-weight: bold;">បញ្ចីខ្ចីវិទ្យុទាក់ទង</h5>
 
     <table class="table table-bordered">
         <thead>
@@ -34,7 +34,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($stockOut->products as $key => $item)
+            @foreach ($borrow->details as $key => $item)
                 <tr>
                     <td class="text-center">{{ $key + 1 }}</td>
                     <td>{{ $item->product->PID }}</td>
@@ -82,15 +82,15 @@
         </div>
         <div class="col-sm-3">
             <p class="battambang text-center
-            ">{{ $stockOut->receiver }}</p>
+            ">{{ $borrow->receiver }}</p>
         </div>
         <div class="col-sm-3">
             <p class="battambang text-center
-            ">{{ $stockOut->user->name }}</p>
+            ">{{ $borrow->user->name }}</p>
         </div>
         
     </div>
-    {{ $stockOut->created_at }}
+    {{ $borrow->created_at }}
 </div>
 @endsection
 

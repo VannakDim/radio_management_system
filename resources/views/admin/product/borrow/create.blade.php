@@ -13,7 +13,7 @@
                     <div class="col-md-12">
                         <div class="card card-default">
                             <div class="card-header card-header-border-bottom">
-                                <h2 class="badge badge-primary">STOCK IN</h2>
+                                <h2 class="badge badge-danger">BORROW PRODUCT</h2>
                             </div>
 
                             <div class="card-body">
@@ -22,25 +22,25 @@
                                         {{ session('error') }}
                                     </div>
                                 @endif
-                                <form id="uploadForm" method="POST" action="{{ route('stockin.store') }}"
+                                <form id="uploadForm" method="POST" action="{{ route('borrow.store') }}"
                                     enctype="multipart/form-data">
                                     @csrf
                                     <div class="row">
                                         <div class="col-md-6">
 
                                             <div class="form-group">
-                                                <label for="exampleInputEmail1">Invoice No:</label>
-                                                <input type="text" name="invoice_no" class="form-control"
-                                                    id="exampleInputEmail1" placeholder="invoice_no">
+                                                <label for="exampleInputEmail1">Receiver:</label>
+                                                <input type="text" name="receiver" class="form-control"
+                                                    id="exampleInputEmail1" placeholder="Receiver">
                                             </div>
 
                                             <div class="form-group">
-                                                <label for="exampleInputEmail1">Supplier:</label>
-                                                <input type="text" name="supplier" class="form-control"
-                                                    id="exampleInputEmail1" placeholder="supplier">
+                                                <label for="exampleInputEmail1">Purpose:</label>
+                                                <input type="text" name="purpose" class="form-control"
+                                                    id="exampleInputEmail1" placeholder="Purpose of borrow">
                                             </div>
 
-                                            <label for="model">Product list:</label>
+                                            <label for="model">Product detail:</label>
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
@@ -55,8 +55,8 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                     <div class="form-group">
-                                                        <input type="number" class="form-control" id="quantity"
-                                                            placeholder="Quantity" min="1">
+                                                        <input type="text" class="form-control" id="serial_number"
+                                                            placeholder="Serial number">
                                                     </div>
                                                 </div>
                                                 <div class="col-md-3">
@@ -69,7 +69,7 @@
                                                     <tr>
                                                         <th>Model ID</th>
                                                         <th>Model name</th>
-                                                        <th>Quantity</th>
+                                                        <th>S/N</th>
                                                         <th>Actions</th>
                                                     </tr>
                                                 </thead>
@@ -81,14 +81,13 @@
                                             <input type="hidden" name="items" id="itemsInput" required>
 
                                             <div class="form-group">
-                                                <label for="exampleInputEmail1">Invoice image</label>
+                                                <label for="exampleInputEmail1">Photo</label>
                                                 <input type="file" name="image" id="input-image" class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="post-img" id="img-preview"
                                                 style="display: flex; justify-content: center; align-items: center; background-image: url({{ asset('backend/assets/img/default-image.avif') }}); background-size: cover; background-position: center; width: 100%; height: 100%;">
-                                                {{-- <img id="img-preview" src="" alt="Image Preview" style="max-width: 100%;max-height: 350px;object-fit: cover;"> --}}
                                             </div>
                                         </div>
                                     </div>
@@ -110,6 +109,7 @@
                                     </button>
                                     <a href="{{ route('all.product') }}" class="btn btn-secondary float-right"
                                         style="margin-right: 6px">Back</a>
+
                                 </form>
                             </div>
                         </div>
@@ -171,9 +171,15 @@
                 success: function(response) {
                     // Hide loading indicator
                     $('#loading').hide();
+                    // Open a popup window for the print view
+                    var popup = window.open('/product/stock-out/show/' + response.id,
+                        'PrintWindow', 'width=800,height=600');
+
+                    // Focus on the popup and wait for it to load
+                    popup.onload = function() {
+                        popup.print();
+                    };
                     alert(response.message);
-                    window.location.href =
-                        '{{ route('stockin.create') }}'; // Redirect to the "home" route
                 },
                 error: function(xhr) {
                     // Hide loading indicator
@@ -193,10 +199,10 @@
             const modelId = document.getElementById('model').value;
             const modelText = document.getElementById('model').options[document.getElementById('model').selectedIndex]
                 .text;
-            const quantity = document.getElementById('quantity').value;
+            const serial_number = document.getElementById('serial_number').value;
 
-            if (!modelId || !quantity) {
-                alert('Please fill the product and quantity.');
+            if (!modelId || !serial_number) {
+                alert('Please fill the product and serial_number.');
                 return;
             }
 
@@ -204,7 +210,7 @@
             items.push({
                 model_id: modelId,
                 model_text: modelText,
-                quantity: quantity
+                serial_number: serial_number,
             });
 
             // Update the table
@@ -212,7 +218,7 @@
 
             // Clear the form fields
             // document.getElementById('model').value = '';
-            document.getElementById('quantity').value = '';
+            document.getElementById('serial_number').value = '';
         }
 
         // Function to update the table with added items
@@ -225,7 +231,7 @@
                 row.innerHTML = `
                 <td>${item.model_id}</td>
                 <td>${item.model_text}</td>
-                <td>${item.quantity}</td>
+                <td>${item.serial_number}</td>
                 <td>
                     <button type="button" class="btn btn-danger btn-sm" onclick="removeItem(${index})">Remove</button>
                 </td>
