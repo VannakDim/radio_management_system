@@ -49,9 +49,9 @@ Route::middleware([
             $stockOut = StockOutProduct::whereHas('product', function ($query) use ($model) {
                 $query->where('model_id', $model->id);
             })->count('id');
-            $borrow = BorrowDetail::whereHas('product', function($query) use ($model){
+            $borrow = BorrowDetail::whereHas('product', function ($query) use ($model) {
                 $query->where('model_id', $model->id)
-                      ->where('borrowed', 1); // Add condition to filter borrowed products
+                    ->where('borrowed', 1); // Add condition to filter borrowed products
             })->count('id');
             return [
                 'id' => $model->id,
@@ -59,18 +59,22 @@ Route::middleware([
                 'image' => $model->image,
                 'brand_name' => $model->brand->brand_name,
                 'available_stock' => $stockIn - $stockOut - $borrow,
-                'borrow'=> $borrow,
+                'borrow' => $borrow,
             ];
         });
         $users = User::all();
-        $stockOut = StockOut::orderBy('created_at', 'desc')->paginate(5); // 10 items per page
-        $borrows = Borrow::orderBy('created_at', 'desc')->paginate(5); // 10 items per page
+        $stockOut = StockOut::orderBy('created_at', 'desc')->paginate(5); // 5 items per page
+        $borrows = Borrow::where('borrowed', 1)->orderBy('created_at', 'desc')->paginate(5); // 5 items per page
+
         if ($request->ajax()) {
-            return view('admin.partials.stock', compact('stockOut'))->render();
+            if ($request->has('stockOutPage')) {
+                return view('admin.partials.stock', compact('stockOut'))->render();
+            }
+            if ($request->has('borrowsPage')) {
+                return view('admin.partials.borrow', compact('borrows'))->render();
+            }
         }
-        if($request->ajax()){
-            return view('admin.partials.borrow', compact('borrows'))->render();
-        }
+
         return view('admin.index', compact('users', 'data', 'stockOut', 'borrows'));
     })->name('dashboard');
 
@@ -147,8 +151,10 @@ Route::middleware([
     Route::get('/product/borrow', [BorrowController::class, 'create'])->name('borrow.create');
     Route::get('/product/borrow/show/{id}', [ExportToPdf::class, 'exportBorrow'])->name('borrow.show');
     Route::post('/product/borrow/store', [BorrowController::class, 'store'])->name('borrow.store');
+    Route::get('/product/borrow/index', [BorrowController::class, 'index'])->name('borrow.index');
 
-    
+
 
     Route::get('/logout', [UserAuthController::class, 'logout'])->name('user.logout');
+
 });

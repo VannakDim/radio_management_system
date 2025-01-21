@@ -1,4 +1,3 @@
-
 <table class="table card-table table-responsive table-responsive-large" style="width:100%">
     <thead>
         <tr>
@@ -43,7 +42,7 @@
 <!-- Custom Pagination Bar -->
 <div class="pagination-container text-center">
     <div class="pagination-buttons">
-        {{ $borrows->links('vendor.pagination.custom') }}
+        {{ $borrows->links('vendor.pagination.borrow') }}
     </div>
     <div class="pagination-description mt-2">
         <p>Showing {{ $borrows->firstItem() }} to {{ $borrows->lastItem() }} of {{ $borrows->total() }} results</p>
@@ -52,14 +51,14 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-    $(document).on('click', '.pagination a', function (e) {
+    $(document).on('click', '#pagination-borrow a', function (e) {
         e.preventDefault();
         var url = $(this).attr('href');
 
         $.ajax({
             url: url,
             success: function (data) {
-                $('#pagination-data').html(data);
+                $('#pagination-borrow').html(data);
             }
         });
     });

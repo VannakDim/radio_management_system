@@ -54,14 +54,14 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-    $(document).on('click', '.pagination a', function (e) {
+    $(document).on('click', '#pagination-out a', function (e) {
         e.preventDefault();
         var url = $(this).attr('href');
 
         $.ajax({
             url: url,
             success: function (data) {
-                $('#pagination-data').html(data);
+                $('#pagination-out').html(data);
             }
         });
     });

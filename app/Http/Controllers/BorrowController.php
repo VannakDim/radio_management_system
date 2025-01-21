@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Borrow;
 use App\Models\BorrowDetail;
+use App\Models\BorrowAccessory;
 use App\Models\ProductModel;
 use App\Models\Product;
 use Illuminate\Support\Facades\Auth;
@@ -57,6 +58,18 @@ class BorrowController extends Controller
             }
         }
 
-        return redirect()->route('borrow.index');
+        // Decode the accessories JSON
+        $accessories = json_decode($request->input('accessories'), true);
+        if ($accessories) {
+            foreach ($accessories as $accessory) {
+                BorrowAccessory::create([
+                    'borrow_id' => $borrow->id,
+                    'model_id' => $accessory['model_id'],
+                    'quantity' => $accessory['quantity'],
+                ]);
+            }
+        }
+
+        return response()->json(['message' => 'Successful!', 'id' => $borrow->id]);
     }
 }

@@ -46,9 +46,11 @@
                                                     <div class="form-group">
                                                         <select name="models" id="model" class="form-control">
                                                             @foreach ($models as $model)
-                                                                <option value="{{ $model->id }}">
-                                                                    {{ $model->name }}
-                                                                </option>
+                                                                @if ($model->accessory == 0)
+                                                                    <option value="{{ $model->id }}">
+                                                                        {{ $model->name }}
+                                                                    </option>
+                                                                @endif
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -80,6 +82,48 @@
                                             <!-- Hidden input to store the items data -->
                                             <input type="hidden" name="items" id="itemsInput" required>
 
+                                            <label for="model">Accessory:</label>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <select name="models" id="model_accessory" class="form-control">
+                                                            @foreach ($models as $model)
+                                                                @if ($model->accessory == 1)
+                                                                    <option value="{{ $model->id }}">
+                                                                        {{ $model->name }}
+                                                                    </option>
+                                                                @endif
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <input type="number" class="form-control" id="quantity"
+                                                            placeholder="Quantity">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <button type="button" class="btn btn-primary"
+                                                        onclick="addAccessory(event)">ADD TO LIST</button>
+                                                </div>
+                                            </div>
+                                            <table class="table table-bordered" id="accessoryTable">
+                                                <thead>
+                                                    <tr>
+                                                        <th>ID</th>
+                                                        <th>Accessory name</th>
+                                                        <th>Quantity</th>
+                                                        <th>Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <!-- Items will be added here dynamically -->
+                                                </tbody>
+                                            </table>
+                                            <!-- Hidden input to store the items data -->
+                                            <input type="hidden" name="accessories" id="accessoryInput" required>
+
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1">Photo</label>
                                                 <input type="file" name="image" id="input-image" class="form-control">
@@ -107,7 +151,7 @@
                                         <span class="ladda-label">Save!</span>
                                         <span class="ladda-spinner"></span>
                                     </button>
-                                    <a href="{{ route('all.product') }}" class="btn btn-secondary float-right"
+                                    <a href="{{ route('dashboard') }}" class="btn btn-secondary float-right"
                                         style="margin-right: 6px">Back</a>
 
                                 </form>
@@ -152,7 +196,8 @@
         });
     </script>
     <script src="https://cdn.tiny.cloud/1/qdi8ljnwutu3zjh290nqmze8oo8w5x9wqh925tzk9eyqpqmk/tinymce/7/tinymce.min.js"
-        referrerpolicy="origin"></script>
+        referrerpolicy="origin">
+    </script>
 
     <script>
         $('#uploadForm').on('submit', function(e) {
@@ -171,15 +216,17 @@
                 success: function(response) {
                     // Hide loading indicator
                     $('#loading').hide();
+
+                    alert(response.message);
+
                     // Open a popup window for the print view
-                    var popup = window.open('/product/stock-out/show/' + response.id,
+                    var popup = window.open('/product/borrow/show/' + response.id,
                         'PrintWindow', 'width=800,height=600');
 
                     // Focus on the popup and wait for it to load
                     popup.onload = function() {
                         popup.print();
                     };
-                    alert(response.message);
                 },
                 error: function(xhr) {
                     // Hide loading indicator
@@ -247,6 +294,66 @@
         function removeItem(index) {
             items.splice(index, 1);
             updateTable();
+        }
+    </script>
+
+    <script>
+        let accessories = [];
+
+        function addAccessory(event) {
+            event.preventDefault(); // Prevent form submission
+            const modelId = document.getElementById('model_accessory').value;
+            const modelText = document.getElementById('model_accessory').options[document.getElementById('model_accessory')
+                    .selectedIndex]
+                .text;
+            const quantity = document.getElementById('quantity').value;
+
+            if (!modelId || !quantity) {
+                alert('Please fill the product and quantity.');
+                return;
+            }
+
+            // Add item to the array
+            accessories.push({
+                model_id: modelId,
+                model_text: modelText,
+                quantity: quantity,
+            });
+
+            // Update the table
+            updateAccessoryTable();
+
+            // Clear the form fields
+            // document.getElementById('model_accessory').value = '';
+            document.getElementById('quantity').value = '';
+        }
+
+        // Function to update the table with added items
+        function updateAccessoryTable() {
+            const tableBody = document.querySelector('#accessoryTable tbody');
+            tableBody.innerHTML = '';
+
+            accessories.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                <td>${item.model_id}</td>
+                <td>${item.model_text}</td>
+                <td>${item.quantity}</td>
+                <td>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="removeAccessory(${index})">Remove</button>
+                </td>
+            `;
+                tableBody.appendChild(row);
+            });
+
+            // Update the hidden input with the items data
+            document.getElementById('accessoryInput').value = JSON.stringify(accessories);
+        }
+
+        // Function to remove an item from the list
+        function removeAccessory(index) {
+            accessories.splice(index, 1);
+            updateAccessoryTable();
         }
     </script>
 @endsection

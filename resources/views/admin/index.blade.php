@@ -6,7 +6,9 @@
     <!-- Setup and start animation! -->
     <script>
         var typed = new Typed('.welcome-text', {
-            strings: ['<i>សូមស្វាគមន៍មកកាន់</i>ប្រព័ន្ធគ្រប់គ្រងសម្ភារៈបច្ចេកទេស', 'យើងនៅទីនេះដើម្បីជួយលោកអ្នកក្នុងការស្វែងរកដំណោះស្រាយចំពោះបញ្ហា'],
+            strings: ['<i>សូមស្វាគមន៍មកកាន់</i>ប្រព័ន្ធគ្រប់គ្រងសម្ភារៈបច្ចេកទេស',
+                'យើងនៅទីនេះដើម្បីជួយលោកអ្នកក្នុងការស្វែងរកដំណោះស្រាយចំពោះបញ្ហា'
+            ],
             typeSpeed: 70,
             backSpeed: 30,
             loop: true,
@@ -25,9 +27,7 @@
                         <div class="card card-table-border-none" id="recent-orders">
                             <div class="card-header justify-content-between">
                                 <h2 class="badge badge-primary"><strong>PRODUCT AVAILABLE</strong></h2>
-                                {{-- <div class="date-range-report ">
-                                    <span></span>
-                                </div> --}}
+
                             </div>
                             <div class="card-body pt-0 pb-5">
                                 <table class="table card-table table-responsive table-responsive-large" style="width:100%">
@@ -50,7 +50,7 @@
                                                 </td>
                                                 <td>{{ $stock['brand_name'] }}</td>
                                                 <td>{{ $stock['available_stock'] }}</td>
-                                                <td><span class="badge badge-danger">{{$stock['borrow']}}</span></td>
+                                                <td><span class="badge badge-danger">{{ $stock['borrow'] }}</span></td>
                                                 <td class="text-right">
                                                     <div class="dropdown show d-inline-block widget-dropdown">
                                                         <a class="dropdown-toggle icon-burger-mini" href=""
@@ -81,28 +81,117 @@
                                 </div>
                             </div>
                             <div class="card-body pt-0 pb-5">
-                                <!-- resources/views/stock_out/index.blade.php -->
-                                <div id="pagination-data">
-                                    @include('admin.partials.stock')
-                                </div>
+                                <table class="table card-table table-responsive table-responsive-large" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Receiver</th>
+                                            <th class="d-none d-md-table-cell">Giver</th>
+                                            <th class="d-none d-md-table-cell">Date</th>
+                                            <th class="d-none d-md-table-cell">Note</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @php
+                                            $index = ($stockOut->currentPage() - 1) * $stockOut->perPage() + 1;
+                                        @endphp
+                                        @foreach ($stockOut as $stock)
+                                            <tr>
+                                                <td>{{ $index++ }}</td>
+                                                <td>{{ $stock->receiver }}</td>
+                                                <td>{{ $stock->user->name }}</td>
+                                                <td>{{ $stock->created_at->diffForHumans() }}</td>
+                                                <td class="d-none d-md-table-cell">{{ $stock->note }}</td>
+
+                                                <td class="text-right">
+                                                    <div class="dropdown show d-inline-block widget-dropdown">
+                                                        <a class="dropdown-toggle icon-burger-mini" href=""
+                                                            role="button" id="dropdown-recent-order1"
+                                                            data-toggle="dropdown" aria-haspopup="true"
+                                                            aria-expanded="false" data-display="static"></a>
+                                                        <ul class="dropdown-menu dropdown-menu-right"
+                                                            aria-labelledby="dropdown-recent-order1">
+
+                                                            <li class="dropdown-item">
+                                                                <a href="{{ route('stockout.show', $stock->id) }}"
+                                                                    target="_blank" rel="noopener noreferrer"
+                                                                    onclick="openPrintPopup(event, this.href)">Print</a>
+                                                            </li>
+
+                                                        </ul>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                                <!-- Custom Pagination Bar -->
+                                
                             </div>
                         </div>
 
-                        {{-- Stock Out Report --}}
-                        <div class="card card-table-border-none" id="recent-orders">
-                            <div class="card-header justify-content-between">
-                                <h2 class="badge badge-danger"><strong>BORROWING REPORT</strong></h2>
-                                <div class="date-range-report ">
-                                    <span></span>
+                        @if ($borrows->count() > 0)
+                            {{-- Stock Out Report --}}
+                            <div class="card card-table-border-none" id="recent-orders">
+                                <div class="card-header justify-content-between">
+                                    <h2 class="badge badge-danger"><strong>BORROWING REPORT</strong></h2>
+                                    <div class="date-range-report ">
+                                        <span></span>
+                                    </div>
+                                </div>
+                                <div class="card-body pt-0 pb-5">
+                                    <table class="table card-table table-responsive table-responsive-large"
+                                        style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Receiver</th>
+                                                <th class="d-none d-md-table-cell">Borrower</th>
+                                                <th class="d-none d-md-table-cell">Date</th>
+                                                <th class="d-none d-md-table-cell">Note</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @php
+                                                $index = ($borrows->currentPage() - 1) * $borrows->perPage() + 1;
+                                            @endphp
+                                            @foreach ($borrows as $borrow)
+                                                <tr>
+                                                    <td>{{ $index++ }}</td>
+                                                    <td>{{ $borrow->receiver }}</td>
+                                                    <td>{{ $borrow->user->name }}</td>
+                                                    <td>{{ $borrow->created_at->diffForHumans() }}</td>
+                                                    <td class="d-none d-md-table-cell">{{ $borrow->note }}</td>
+
+                                                    <td class="text-right">
+                                                        <div class="dropdown show d-inline-block widget-dropdown">
+                                                            <a class="dropdown-toggle icon-burger-mini" href=""
+                                                                role="button" id="dropdown-recent-order1"
+                                                                data-toggle="dropdown" aria-haspopup="true"
+                                                                aria-expanded="false" data-display="static"></a>
+                                                            <ul class="dropdown-menu dropdown-menu-right"
+                                                                aria-labelledby="dropdown-recent-order1">
+
+                                                                <li class="dropdown-item">
+                                                                    <a href="{{ route('borrow.show', $borrow->id) }}"
+                                                                        target="_blank" rel="noopener noreferrer"
+                                                                        onclick="openPrintPopup(event, this.href)">Print</a>
+                                                                </li>
+
+                                                            </ul>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                    <!-- Custom Pagination Bar -->
+                                    
                                 </div>
                             </div>
-                            <div class="card-body pt-0 pb-5">
-                                <!-- resources/views/stock_out/index.blade.php -->
-                                <div id="pagination-data">
-                                    @include('admin.partials.borrow')
-                                </div>
-                            </div>
-                        </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -111,7 +200,8 @@
         <div class="row">
             <div class="col-xl-12">
                 <strong>
-                    <h1 class="kh-koulen"><span class="welcome-text"></span></h1>
+                    <h1 class="kh-koulen"><span class="welcome-text"></span>
+                    </h1>
                 </strong>
             </div>
         </div>

@@ -20,6 +20,11 @@ class Borrow extends Model
         return $this->hasMany(BorrowDetail::class);
     }
 
+    public function accessory()
+    {
+        return $this->hasMany(BorrowAccessory::class);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);
