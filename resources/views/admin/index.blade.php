@@ -163,7 +163,6 @@
                     type: "GET",
                     success: function(response) {
                         let rows = '';
-                        // console.log(response.data[0].id);
                         $.each(response.data, function(index, value) {
                             rows += '<tr>' +
                                 '<td>' + value.id + '</td>' +
@@ -193,13 +192,16 @@
                         $('#stockout-table tbody').html(rows);
 
                         // Build pagination for Stock-Out
-                        let pagination = '<nav aria-label="Page navigation example"><ul class="pagination justify-content-center">';
-                        pagination += '<li class="page-item ' + (response.current_page === 1 ? 'disabled' : '') + '"><a href="#" class="page-link stock-out-page" data-page="' + (response.current_page - 1) + '" style="height: 38px;">\<</a></li>';
-                        for (let i = 1; i <= response.last_page; i++) {
-                            pagination += '<li class="page-item ' + (response.current_page === i ? 'active' : '') + '"><a href="#" class="page-link stock-out-page" data-page="' + i + '" style="height: 38px;">' + i + '</a></li>';
+                        if (response.last_page > 1) {
+                            var pagination = '<nav aria-label="Page navigation example"><ul class="pagination justify-content-center">';
+                            pagination += '<li class="page-item ' + (response.current_page === 1 ? 'disabled' : '') + '"><a href="#" class="page-link stock-out-page" data-page="' + (response.current_page - 1) + '" style="height: 38px;">\<</a></li>';
+                            for (let i = 1; i <= response.last_page; i++) {
+                                pagination += '<li class="page-item ' + (response.current_page === i ? 'active' : '') + '"><a href="#" class="page-link stock-out-page" data-page="' + i + '" style="height: 38px;">' + i + '</a></li>';
+                            }
+                            pagination += '<li class="page-item ' + (response.current_page === response.last_page ? 'disabled' : '') + '"><a href="#" class="page-link stock-out-page" data-page="' + (response.current_page + 1) + '" style="height: 38px;">\></a></li>';
+                            pagination += '</ul></nav>';
+                            $('#stockOutPagination').html(pagination);
                         }
-                        pagination += '<li class="page-item ' + (response.current_page === response.last_page ? 'disabled' : '') + '"><a href="#" class="page-link stock-out-page" data-page="' + (response.current_page + 1) + '" style="height: 38px;">\></a></li>';
-                        pagination += '</ul></nav>';
                         $('#stockOutPagination').html(pagination);
                     }
                 });
@@ -212,7 +214,6 @@
                     type: "GET",
                     success: function(response) {
                         let rows = '';
-                        console.log(response.data);
                         $.each(response.data, function(index, value) {
                             rows += '<tr>' +
                                 '<td>' + value.id + '</td>' +
@@ -242,13 +243,16 @@
                         $('#borrow-table tbody').html(rows);
 
                         // Build pagination for Borrow
-                        let pagination = '<nav aria-label="Page navigation example"><ul class="pagination justify-content-center">';
-                        pagination += '<li class="page-item ' + (response.current_page === 1 ? 'disabled' : '') + '"><a href="#" class="page-link borrow-page" data-page="' + (response.current_page - 1) + '" style="height: 38px;">\<</a></li>';
-                        for (let i = 1; i <= response.last_page; i++) {
-                            pagination += '<li class="page-item ' + (response.current_page === i ? 'active' : '') + '"><a href="#" class="page-link borrow-page" data-page="' + i + '">' + i + '</a></li>';
+                        if (response.last_page > 1) {
+                            var pagination = '<nav aria-label="Page navigation example"><ul class="pagination justify-content-center">';
+                            pagination += '<li class="page-item ' + (response.current_page === 1 ? 'disabled' : '') + '"><a href="#" class="page-link borrow-page" data-page="' + (response.current_page - 1) + '" style="height: 38px;">\<</a></li>';
+                            for (let i = 1; i <= response.last_page; i++) {
+                                pagination += '<li class="page-item ' + (response.current_page === i ? 'active' : '') + '"><a href="#" class="page-link borrow-page" data-page="' + i + '">' + i + '</a></li>';
+                            }
+                            pagination += '<li class="page-item ' + (response.current_page === response.last_page ? 'disabled' : '') + '"><a href="#" class="page-link borrow-page" data-page="' + (response.current_page + 1) + '" style="height: 38px;">\></a></li>';
+                            pagination += '</ul></nav>';
+                            $('#borrowPagination').html(pagination);
                         }
-                        pagination += '<li class="page-item ' + (response.current_page === response.last_page ? 'disabled' : '') + '"><a href="#" class="page-link borrow-page" data-page="' + (response.current_page + 1) + '" style="height: 38px;">\></a></li>';
-                        pagination += '</ul></nav>';
                         $('#borrowPagination').html(pagination);
                     }
                 });
