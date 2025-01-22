@@ -1,4 +1,4 @@
-@props(['align' => 'right', 'width' => '48', 'contentClasses' => 'py-1 bg-white', 'dropdownClasses' => ''])
+@props(['align' => 'right', 'width' => '48', 'contentClasses' => 'py-1 bg-white', 'dropdownClasses' => '', 'content' => ''])
 
 @php
 $alignmentClasses = match ($align) {
@@ -15,12 +15,10 @@ $width = match ($width) {
 };
 @endphp
 
-<div class="relative" x-data="{ open: false }" @click.away="open = false" @close.stop="open = false">
-    <div @click="open = ! open">
-        {{ $trigger }}
-    </div>
-
-    <div x-show="open"
+<div class="dropdown show d-inline-block widget-dropdown" x-data="{ open: false }" @click.away="open = false" @close.stop="open = false">
+    <a class="dropdown-toggle icon-burger-mini" href="" role="button" id="dropdown-recent-order1"
+       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static" @click="open = ! open"></a>
+    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-recent-order1" x-show="open"
             x-transition:enter="transition ease-out duration-200"
             x-transition:enter-start="transform opacity-0 scale-95"
             x-transition:enter-end="transform opacity-100 scale-100"
@@ -33,5 +31,5 @@ $width = match ($width) {
         <div class="rounded-md ring-1 ring-black ring-opacity-5 {{ $contentClasses }}">
             {{ $content }}
         </div>
-    </div>
+    </ul>
 </div>

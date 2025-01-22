@@ -46,7 +46,7 @@
             </tbody>
         </table>
         @if ($borrow->accessory->count() > 0)
-            <h6 class="battambang text-center my-5" style="font-weight: bold;">ឧបករណ៍ភ្ជាប់បន្ថែម</h6>
+            <h6 class="battambang text-center my-5" style="font-weight: bold;">និងឧបករណ៍ភ្ជាប់បន្ថែម</h6>
 
             <table class="table table-bordered">
                 <thead>
