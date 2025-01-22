@@ -12,6 +12,12 @@ use Illuminate\Http\Request;
 
 class BorrowController extends Controller
 {
+    public function paginateData(Request $request)
+    {
+        $borrows = Borrow::with('user')->orderBy('created_at', 'desc')->paginate(5); // 5 items per page
+        return response()->json($borrows);
+    }
+    
     public function create()
     {
         $models = ProductModel::all();

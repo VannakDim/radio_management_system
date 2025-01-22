@@ -63,19 +63,19 @@ Route::middleware([
             ];
         });
         $users = User::all();
-        $stockOut = StockOut::orderBy('created_at', 'desc')->paginate(5); // 5 items per page
-        $borrows = Borrow::where('borrowed', 1)->orderBy('created_at', 'desc')->paginate(5); // 5 items per page
+        // $stockOut = StockOut::orderBy('created_at', 'desc')->paginate(5); // 5 items per page
+        // $borrows = Borrow::where('borrowed', 1)->orderBy('created_at', 'desc')->paginate(5); // 5 items per page
 
-        if ($request->ajax()) {
-            if ($request->has('stockOutPage')) {
-                return view('admin.partials.stock', compact('stockOut'))->render();
-            }
-            if ($request->has('borrowsPage')) {
-                return view('admin.partials.borrow', compact('borrows'))->render();
-            }
-        }
+        // if ($request->ajax()) {
+        //     if ($request->has('stockOutPage')) {
+        //         return view('admin.partials.stock', compact('stockOut'))->render();
+        //     }
+        //     if ($request->has('borrowsPage')) {
+        //         return view('admin.partials.borrow', compact('borrows'))->render();
+        //     }
+        // }
 
-        return view('admin.index', compact('users', 'data', 'stockOut', 'borrows'));
+        return view('admin.index', compact('users', 'data'));
     })->name('dashboard');
 
     Route::get('/slider/all', [SliderController::class, 'index'])->name('all.slider');
@@ -153,7 +153,8 @@ Route::middleware([
     Route::post('/product/borrow/store', [BorrowController::class, 'store'])->name('borrow.store');
     Route::get('/product/borrow/index', [BorrowController::class, 'index'])->name('borrow.index');
 
-
+    Route::get('/product/stock-out/data', [StockOutController::class, 'paginateData'])->name('stockout.paginate');
+    Route::get('/product/borrow/data', [BorrowController::class, 'paginateData'])->name('borrow.paginate');
 
     Route::get('/logout', [UserAuthController::class, 'logout'])->name('user.logout');
 

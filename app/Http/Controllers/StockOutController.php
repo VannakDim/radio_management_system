@@ -13,6 +13,13 @@ use Illuminate\Support\Facades\Auth;
 
 class StockOutController extends Controller
 {
+
+    public function paginateData(Request $request)
+    {
+        $stockOut = StockOut::with('user')->orderBy('created_at', 'desc')->paginate(5); // 5 items per page
+        return response()->json($stockOut);
+    }
+
     public function create()
     {
         $models = ProductModel::all();
