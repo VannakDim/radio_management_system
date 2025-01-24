@@ -17,8 +17,10 @@ class BorrowController extends Controller
         $query = Borrow::with('user');
 
         // Check if date range is provided
-        if ($request->has('start_date') && $request->has('end_date')) {
-            $query->whereBetween('created_at', [$request->start_date, $request->end_date]);
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $startDate = date('Y-m-d 00:00:00', strtotime($request->start_date));
+            $endDate = date('Y-m-d 23:59:59', strtotime($request->end_date));
+            $query->whereBetween('created_at', [$startDate, $endDate]);
         }
 
         $borrow = $query->orderBy('created_at', 'desc')->paginate(5); // 5 items per page

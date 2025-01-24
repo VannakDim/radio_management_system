@@ -63,17 +63,6 @@ Route::middleware([
             ];
         });
         $users = User::all();
-        // $stockOut = StockOut::orderBy('created_at', 'desc')->paginate(5); // 5 items per page
-        // $borrows = Borrow::where('borrowed', 1)->orderBy('created_at', 'desc')->paginate(5); // 5 items per page
-
-        // if ($request->ajax()) {
-        //     if ($request->has('stockOutPage')) {
-        //         return view('admin.partials.stock', compact('stockOut'))->render();
-        //     }
-        //     if ($request->has('borrowsPage')) {
-        //         return view('admin.partials.borrow', compact('borrows'))->render();
-        //     }
-        // }
 
         return view('admin.index', compact('users', 'data'));
     })->name('dashboard');
