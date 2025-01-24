@@ -157,7 +157,7 @@
                         end_date: endDate
                     },
                     success: function(response) {
-                        console.log(response);
+                        // console.log(response);
                         updateTable('#borrow-table-body', response.data);
                         updatePagination('#borrowPagination', response);
                     }
