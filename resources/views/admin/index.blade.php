@@ -42,8 +42,8 @@
                             <div class="card-header justify-content-between">
                                 <h2 class="badge badge-warning">STOCK-OUT REPORT</h2>
                                 <div class="date-range-report" id="filterStockOut"><span></span></div>
-                                <button class="btn btn-sm btn-outline-primary" onclick="dateRangeStockOut()"
-                                    style="margin-left: 10px">Filter</button>
+                                {{-- <button class="btn btn-sm btn-outline-primary" onclick="dateRangeStockOut()"
+                                    style="margin-left: 10px">Filter</button> --}}
                             </div>
                             <div class="card-body pt-0 pb-5">
                                 <table class="table card-table table-responsive table-responsive-large" style="width:100%">
@@ -73,8 +73,8 @@
                             <div class="card-header justify-content-between">
                                 <h2 class="badge badge-danger">BORROWING REPORT</h2>
                                 <div class="date-range-report" id="filterBorrow"><span></span></div>
-                                <button class="btn btn-sm btn-outline-primary" onclick="dateRangeBorrow()"
-                                    style="margin-left: 10px">Filter</button>
+                                {{-- <button class="btn btn-sm btn-outline-primary" onclick="dateRangeBorrow()"
+                                    style="margin-left: 10px">Filter</button> --}}
                             </div>
                             <div class="card-body pt-0 pb-5">
                                 <table class="table card-table table-responsive table-responsive-large" style="width:100%">
@@ -113,6 +113,78 @@
 @section('script')
     <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
     <script>
+        $(document).ready(function() {
+            $('#filterStockOut').daterangepicker({
+                opens: 'left',
+                startDate: moment().startOf('month'),
+                endDate: moment().endOf('month'),
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1,
+                        'month').endOf('month')]
+                },
+                locale: {
+                    format: 'MMM/DD/YYYY'
+                }
+            }, function(start, end, label) {
+                $('#filterStockOut span').html(start.format('MMM/DD/YYYY') + ' - ' + end.format(
+                    'MMM/DD/YYYY'));
+                // console.log(start.format('YYYY-MM-DD') + ' - ' + end.format('YYYY-MM-DD'));
+                $.ajax({
+                    url: "{{ route('stockout.paginate') }}",
+                    type: "GET",
+                    data: {
+                        start_date: start.format('YYYY-MM-DD'),
+                        end_date: end.format('YYYY-MM-DD')
+                    },
+                    success: function(response) {
+                        // console.log(response.last_page);
+                        updateTable('#stockout-table-body', response.data);
+                        updatePagination('#stockOutPagination', response);
+                    }
+                });
+            });
+
+            $('#filterBorrow').daterangepicker({
+                opens: 'left',
+                startDate: moment().startOf('month'),
+                endDate: moment().endOf('month'),
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1,
+                        'month').endOf('month')]
+                },
+                locale: {
+                    format: 'MMM/DD/YYYY'
+                }
+            }, function(start, end, label) {
+                $('#filterBorrow span').html(start.format('MMM/DD/YYYY') + ' - ' + end.format(
+                    'MMM/DD/YYYY'));
+                    $.ajax({
+                    url: "{{ route('borrow.paginate') }}",
+                    type: "GET",
+                    data: {
+                        start_date: start.format('YYYY-MM-DD'),
+                        end_date: end.format('YYYY-MM-DD')
+                    },
+                    success: function(response) {
+                        // console.log(response.last_page);
+                        updateTable('#borrow-table-body', response.data);
+                        updatePagination('#borrowPagination', response);
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
         new Typed('.welcome-text', {
             strings: ['<i>សូមស្វាគមន៍មកកាន់</i>ប្រព័ន្ធគ្រប់គ្រងសម្ភារៈបច្ចេកទេស',
                 'យើងនៅទីនេះដើម្បីជួយលោកអ្នកក្នុងការស្វែងរកដំណោះស្រាយចំពោះបញ្ហា'
@@ -136,12 +208,14 @@
                         end_date: endDate
                     },
                     success: function(response) {
+                        console.log(response.last_page);
                         updateTable('#stockout-table-body', response.data);
                         updatePagination('#stockOutPagination', response);
                     }
                 });
             }
         }
+
 
         function dateRangeBorrow(page) {
             let dateRange = $('#filterBorrow span').text();
@@ -202,7 +276,7 @@
         }
 
         function updatePagination(selector, response) {
-            if(selector === '#stockOutPagination') {
+            if (selector === '#stockOutPagination') {
                 view = "stock-out";
             } else {
                 view = "borrow";
@@ -222,6 +296,8 @@
                                 <a href="#" class="page-link" data-view="${view}" data-page="${response.current_page + 1}" style="height: 38px;">\></a></li>`;
                 pagination += '</ul></nav>';
                 $(selector).find('.pagination').html(pagination);
+            } else {
+                $(selector).find('.pagination').html(`<span class="mr-2">Records found: ${response.total}</span>`);
             }
         }
 
