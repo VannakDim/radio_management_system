@@ -60,7 +60,7 @@
                                     <tbody id="stockout-table-body">
                                     </tbody>
                                 </table>
-                                <div id="stockOutPagination" data-url="{{ route('stockout.paginate') }}">
+                                <div id="stockoutPagination" data-url="{{ route('stockout.paginate') }}">
                                     <nav aria-label="Page navigation example">
                                         <ul class="pagination justify-content-center"></ul>
                                     </nav>
@@ -114,75 +114,46 @@
     <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
     <script>
         $(document).ready(function() {
-            $('#filterStockOut').daterangepicker({
-                opens: 'left',
-                startDate: moment().startOf('month'),
-                endDate: moment().endOf('month'),
-                ranges: {
-                    'Today': [moment(), moment()],
-                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                    'This Month': [moment().startOf('month'), moment().endOf('month')],
-                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1,
-                        'month').endOf('month')]
-                },
-                locale: {
-                    format: 'MMM/DD/YYYY'
-                }
-            }, function(start, end, label) {
-                $('#filterStockOut span').html(start.format('MMM/DD/YYYY') + ' - ' + end.format(
-                    'MMM/DD/YYYY'));
-                // console.log(start.format('YYYY-MM-DD') + ' - ' + end.format('YYYY-MM-DD'));
-                $.ajax({
-                    url: "{{ route('stockout.paginate') }}",
-                    type: "GET",
-                    data: {
-                        start_date: start.format('YYYY-MM-DD'),
-                        end_date: end.format('YYYY-MM-DD')
-                    },
-                    success: function(response) {
-                        // console.log(response.last_page);
-                        updateTable('#stockout-table-body', response.data);
-                        updatePagination('#stockOutPagination', response);
-                    }
-                });
-            });
-
-            $('#filterBorrow').daterangepicker({
-                opens: 'left',
-                startDate: moment().startOf('month'),
-                endDate: moment().endOf('month'),
-                ranges: {
-                    'Today': [moment(), moment()],
-                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                    'This Month': [moment().startOf('month'), moment().endOf('month')],
-                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1,
-                        'month').endOf('month')]
-                },
-                locale: {
-                    format: 'MMM/DD/YYYY'
-                }
-            }, function(start, end, label) {
-                $('#filterBorrow span').html(start.format('MMM/DD/YYYY') + ' - ' + end.format(
-                    'MMM/DD/YYYY'));
-                    $.ajax({
-                    url: "{{ route('borrow.paginate') }}",
-                    type: "GET",
-                    data: {
-                        start_date: start.format('YYYY-MM-DD'),
-                        end_date: end.format('YYYY-MM-DD')
-                    },
-                    success: function(response) {
-                        // console.log(response.last_page);
-                        updateTable('#borrow-table-body', response.data);
-                        updatePagination('#borrowPagination', response);
-                    }
-                });
-            });
+            initializeDateRangePicker('#filterStockOut', "{{ route('stockout.paginate') }}", 1,
+                '#stockout-table-body', '#stockoutPagination');
+            initializeDateRangePicker('#filterBorrow', "{{ route('borrow.paginate') }}", 1, '#borrow-table-body',
+                '#borrowPagination');
         });
+
+        function initializeDateRangePicker(selector, url, page, tableBodySelector, paginationSelector) {
+            $(selector).daterangepicker({
+                opens: 'left',
+                startDate: moment().startOf('month'),
+                endDate: moment().endOf('month'),
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month')
+                        .endOf('month')
+                    ]
+                },
+                locale: {
+                    format: 'MMM/DD/YYYY'
+                }
+            }, function(start, end, label) {
+                $(selector + ' span').html(start.format('MMM/DD/YYYY') + ' - ' + end.format('MMM/DD/YYYY'));
+                $.ajax({
+                    url: url,
+                    type: "GET",
+                    data: {
+                        start_date: start.format('YYYY-MM-DD'),
+                        end_date: end.format('YYYY-MM-DD')
+                    },
+                    success: function(response) {
+                        updateTable(tableBodySelector, response.data);
+                        updatePagination(paginationSelector, response);
+                    }
+                });
+            });
+        }
     </script>
     <script>
         new Typed('.welcome-text', {
@@ -194,50 +165,37 @@
             loop: true,
         });
 
-        function dateRangeStockOut(page) {
-            let dateRange = $('#filterStockOut span').text();
+        function dateRangeDisplay(page, view) {
+            let dateRange;
+            
+            if (view === 'stockout') {
+                dateRange = $('#filterStockOut span').text();
+                url = "{{ route('stockout.paginate') }}?page=" + page;
+            } else {
+                dateRange = $('#filterBorrow span').text();
+                url = "{{ route('borrow.paginate') }}?page=" + page;
+            }
+            console.log(url);
             if (dateRange) {
                 const [start, end] = dateRange.split(' - ');
                 const startDate = moment(start.trim(), 'MMM/DD/YYYY').format('YYYY-MM-DD');
                 const endDate = moment(end.trim(), 'MMM/DD/YYYY').format('YYYY-MM-DD');
                 $.ajax({
-                    url: "{{ route('stockout.paginate') }}?page=" + page,
+                    url: url,
                     type: "GET",
                     data: {
                         start_date: startDate,
                         end_date: endDate
                     },
                     success: function(response) {
-                        console.log(response.last_page);
-                        updateTable('#stockout-table-body', response.data);
-                        updatePagination('#stockOutPagination', response);
+
+                        updateTable(`#${view}-table-body`, response.data);
+                        updatePagination(`#${view}Pagination`, response);
+
                     }
                 });
             }
-        }
-
-
-        function dateRangeBorrow(page) {
-            let dateRange = $('#filterBorrow span').text();
-            if (dateRange) {
-                const [start, end] = dateRange.split(' - ');
-                const startDate = moment(start.trim(), 'MMM/DD/YYYY').format('YYYY-MM-DD');
-                const endDate = moment(end.trim(), 'MMM/DD/YYYY').format('YYYY-MM-DD');
-                $.ajax({
-                    url: "{{ route('borrow.paginate') }}?page=" + page,
-                    type: "GET",
-                    data: {
-                        start_date: startDate,
-                        end_date: endDate
-                    },
-                    success: function(response) {
-                        // console.log(response);
-                        updateTable('#borrow-table-body', response.data);
-                        updatePagination('#borrowPagination', response);
-                    }
-                });
-            }
-        }
+        };
 
         function updateTable(selector, data) {
             let rows = '';
@@ -276,13 +234,14 @@
         }
 
         function updatePagination(selector, response) {
-            if (selector === '#stockOutPagination') {
+            if (selector === '#stockoutPagination') {
                 view = "stock-out";
             } else {
                 view = "borrow";
             }
             if (response.last_page > 1) {
-                let pagination = '<nav aria-label="Page navigation example"><ul class="pagination justify-content-center">';
+                let pagination =
+                    '<nav aria-label="Page navigation example"><ul class="pagination justify-content-center">';
                 pagination +=
                     `<li class="page-item ${response.current_page === 1 ? 'disabled' : ''}">
                                 <a href="#" class="page-link" data-view="${view}" data-page="${response.current_page - 1}" style="height: 38px;">\<</a></li>`;
@@ -307,17 +266,17 @@
             let page = $(this).data('page');
             let view = $(this).data('view');
             if (view === 'stock-out') {
-                dateRangeStockOut(page);
+                dateRangeDisplay(page, 'stockout');
                 // console.log('Stock Out'+page);
             } else {
-                dateRangeBorrow(page);
+                dateRangeDisplay(page, 'borrow');
                 // console.log('Borrow'+page);
             }
         });
 
 
         $(document).ready(function() {
-            loadTableData("{{ route('stockout.paginate') }}", '#stockout-table-body', '#stockOutPagination');
+            loadTableData("{{ route('stockout.paginate') }}", '#stockout-table-body', '#stockoutPagination');
             loadTableData("{{ route('borrow.paginate') }}", '#borrow-table-body', '#borrowPagination');
         });
 
