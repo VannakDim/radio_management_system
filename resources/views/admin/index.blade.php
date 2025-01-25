@@ -8,7 +8,7 @@
                 <div class="row">
                     <div class="col-12">
                         <!-- Recent Stock Update Table -->
-                        <x-card-table title="PRODUCT AVAILABLE" badge="primary">
+                        <x-card-table title="STOCK OVERVIEW" badge="success">
                             <x-slot name="header">
                                 <tr>
                                     <th>ID</th>
@@ -25,7 +25,7 @@
                                         <td>{{ $stock['id'] }}</td>
                                         <td><a class="text-dark" href="">{{ $stock['model_name'] }}</a></td>
                                         <td>{{ $stock['brand_name'] }}</td>
-                                        <td>{{ $stock['available_stock'] }}</td>
+                                        <td><span class="badge badge-success">{{ $stock['available_stock'] }}</span></td>
                                         <td><span class="badge badge-danger">{{ $stock['borrow'] }}</span></td>
                                         <td class="text-right">
                                             <x-dropdown>
@@ -40,7 +40,7 @@
                         <!-- Stock Out Report -->
                         <div class="card card-table-border-none" id="recent-orders">
                             <div class="card-header justify-content-between">
-                                <h2 class="badge badge-warning">STOCK-OUT REPORT</h2>
+                                <h2 class="badge badge-warning text-white">STOCK-OUT REPORT</h2>
                                 <div class="date-range-report" id="filterStockOut"><span></span></div>
                                 {{-- <button class="btn btn-sm btn-outline-primary" onclick="dateRangeStockOut()"
                                     style="margin-left: 10px">Filter</button> --}}
@@ -71,7 +71,7 @@
                         <!-- Borrowing Report -->
                         <div class="card card-table-border-none" id="recent-orders">
                             <div class="card-header justify-content-between">
-                                <h2 class="badge badge-danger">BORROWING REPORT</h2>
+                                <h2 class="badge badge-danger text-white">BORROWING REPORT</h2>
                                 <div class="date-range-report" id="filterBorrow"><span></span></div>
                                 {{-- <button class="btn btn-sm btn-outline-primary" onclick="dateRangeBorrow()"
                                     style="margin-left: 10px">Filter</button> --}}

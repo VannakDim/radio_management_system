@@ -103,7 +103,11 @@
                     <img src="{{ asset($item['image']) }}" class="img-fluid"
                         alt="">
                     <div class="portfolio-info">
-                        <h4>{{$item['model_name']}}<span class="badge badge-success pb-0 mx-2">{{$item['available_stock']}}</span></h4>
+                        <h4>{{$item['model_name']}}
+                            <span class="badge badge-success pb-0 mx-2">{{$item['available_stock']}}</span>
+                            <span class="badge badge-warning pb-0 mx-2">{{$item['stock_out']}}</span>
+                            <span class="badge badge-danger pb-0 mx-2">{{$item['borrowed']}}</span>
+                        </h4>
                         <p>{{$item['brand_name']}}</p>
                         <a href="{{ asset($item['image'])}}" data-gall="portfolioGallery"
                             class="venobox preview-link" title="{{$item['model_name']}}"><i class="bx bx-plus"></i></a>
