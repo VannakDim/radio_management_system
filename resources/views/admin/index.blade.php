@@ -29,9 +29,9 @@
                                         <td><span class="badge badge-success">{{ $stock['available_stock'] }}</span></td>
                                         <td>@if($stock['borrow'] > 0)<span class="badge badge-danger">{{ $stock['borrow'] }}</span>@endif</td>
                                         <td class="text-right">
-                                            <x-dropdown>
+                                            {{-- <x-dropdown>
                                                 <x-dropdown-item href="#">View</x-dropdown-item>
-                                            </x-dropdown>
+                                            </x-dropdown> --}}
                                         </td>
                                     </tr>
                                 @endforeach
