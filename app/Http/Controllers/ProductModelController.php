@@ -38,6 +38,7 @@ class ProductModelController extends Controller
             'categories.*' => 'string|max:50',
             'brands' => 'required|array',
             'name' => 'required',
+            'accessory' => 'required|boolean',
             'frequency' => 'nullable',
             'type' => 'nullable',
             'capacity' => 'nullable',
@@ -59,6 +60,7 @@ class ProductModelController extends Controller
         $model->category_id = $category;
         $model->brand_id = $brand;
         $model->name = $request->name;
+        $model->accessory = $request->accessory;
         $model->frequency = $request->frequency;
         $model->type = $request->type;
         $model->capacity = $request->capacity;
@@ -105,6 +107,7 @@ class ProductModelController extends Controller
             'categories.*' => 'string|max:50',
             'brands' => 'required|array',
             'name' => 'required',
+            'accessory' => 'boolean',
             'frequency' => 'nullable',
             'type' => 'nullable',
             'capacity' => 'nullable',
@@ -126,6 +129,7 @@ class ProductModelController extends Controller
         $model->category_id = $category;
         $model->brand_id = $brand;
         $model->name = $request->name;
+        $model->accessory = $request->accessory;
         $model->frequency = $request->frequency;
         $model->type = $request->type;
         $model->capacity = $request->capacity;
@@ -140,7 +144,7 @@ class ProductModelController extends Controller
             sleep(1);
         }
         $model->save();
-        return response()->json(['message' => 'Model created successfully.']);
+        return response()->json(['message' => 'Model updated successfully.']);
     }
 
     /**

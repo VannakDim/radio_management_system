@@ -54,27 +54,43 @@
                                                     @endforeach
                                                 </select>
                                             </div>
-                                            
                                             <div class="form-group">
-                                                <label for="exampleInputEmail1">Frequency band:</label>
-                                                <input frquency="text" name="frequency" class="form-control"
-                                                    id="exampleInputEmail1" placeholder="Frequency band">
+                                                <label for="accessory">Is Accessory:</label>
+                                                <label class="switch">
+                                                    <input type="checkbox" id="accessory" name="accessory">
+                                                    <span class="slider round"></span>
+                                                </label>
                                             </div>
-                                            
-                                            <div class="form-group">
-                                                <label for="exampleInputEmail1">Type:</label>
-                                                <input type="text" name="type" class="form-control"
-                                                    id="exampleInputEmail1" placeholder="Product type">
-                                                @error('type')
-                                                    <span class="text-danger">{{ $message }}</span>
-                                                @enderror
+                                            <div id="additional-info" style="display: block">
+                                                <div class="form-group">
+                                                    <label for="exampleInputEmail1">Frequency band:</label>
+                                                    <input type="text" name="frequency" class="form-control" id="exampleInputEmail1" placeholder="Frequency band">
+                                                </div>
+                                                
+                                                <div class="form-group">
+                                                    <label for="exampleInputEmail1">Type:</label>
+                                                    <input type="text" name="type" class="form-control" id="exampleInputEmail1" placeholder="Product type">
+                                                    @error('type')
+                                                        <span class="text-danger">{{ $message }}</span>
+                                                    @enderror
+                                                </div>
+                                                
+                                                <div class="form-group">
+                                                    <label for="exampleInputEmail1">Power:</label>
+                                                    <input type="text" name="power" class="form-control" id="exampleInputEmail1" placeholder="Product power">
+                                                </div>
                                             </div>
-                                            
-                                            <div class="form-group">
-                                                <label for="exampleInputEmail1">Power:</label>
-                                                <input type="text" name="power" class="form-control"
-                                                    id="exampleInputEmail1" placeholder="Product power">
-                                            </div>
+
+                                            <script>
+                                                document.getElementById('accessory').addEventListener('change', function() {
+                                                    const additionalInfo = document.getElementById('additional-info');
+                                                    if (this.checked) {
+                                                        additionalInfo.style.display = 'none';
+                                                    } else {
+                                                        additionalInfo.style.display = 'block';
+                                                    }
+                                                });
+                                            </script>
 
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1">Model image</label>
@@ -83,7 +99,8 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="post-img" id="img-preview"
-                                                style="display: flex; justify-content: center; align-items: center; background-image: url({{ asset('backend/assets/img/default-image.avif') }}); background-size: cover; background-position: center; width: 100%; height: 100%;">
+                                                style="display: flex; justify-content: center; align-items: center; background-image: url({{ asset('backend/assets/img/default-image.avif') }}); background-size: contain;background-repeat: no-repeat; background-position: center; width: 100%; height: 100%;">
+                                                {{-- style="display: flex; justify-content: center; align-items: center; background-image: url({{ asset($model->image) }}); background-size: contain; background-repeat: no-repeat; background-position: center; width: 100%; height: 100%;"> --}}
                                                 {{-- <img id="img-preview" src="" alt="Image Preview" style="max-width: 100%;max-height: 350px;object-fit: cover;"> --}}
                                             </div>
                                         </div>

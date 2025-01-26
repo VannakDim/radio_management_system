@@ -24,7 +24,7 @@
                             @foreach ($models as $model)
                                 <div class="col-md-6 col-xl-3">
                                     <div class="card mb-4">
-                                        <div class="card-img-cover" style="background-image: url({{ asset($model->image) }});">
+                                        <div class="card-img-contain" style="background-image: url({{ asset($model->image) }});">
                                         </div>
                                         <div class="card-body">
                                             <h5 class="card-title text-primary">{{$model->brand->brand_name}} <strong>{{ $model->name }}</strong></h5>

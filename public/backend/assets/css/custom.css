@@ -1,28 +1,28 @@
-#slider-image{
-    height: 108px;
-    width: 192px;
+#slider-image {
+  height: 108px;
+  width: 192px;
 }
 
-a{
-    text-decoration: none !important;
+a {
+  text-decoration: none !important;
 }
 
-.kh-koulen{
-    font-family: "Koulen", sans-serif !important;
-    line-height: 27px !important;
-  }
-  
-.kh-battambang{
+.kh-koulen {
+  font-family: "Koulen", sans-serif !important;
+  line-height: 27px !important;
+}
+
+.kh-battambang {
   font-family: "Battambang", sans-serif !important;
   line-height: 27px;
 }
 
-.card-body p{
+.card-body p {
   font-family: "Battambang", sans-serif !important;
 
 }
 
-.sidenav-item-link i{
+.sidenav-item-link i {
   font-size: 1.5rem;
   padding-right: 5px;
 }
@@ -50,7 +50,7 @@ a{
 
 @media (max-width: 768px) {
 
-  #img-preview{
+  #img-preview {
     width: 100%;
     height: 300px !important;
   }
@@ -58,7 +58,8 @@ a{
 
 .text-truncate {
   display: -webkit-box;
-  -webkit-line-clamp: 1; /* Number of lines to show */
+  -webkit-line-clamp: 1;
+  /* Number of lines to show */
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -90,8 +91,10 @@ a{
   text-decoration: none;
   border-radius: 0.25rem;
   transition: background-color 0.3s ease;
-  height: 100%; /* Ensure all buttons have the same height */
-  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  height: 100%;
+  /* Ensure all buttons have the same height */
+  box-sizing: border-box;
+  /* Include padding and border in the element's total width and height */
 }
 
 .pagination-buttons .pagination li a:hover {
@@ -109,3 +112,58 @@ a{
   font-size: 14px;
   color: #6c757d;
 }
+
+
+/* Toggle Button */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 52px;
+  height: 25px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+}
+
+input:checked+.slider {
+  background-color: #2196F3;
+}
+
+input:checked+.slider:before {
+  transform: translateX(26px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+/* End toggle-button */
