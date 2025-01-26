@@ -60,6 +60,8 @@ Route::middleware([
                 'brand_name' => $model->brand->brand_name,
                 'available_stock' => $stockIn - $stockOut - $borrow,
                 'borrow' => $borrow,
+                'stock_out' => $stockOut,
+                'stock_in' => $stockIn,
             ];
         });
         // $users = User::all();

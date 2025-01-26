@@ -23,7 +23,8 @@
                                 @foreach ($data as $stock)
                                     <tr>
                                         <td>{{ $stock['id'] }}</td>
-                                        <td><a class="text-dark" href="">{{ $stock['model_name'] }}</a></td>
+                                        <td><a class="text-dark mr-2" href="">{{ $stock['model_name'] }}</a><span class="badge badge-primary">{{ $stock['stock_in'] }}</span>
+                                            <span class="badge badge-warning">{{ $stock['stock_out'] }}</span></td>
                                         <td>{{ $stock['brand_name'] }}</td>
                                         <td><span class="badge badge-success">{{ $stock['available_stock'] }}</span></td>
                                         <td>@if($stock['borrow'] > 0)<span class="badge badge-danger">{{ $stock['borrow'] }}</span>@endif</td>
