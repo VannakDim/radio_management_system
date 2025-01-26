@@ -42,7 +42,7 @@
 
                                             <label for="model">Product detail:</label>
                                             <div class="row">
-                                                <div class="col-md-6">
+                                                <div class="col-md-7">
                                                     <div class="form-group">
                                                         <select name="models" id="model" class="form-control">
                                                             @foreach ($models as $model)
@@ -55,15 +55,13 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3">
-                                                    <div class="form-group">
-                                                        <input type="text" class="form-control" id="serial_number"
+                                                <div class="col-md-5">
+                                                    <div class="form-group d-flex">
+                                                        <input type="text" class="form-control mr-2" id="serial_number"
                                                             placeholder="Serial number">
+                                                        <button type="button" class="btn btn-primary"
+                                                            onclick="addItem(event)"><i class="fas fa-plus"></i></button>
                                                     </div>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <button type="button" class="btn btn-primary"
-                                                        onclick="addItem(event)">ADD TO LIST</button>
                                                 </div>
                                             </div>
                                             <table class="table table-bordered" id="itemsTable">
@@ -82,47 +80,60 @@
                                             <!-- Hidden input to store the items data -->
                                             <input type="hidden" name="items" id="itemsInput" required>
 
-                                            <label for="model">Accessory:</label>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <select name="models" id="model_accessory" class="form-control">
-                                                            @foreach ($models as $model)
-                                                                @if ($model->accessory == 1)
-                                                                    <option value="{{ $model->id }}">
-                                                                        {{ $model->name }}
-                                                                    </option>
-                                                                @endif
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <div class="form-group">
-                                                        <input type="number" class="form-control" id="quantity"
-                                                            placeholder="Quantity">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <button type="button" class="btn btn-primary"
-                                                        onclick="addAccessory(event)">ADD TO LIST</button>
-                                                </div>
+                                            {{-- <label for="model">Accessory:</label> --}}
+                                            {{-- <div class="form-group form-check">
+                                                <input type="checkbox" class="form-check-input" id="withAccessories" onchange="toggleAccessories()">
+                                                <label class="form-check-label" for="withAccessories">With Accessories</label>
+                                            </div> --}}
+                                            <div class="form-group">
+                                                <label for="accessory">With Accessory:</label>
+                                                <label class="switch">
+                                                    <input type="checkbox" id="withAccessories" onchange="toggleAccessories()">
+                                                    <span class="slider round"></span>
+                                                </label>
                                             </div>
-                                            <table class="table table-bordered" id="accessoryTable">
-                                                <thead>
-                                                    <tr>
-                                                        <th>ID</th>
-                                                        <th>Accessory name</th>
-                                                        <th>Quantity</th>
-                                                        <th>Actions</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <!-- Items will be added here dynamically -->
-                                                </tbody>
-                                            </table>
-                                            <!-- Hidden input to store the items data -->
-                                            <input type="hidden" name="accessories" id="accessoryInput" required>
+                                            <div id="accessoriesSection" style="display: none;">
+                                                <div class="row">
+                                                    <div class="col-md-7">
+                                                        <div class="form-group">
+                                                            <select name="models" id="model_accessory" class="form-control">
+                                                                @foreach ($models as $model)
+                                                                    @if ($model->accessory == 1)
+                                                                        <option value="{{ $model->id }}">
+                                                                            {{ $model->name }}
+                                                                        </option>
+                                                                    @endif
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-5">
+                                                        <div class="form-group flex">
+                                                            <input type="number" class="form-control mr-2" id="quantity"
+                                                                placeholder="Quantity">
+                                                            <button type="button" class="btn btn-primary"
+                                                                onclick="addAccessory(event)">
+                                                                <i class="fas fa-plus"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <table class="table table-bordered" id="accessoryTable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>ID</th>
+                                                            <th>Accessory name</th>
+                                                            <th>Quantity</th>
+                                                            <th>Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <!-- Items will be added here dynamically -->
+                                                    </tbody>
+                                                </table>
+                                                <!-- Hidden input to store the items data -->
+                                                <input type="hidden" name="accessories" id="accessoryInput" required>
+                                            </div>
 
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1">Photo</label>
@@ -131,7 +142,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="post-img" id="img-preview"
-                                                style="display: flex; justify-content: center; align-items: center; background-image: url({{ asset('backend/assets/img/default-image.avif') }}); background-size: cover; background-position: center; width: 100%; height: 100%;">
+                                                style="display: flex; justify-content: center; align-items: center; background-image: url({{ asset('backend/assets/img/default-image.avif') }}); background-size: contain; background-repeat: no-repeat; background-position: center; width: 100%; height: 100%;">
                                             </div>
                                         </div>
                                     </div>
@@ -195,10 +206,16 @@
             }
         });
     </script>
-    <script src="https://cdn.tiny.cloud/1/qdi8ljnwutu3zjh290nqmze8oo8w5x9wqh925tzk9eyqpqmk/tinymce/7/tinymce.min.js"
-        referrerpolicy="origin">
+    <script>
+        function toggleAccessories() {
+            const accessoriesSection = document.getElementById('accessoriesSection');
+            if (document.getElementById('withAccessories').checked) {
+                accessoriesSection.style.display = 'block';
+            } else {
+                accessoriesSection.style.display = 'none';
+            }
+        }
     </script>
-
     <script>
         $('#uploadForm').on('submit', function(e) {
             e.preventDefault(); // Prevent the default form submission
