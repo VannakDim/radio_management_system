@@ -26,7 +26,7 @@
                                         <td><a class="text-dark" href="">{{ $stock['model_name'] }}</a></td>
                                         <td>{{ $stock['brand_name'] }}</td>
                                         <td><span class="badge badge-success">{{ $stock['available_stock'] }}</span></td>
-                                        <td><span class="badge badge-danger">{{ $stock['borrow'] }}</span></td>
+                                        <td>@if($stock['borrow'] > 0)<span class="badge badge-danger">{{ $stock['borrow'] }}</span>@endif</td>
                                         <td class="text-right">
                                             <x-dropdown>
                                                 <x-dropdown-item href="#">View</x-dropdown-item>
@@ -42,8 +42,7 @@
                             <div class="card-header justify-content-between">
                                 <h2 class="badge badge-warning text-white">STOCK-OUT REPORT</h2>
                                 <div class="date-range-report" id="filterStockOut"><span></span></div>
-                                {{-- <button class="btn btn-sm btn-outline-primary" onclick="dateRangeStockOut()"
-                                    style="margin-left: 10px">Filter</button> --}}
+                                
                             </div>
                             <div class="card-body pt-0 pb-5">
                                 <table class="table card-table table-responsive table-responsive-large" style="width:100%">
@@ -73,8 +72,7 @@
                             <div class="card-header justify-content-between">
                                 <h2 class="badge badge-danger text-white">BORROWING REPORT</h2>
                                 <div class="date-range-report" id="filterBorrow"><span></span></div>
-                                {{-- <button class="btn btn-sm btn-outline-primary" onclick="dateRangeBorrow()"
-                                    style="margin-left: 10px">Filter</button> --}}
+                                
                             </div>
                             <div class="card-body pt-0 pb-5">
                                 <table class="table card-table table-responsive table-responsive-large" style="width:100%">
