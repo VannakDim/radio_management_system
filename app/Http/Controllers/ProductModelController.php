@@ -6,6 +6,9 @@ use App\Models\ProductBrand;
 use Illuminate\Http\Request;
 use App\Models\ProductModel;
 use App\Models\ProductCategory;
+use App\Models\StockInDetail;
+use App\Models\StockOutProduct;
+use App\Models\BorrowDetail;
 
 class ProductModelController extends Controller
 {
@@ -14,8 +17,29 @@ class ProductModelController extends Controller
      */
     public function index()
     {
-        $models = ProductModel::all();
-        return view('admin.product.model.index', compact('models'));
+        $data = ProductModel::with('brand')->get()->map(function ($model) {
+            $stockIn = StockInDetail::where('product_model_id', $model->id)->sum('quantity');
+            $stockOut = StockOutProduct::whereHas('product', function ($query) use ($model) {
+                $query->where('model_id', $model->id);
+            })->count('id');
+            $borrow = BorrowDetail::whereHas('product', function ($query) use ($model) {
+                $query->where('model_id', $model->id)
+                    ->where('borrowed', 1); // Add condition to filter borrowed products
+            })->count('id');
+            return [
+                'id' => $model->id,
+                'model_name' => $model->name,
+                'frequency' => $model->frequency,
+                'type' => $model->type,
+                'image' => $model->image,
+                'brand_name' => $model->brand->brand_name,
+                'stock_in' => $stockIn,
+                'available_stock' => $stockIn - $stockOut - $borrow,
+                'stock_out' => $stockOut,
+                'borrowed' => $borrow,
+            ];
+        });
+        return view('admin.product.model.index', compact('data'));
     }
 
     /**

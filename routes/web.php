@@ -62,9 +62,9 @@ Route::middleware([
                 'borrow' => $borrow,
             ];
         });
-        $users = User::all();
+        // $users = User::all();
 
-        return view('admin.index', compact('users', 'data'));
+        return view('admin.index', compact( 'data'));
     })->name('dashboard');
 
     Route::get('/slider/all', [SliderController::class, 'index'])->name('all.slider');

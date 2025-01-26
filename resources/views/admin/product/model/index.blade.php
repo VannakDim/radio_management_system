@@ -21,22 +21,42 @@
                             
                         @endsession
                         <div class="row">
-                            @foreach ($models as $model)
+                            @foreach ($data as $item)
                                 <div class="col-md-6 col-xl-3">
                                     <div class="card mb-4">
-                                        <div class="card-img-contain" style="background-image: url({{ asset($model->image) }});">
+                                        <div class="card-img-contain" style="background-image: url({{ asset($item['image']) }});">
                                         </div>
                                         <div class="card-body">
-                                            <h5 class="card-title text-primary">{{$model->brand->brand_name}} <strong>{{ $model->name }}</strong></h5>
-                                            <p class="badge badge-warning">{{ $model->frequency}}</p><span  class="badge badge-success">{{$model->type}}</span>
-                                            <p class="card-text py-3">{{ Str::limit($model->description,50) }}</p>
-                                            <a href="/product/model/edit/{{$model->id}}" class="btn btn-outline-primary edit-button">Edit</a>
-                                            <a class="btn btn-danger" href="{{ url('product/softDel/' . $model->id) }}"
+                                            <h4 class="card-title text-success"><strong class="badge badge-success">{{$item['model_name']}}</strong>{{$item['brand_name']}}</h4>
+                                            <p class="badge badge-warning">{{ $item['frequency']}}</p><span  class="badge badge-success">{{$item['type']}}</span>
+                                            <div class="row">
+                                                <div class="col-md-10 text-right">
+                                                    <h1>TOTAL:</h1>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <p class="badge badge-success">{{ $item['stock_in'] }}</p>
+                                                </div>
+                                                <div class="col-md-10 text-right">
+                                                    <h1>STOCK OUT:</h1>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <p class="badge badge-warning">{{ $item['stock_out'] }}</p>
+                                                </div>
+                                                <div class="col-md-10 text-right">
+                                                    <h1>BORROWED:</h1>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <p class="badge badge-danger">{{ $item['borrowed'] }}</p>
+                                                </div>
+                                            </div>
+                                            <a href="/product/model/edit/{{$item['id']}}" class="btn btn-outline-primary edit-button">Edit</a>
+                                            <a class="btn btn-danger" href="{{ url('product/softDel/' . $item['id']) }}"
                                                 href="">Delete</a>
                                         </div>
                                     </div>
                                 </div>
                             @endforeach
+                            
                         </div>
                     </div>
 

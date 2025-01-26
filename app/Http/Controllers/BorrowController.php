@@ -23,10 +23,19 @@ class BorrowController extends Controller
             $query->whereBetween('created_at', [$startDate, $endDate]);
         }
 
+        $query->where(function ($query) {
+            $query->whereHas('accessory', function ($accessory) {
+                $accessory->where('borrowed', 1); // Only show items that have accessories
+            })
+                ->orWhereHas('details', function ($product) {
+                    $product->where('borrowed', 1); // Only show items that are not returned
+                });
+        });
+
         $borrow = $query->orderBy('created_at', 'desc')->paginate(5); // 5 items per page
         return response()->json($borrow);
     }
-    
+
     public function create()
     {
         $models = ProductModel::all();
