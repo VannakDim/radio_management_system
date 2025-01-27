@@ -27,8 +27,8 @@
                                         <div class="card-img-contain" style="background-image: url({{ asset($item['image']) }});">
                                         </div>
                                         <div class="card-body">
-                                            <h4 class="card-title text-success"><strong class="badge-success kh-battambang">{{$item['model_name']}}</strong>{{$item['brand_name']}}</h4>
-                                            <p class="badge badge-warning">{{ $item['frequency']}}</p><span  class="badge badge-success">{{$item['type']}}</span>
+                                            <h4 class="card-title text-primary"><strong class="badge-primary kh-battambang px-1 mr-1">{{$item['model_name']}}</strong>{{$item['brand_name']}}</h4>
+                                            <p class="badge badge-warning mr-2">{{ $item['frequency']}}</p><span  class="badge badge-success">{{$item['type']}}</span>
                                             <div class="row">
                                                 <div class="col-10 text-right">
                                                     <h1>TOTAL:</h1>
