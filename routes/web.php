@@ -131,6 +131,7 @@ Route::middleware([
     Route::get('/product/softDel/{id}', [ProductModelController::class, 'softDelete']);
     Route::get('/product/model', [ProductModelController::class, 'create'])->name('product.model');
     Route::post('/product/store', [ProductModelController::class, 'store'])->name('store.model');
+    Route::post('/product/check-serial-number', [ProductController::class, 'checkSerialNumber'])->name('check.serial.number');
 
     Route::get('/product/stock-in', [StockInController::class, 'create'])->name('stockin.create');
     Route::post('/product/stock-in/store', [StockInController::class, 'store'])->name('stockin.store');

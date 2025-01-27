@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\ProductModel;
 use App\Models\StockOut;
+use App\Models\StockOutDetail;
 use App\Models\StockOutProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -23,7 +24,7 @@ class StockOutController extends Controller
             $endDate = date('Y-m-d 23:59:59', strtotime($request->end_date));
             $query->whereBetween('created_at', [$startDate, $endDate]);
         }
-        
+
         $stockOut = $query->orderBy('created_at', 'desc')->paginate(5); // 5 items per page
         return response()->json($stockOut);
     }
@@ -64,6 +65,18 @@ class StockOutController extends Controller
                 ]);
             } else {
                 return response()->json(['message' => 'Product not found!']);
+            }
+        }
+
+        // Decode the accessories JSON
+        $accessories = json_decode($request->input('accessories'), true);
+        if ($accessories) {
+            foreach ($accessories as $accessory) {
+                StockOutDetail::create([
+                    'stock_out_id' => $stock_out->id,
+                    'product_model_id' => $accessory['model_id'],
+                    'quantity' => $accessory['quantity'],
+                ]);
             }
         }
 

@@ -38,8 +38,15 @@ class BorrowController extends Controller
 
     public function create()
     {
+        
         $models = ProductModel::all();
-        return view('admin.product.borrow.create', compact('models'));
+        $availableProducts = Product::whereNotIn('id', function ($query) {
+            $query->select('product_id')->from('borrow_details')->where('borrowed', 1);
+        })->whereNotIn('id', function ($query) {
+            $query->select('product_id')->from('stock_out_products');
+        })->get();
+
+        return view('admin.product.borrow.create', compact('models', 'availableProducts'));
     }
 
     public function store(Request $request)

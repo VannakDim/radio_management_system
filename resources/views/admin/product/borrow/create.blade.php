@@ -58,7 +58,12 @@
                                                 <div class="col-md-5">
                                                     <div class="form-group d-flex">
                                                         <input type="text" class="form-control mr-2" id="serial_number"
-                                                            placeholder="Serial number">
+                                                            placeholder="Serial number" list="availableProducts">
+                                                        <datalist id="availableProducts">
+                                                            @foreach ($availableProducts as $product)
+                                                                <option value="{{ $product->PID }}"></option>
+                                                            @endforeach
+                                                        </datalist>
                                                         <button type="button" class="btn btn-primary"
                                                             onclick="addItem(event)"><i class="fas fa-plus"></i></button>
                                                     </div>
@@ -70,7 +75,7 @@
                                                         <th>Model ID</th>
                                                         <th>Model name</th>
                                                         <th>S/N</th>
-                                                        <th>Actions</th>
+                                                        <th style="width: 50px">Actions</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -80,15 +85,11 @@
                                             <!-- Hidden input to store the items data -->
                                             <input type="hidden" name="items" id="itemsInput" required>
 
-                                            {{-- <label for="model">Accessory:</label> --}}
-                                            {{-- <div class="form-group form-check">
-                                                <input type="checkbox" class="form-check-input" id="withAccessories" onchange="toggleAccessories()">
-                                                <label class="form-check-label" for="withAccessories">With Accessories</label>
-                                            </div> --}}
                                             <div class="form-group">
                                                 <label for="accessory">With Accessory:</label>
                                                 <label class="switch">
-                                                    <input type="checkbox" id="withAccessories" onchange="toggleAccessories()">
+                                                    <input type="checkbox" id="withAccessories"
+                                                        onchange="toggleAccessories()">
                                                     <span class="slider round"></span>
                                                 </label>
                                             </div>
@@ -96,7 +97,8 @@
                                                 <div class="row">
                                                     <div class="col-md-7">
                                                         <div class="form-group">
-                                                            <select name="models" id="model_accessory" class="form-control">
+                                                            <select name="models" id="model_accessory"
+                                                                class="form-control">
                                                                 @foreach ($models as $model)
                                                                     @if ($model->accessory == 1)
                                                                         <option value="{{ $model->id }}">
@@ -124,7 +126,7 @@
                                                             <th>ID</th>
                                                             <th>Accessory name</th>
                                                             <th>Quantity</th>
-                                                            <th>Actions</th>
+                                                            <th style="width: 50px">Actions</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -270,12 +272,44 @@
                 return;
             }
 
-            // Add item to the array
-            items.push({
-                model_id: modelId,
-                model_text: modelText,
-                serial_number: serial_number,
+            // Check if the serial number exists in the product table
+            $.ajax({
+                url: '/product/check-serial-number', // Adjust the URL to your route
+                type: 'POST',
+                data: {
+                    serial_number: serial_number,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(response) {
+                    if (response.exists) {
+                        // Add item to the array
+                        items.push({
+                            model_id: response.product.model_id,
+                            model_text: response.model,
+                            serial_number: response.product.PID,
+                        });
+                        console.log(response.model);
+
+                        // Update the table
+                        updateTable();
+
+                        // Clear the form fields
+                        document.getElementById('serial_number').value = '';
+                    } else {
+                        console.log('Serial number does not exist.');
+                        // Add item to the array
+                        items.push({
+                            model_id: modelId,
+                            model_text: modelText,
+                            serial_number: serial_number,
+                        });
+                    }
+                },
+                error: function(xhr) {
+                    alert('Error checking serial number: ' + xhr.responseText);
+                }
             });
+
 
             // Update the table
             updateTable();
@@ -297,7 +331,7 @@
                 <td>${item.model_text}</td>
                 <td>${item.serial_number}</td>
                 <td>
-                    <button type="button" class="btn btn-danger btn-sm" onclick="removeItem(${index})">Remove</button>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="removeItem(${index})"><i class="fas fa-trash-alt"></i></button>
                 </td>
             `;
                 tableBody.appendChild(row);
@@ -357,7 +391,7 @@
                 <td>${item.model_text}</td>
                 <td>${item.quantity}</td>
                 <td>
-                    <button type="button" class="btn btn-danger btn-sm" onclick="removeAccessory(${index})">Remove</button>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="removeAccessory(${index})"><i class="fas fa-trash-alt"></i></button>
                 </td>
             `;
                 tableBody.appendChild(row);

@@ -31,7 +31,7 @@
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1">Receiver:</label>
                                                 <input type="text" name="receiver" class="form-control"
-                                                    id="exampleInputEmail1" placeholder="Receiver">
+                                                    id="receiver_input" placeholder="Receiver">
                                             </div>
 
                                             <div class="form-group">
@@ -42,7 +42,7 @@
 
                                             <label for="model">Product detail:</label>
                                             <div class="row">
-                                                <div class="col-md-6">
+                                                <div class="col-md-7">
                                                     <div class="form-group">
                                                         <select name="models" id="model" class="form-control">
                                                             @foreach ($models as $model)
@@ -53,24 +53,21 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3">
-                                                    <div class="form-group">
-                                                        <input type="text" class="form-control" id="serial_number"
+                                                <div class="col-md-5">
+                                                    <div class="form-group flex">
+                                                        <input type="text" class="form-control mr-2" id="serial_number"
                                                             placeholder="Serial number">
+                                                        <button type="button" class="btn btn-primary"
+                                                            onclick="addItem(event)"><i class="fas fa-plus"></i></button>
                                                     </div>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <button type="button" class="btn btn-primary"
-                                                        onclick="addItem(event)">ADD TO LIST</button>
                                                 </div>
                                             </div>
                                             <table class="table table-bordered" id="itemsTable">
                                                 <thead>
                                                     <tr>
-                                                        <th>Model ID</th>
-                                                        <th>Model name</th>
-                                                        <th>S/N</th>
-                                                        <th>Actions</th>
+                                                        <th style="width: 40%">Model name</th>
+                                                        <th style="width: 40%">S/N</th>
+                                                        <th style="width: 20%">Actions</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -80,6 +77,58 @@
                                             <!-- Hidden input to store the items data -->
                                             <input type="hidden" name="items" id="itemsInput" required>
 
+
+                                            <div class="form-group">
+                                                <label for="accessory">With Accessory:</label>
+                                                <label class="switch">
+                                                    <input type="checkbox" id="withAccessories"
+                                                        onchange="toggleAccessories()">
+                                                    <span class="slider round"></span>
+                                                </label>
+                                            </div>
+                                            <div id="accessoriesSection" style="display: none;">
+                                                <div class="row">
+                                                    <div class="col-md-7">
+                                                        <div class="form-group">
+                                                            <select name="models" id="model_accessory"
+                                                                class="form-control">
+                                                                @foreach ($models as $model)
+                                                                    @if ($model->accessory == 1)
+                                                                        <option value="{{ $model->id }}">
+                                                                            {{ $model->name }}
+                                                                        </option>
+                                                                    @endif
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-5">
+                                                        <div class="form-group flex">
+                                                            <input type="number" class="form-control mr-2" id="quantity"
+                                                                placeholder="Quantity">
+                                                            <button type="button" class="btn btn-primary"
+                                                                onclick="addAccessory(event)">
+                                                                <i class="fas fa-plus"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <table class="table table-bordered" id="accessoryTable">
+                                                    <thead>
+                                                        <tr>
+                                                            <th style="width: 40%">Accessory name</th>
+                                                            <th style="width: 40%">Quantity</th>
+                                                            <th style="width: 20%">Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <!-- Items will be added here dynamically -->
+                                                    </tbody>
+                                                </table>
+                                                <!-- Hidden input to store the items data -->
+                                                <input type="hidden" name="accessories" id="accessoryInput" required>
+                                            </div>
+
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1">Photo</label>
                                                 <input type="file" name="image" id="input-image" class="form-control">
@@ -87,7 +136,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="post-img" id="img-preview"
-                                                style="display: flex; justify-content: center; align-items: center; background-image: url({{ asset('backend/assets/img/default-image.avif') }}); background-size: cover; background-position: center; width: 100%; height: 100%;">
+                                                style="display: flex; justify-content: center; align-items: center; background-image: url({{ asset('backend/assets/img/default-image.avif') }}); background-size: containt; background-repeat: no-repeat; background-position: center; width: 100%; height: 100%;">
                                             </div>
                                         </div>
                                     </div>
@@ -151,9 +200,74 @@
             }
         });
     </script>
-    <script src="https://cdn.tiny.cloud/1/qdi8ljnwutu3zjh290nqmze8oo8w5x9wqh925tzk9eyqpqmk/tinymce/7/tinymce.min.js"
-        referrerpolicy="origin"></script>
+    <script>
+        function toggleAccessories() {
+            const accessoriesSection = document.getElementById('accessoriesSection');
+            if (document.getElementById('withAccessories').checked) {
+                accessoriesSection.style.display = 'block';
+            } else {
+                accessoriesSection.style.display = 'none';
+            }
+        }
 
+        let accessories = [];
+
+        function addAccessory(event) {
+            event.preventDefault(); // Prevent form submission
+            const modelId = document.getElementById('model_accessory').value;
+            const modelText = document.getElementById('model_accessory').options[document.getElementById('model_accessory')
+                    .selectedIndex]
+                .text;
+            const quantity = document.getElementById('quantity').value;
+
+            if (!modelId || !quantity) {
+                alert('Please fill the product and quantity.');
+                document.getElementById('quantity').focus();
+                return;
+            }
+
+            // Add item to the array
+            accessories.push({
+                model_id: modelId,
+                model_text: modelText,
+                quantity: quantity,
+            });
+
+            // Update the table
+            updateAccessoryTable();
+
+            // Clear the form fields
+            // document.getElementById('model_accessory').value = '';
+            document.getElementById('quantity').value = '';
+        }
+
+        // Function to update the table with added items
+        function updateAccessoryTable() {
+            const tableBody = document.querySelector('#accessoryTable tbody');
+            tableBody.innerHTML = '';
+
+            accessories.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                <td>${item.model_text}</td>
+                <td>${item.quantity}</td>
+                <td>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="removeAccessory(${index})"><i class="fas fa-trash-alt"></i></button>
+                </td>
+            `;
+                tableBody.appendChild(row);
+            });
+
+            // Update the hidden input with the items data
+            document.getElementById('accessoryInput').value = JSON.stringify(accessories);
+        }
+
+        // Function to remove an item from the list
+        function removeAccessory(index) {
+            accessories.splice(index, 1);
+            updateAccessoryTable();
+        }
+    </script>
     <script>
         $('#uploadForm').on('submit', function(e) {
             e.preventDefault(); // Prevent the default form submission
@@ -171,15 +285,17 @@
                 success: function(response) {
                     // Hide loading indicator
                     $('#loading').hide();
+                    clearForm(); // Clear the form after successful submission
+                    
+                    alert(response.message);
                     // Open a popup window for the print view
                     var popup = window.open('/product/stock-out/show/' + response.id,
-                        'PrintWindow', 'width=800,height=600');
+                        'PrintWindow', 'fullscreen=yes');
 
                     // Focus on the popup and wait for it to load
                     popup.onload = function() {
                         popup.print();
                     };
-                    alert(response.message);
                 },
                 error: function(xhr) {
                     // Hide loading indicator
@@ -229,11 +345,10 @@
             items.forEach((item, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                <td>${item.model_id}</td>
                 <td>${item.model_text}</td>
                 <td>${item.serial_number}</td>
                 <td>
-                    <button type="button" class="btn btn-danger btn-sm" onclick="removeItem(${index})">Remove</button>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="removeItem(${index})"><i class="fas fa-trash-alt"></i></button>
                 </td>
             `;
                 tableBody.appendChild(row);
@@ -247,6 +362,18 @@
         function removeItem(index) {
             items.splice(index, 1);
             updateTable();
+        }
+    </script>
+    <script>
+        function clearForm() {
+            // Clear all form fields
+            $('#uploadForm')[0].reset();
+            items = [];
+            accessories = [];
+            updateTable();
+            updateAccessoryTable();
+            previewImage.style.backgroundImage = `url('${default_img}')`;
+            document.getElementById('receiver_input').focus();
         }
     </script>
 @endsection

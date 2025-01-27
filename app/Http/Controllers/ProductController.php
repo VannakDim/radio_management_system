@@ -39,4 +39,16 @@ class ProductController extends Controller
         $models = ProductModel::all();
         return view('admin.product.create',compact('models','categories'));
     }
+
+    public function checkSerialNumber(Request $request)
+    {
+        $serialNumber = $request->input('serial_number');
+        $product = Product::where('PID', $serialNumber)->first();
+
+        if ($product) {
+            return response()->json(['exists' => true, 'product' => $product, 'model'=>$product->model->name]);
+        } else {
+            return response()->json(['exists' => false]);
+        }
+    }
 }

@@ -12,7 +12,7 @@
                             <x-slot name="header">
                                 <tr>
                                     <th>ID</th>
-                                    <th style="width: 30%">Product Model</th>
+                                    <th style="width: 30%">Model</th>
                                     <th style="width: 30%" class="d-none d-md-table-cell">Brand</th>
                                     <th style="width: 20%" class="d-none d-md-table-cell">Available</th>
                                     <th style="width: 30%" class="d-none d-md-table-cell">Borrowed</th>
@@ -22,7 +22,7 @@
                             <x-slot name="body">
                                 @foreach ($data as $stock)
                                     <tr>
-                                        <td>{{ $stock['id'] }}</td>
+                                        <td>{{ str_pad($stock['id'], 2, '0', STR_PAD_LEFT) }}</td>
                                         <td><a class="text-dark mr-2" href="">{{ $stock['model_name'] }}</a><span class="badge badge-primary">{{ $stock['stock_in'] }}</span>
                                             <span class="badge badge-warning">{{ $stock['stock_out'] }}</span></td>
                                         <td>{{ $stock['brand_name'] }}</td>
@@ -50,8 +50,8 @@
                                     <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th style="width: 30%">Receiver</th>
-                                            <th style="width: 30%" class="d-none d-md-table-cell">Borrower</th>
+                                            <th style="width: 30%">អ្នកទទួល</th>
+                                            <th style="width: 30%" class="d-none d-md-table-cell">អ្នកប្រគល់</th>
                                             <th style="width: 20%" class="d-none d-md-table-cell">Date</th>
                                             <th style="width: 30%" class="d-none d-md-table-cell">Note</th>
                                             <th></th>
@@ -80,8 +80,8 @@
                                     <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th style="width: 30%">Receiver</th>
-                                            <th style="width: 30%" class="d-none d-md-table-cell">Borrower</th>
+                                            <th style="width: 30%">អ្នកទទួល</th>
+                                            <th style="width: 30%" class="d-none d-md-table-cell">អ្នកប្រគល់</th>
                                             <th style="width: 20%" class="d-none d-md-table-cell">Date</th>
                                             <th style="width: 30%" class="d-none d-md-table-cell">Note</th>
                                             <th></th>
