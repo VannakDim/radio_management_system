@@ -8,7 +8,7 @@
         @endisset
     </div>
     <div class="card-body pt-0 pb-5">
-        <table class="table card-table table-responsive table-responsive-large" style="width:100%">
+        <table class="table card-table table-responsive table-responsive-large table-striped" style="width:100%">
             <thead>
                 {{ $header }}
             </thead>
