@@ -1,7 +1,7 @@
 @extends('admin.layout.admin')
 
 @section('main_body')
-    <div class="content battambang">
+    <div class="content kh-battambang">
         <!-- Top Statistics -->
         <div class="py-12">
             <div class="mx-auto">
