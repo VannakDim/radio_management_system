@@ -14,9 +14,9 @@
             word-spacing: 0;
         } */
 
-        body {
+        /* body {
             font-family: 'battambang', sans-serif !important;
-        }
+        } */
     </style>
 @endsection
 
@@ -29,7 +29,7 @@
 
         <table class="table table-bordered">
             <thead>
-                <tr>
+                <tr class="battambang">
                     <th class="text-center" width=90>ល.រ</th>
                     <th style="width: 30%">លេខសម្គាល់</th>
                     <th style="width: 20%">ម៉ូដែល</th>
