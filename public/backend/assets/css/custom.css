@@ -3,7 +3,11 @@
   width: 192px;
 }
 
-
+/* Embed font */
+@font-face {
+  font-family: "battambangg";
+  src: url("/font/KhmerOSBattambang-Regular.ttf") format("truetype");
+}
 
 a {
   text-decoration: none !important;
@@ -15,12 +19,12 @@ a {
 }
 
 .kh-battambang {
-  font-family: "Battambang", sans-serif !important;
+  font-family: "Battambangg", sans-serif !important;
   line-height: 27px;
 }
 
 .card-body p {
-  font-family: "Battambang", sans-serif !important;
+  font-family: "Battambangg", sans-serif !important;
 
 }
 
