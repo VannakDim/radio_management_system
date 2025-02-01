@@ -43,7 +43,7 @@
                 @endphp
                 
 
-                <li class="has-sub @if (in_array($url, $product)) expand active @endif">
+                <li class="kh-battambang has-sub @if (in_array($url, $product)) expand active @endif">
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#products"
                         aria-expanded="false" aria-controls="products">
                         <i class="fa-solid fa-walkie-talkie"></i>
