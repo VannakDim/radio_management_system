@@ -7,7 +7,7 @@
             <div class="mx-auto">
                 <div class="row">
                     <div class="col-12">
-                        <!-- Recent Stock Update Table -->
+                        <!--  Stock Update Table -->
                         <x-card-table title="STOCK OVERVIEW" badge="success">
                             <x-slot name="header">
                                 <tr>

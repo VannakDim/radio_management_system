@@ -87,7 +87,7 @@
 
                     </button>
 
-                    <ul class="dropdown-menu dropdown-menu-right">
+                    <ul class="dropdown-menu dropdown-menu-right" style="width: 250px">
                         <!-- User image -->
                         <li class="dropdown-header">
                             <img src="{{ Auth::user()->profile_photo_url }}" class="img-circle"

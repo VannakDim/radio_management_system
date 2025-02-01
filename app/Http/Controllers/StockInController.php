@@ -10,6 +10,11 @@ use App\Models\StockInDetail;
 
 class StockInController extends Controller
 {
+    public function index()
+    {
+        $stock_ins = StockIn::with('user')->orderBy('created_at', 'desc')->paginate(5);
+        return view('admin.product.stockin.index', compact('stock_ins'));
+    }
 
     public function create()
     {

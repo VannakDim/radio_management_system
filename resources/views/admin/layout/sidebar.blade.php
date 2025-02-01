@@ -70,7 +70,7 @@
                             </li>
 
                             <li class="{{ request()->is('product/stock-in') ? 'active' : '' }}">
-                                <a class="sidenav-item-link" href="{{ route('stockin.create') }}">
+                                <a class="sidenav-item-link" href="{{ route('stockin.index') }}">
                                     <i class="fa-solid fa-caret-right {{ request()->is('product/stock-in') ? 'fa-beat' : '' }}"></i>
                                     <span class="nav-text">នាំចូល</span>
 
