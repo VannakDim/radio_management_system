@@ -2,7 +2,7 @@
 
 @section('style')
     <style>
-        @font-face {
+        /* @font-face {
             font-family: 'battambang';
             src: url('{{ public_path('font/KhmerOSBattambang-Regular.ttf') }}') format('truetype');
             font-weight: normal;
@@ -15,7 +15,7 @@
         }
         body {
             font-family: 'battambang', sans-serif !important;
-        }
+        } */
     </style>
 @endsection
 
