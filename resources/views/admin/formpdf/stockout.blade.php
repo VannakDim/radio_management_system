@@ -1,7 +1,7 @@
 @extends('frontend.layout.web')
 
 @section('style')
-    {{-- <style>
+    <style>
         @font-face {
             font-family: 'battambang';
             src: url('{{ public_path('font/KhmerOSBattambang-Regular.ttf') }}') format('truetype');
@@ -13,7 +13,10 @@
             font-family: 'battambang', sans-serif !important;
             word-spacing: 0;
         }
-    </style> --}}
+        body {
+            font-family: 'battambang', sans-serif !important;
+        }
+    </style>
 @endsection
 
 @section('content')
