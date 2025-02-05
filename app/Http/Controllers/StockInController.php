@@ -99,6 +99,7 @@ class StockInController extends Controller
     {
         $stock_in = StockIn::findOrFail($id);
         $file_path = public_path($stock_in->image);
+        dd($file_path);
 
         if (file_exists($file_path)) {
             return response()->download($file_path);
