@@ -99,12 +99,12 @@ class StockInController extends Controller
     {
         $stock_in = StockIn::findOrFail($id);
         $file_path = asset($stock_in->image);
-        // dd($file_path);
+        dd($file_path);
 
-        if (file_exists($file_path)) {
-            return response()->download($file_path);
-        } else {
-            return response()->json(['message' => 'File not found.'], 404);
-        }
+        // if (file_exists($file_path)) {
+        //     return response()->download($file_path);
+        // } else {
+        //     return response()->json(['message' => 'File not found.'], 404);
+        // }
     }
 }
