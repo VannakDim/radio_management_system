@@ -40,7 +40,7 @@ class StockInController extends Controller
             $image = $request->file('image');
             $name_gen ='stock_in_'. hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
             $image->storeAs('image/product/stock_in/', $name_gen, 'public');
-            $stock_in->image = 'storage/image/product/stock_in/' . $name_gen;
+            $stock_in->image = 'image/product/stock_in/' . $name_gen;
             // Simulate a long process (e.g., 5 seconds)
             sleep(1);
         }
@@ -75,7 +75,7 @@ class StockInController extends Controller
             $image = $request->file('image');
             $name_gen ='stock_in_'. hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
             $image->storeAs(public_path('image/product/stock_in/'), $name_gen,'public');
-            $stock_in->image = 'storage/image/product/stock_in/' . $name_gen;
+            $stock_in->image = 'image/product/stock_in/' . $name_gen;
             // Simulate a long process (e.g., 5 seconds)
             sleep(1);
         }
