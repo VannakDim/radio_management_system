@@ -3,7 +3,7 @@
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{-- {{ __('Dashboard') }} --}}
             Welcome <b>{{ Auth::user()->name }}!</b>
-            <b style="float: right;">Total users: <span class="badge badge-danger">{{ count($users) }}</span></b>
+            {{-- <b style="float: right;">Total users: <span class="badge badge-danger">{{ count($users) }}</span></b> --}}
         </h2>
         
     </x-slot>

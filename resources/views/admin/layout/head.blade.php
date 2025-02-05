@@ -27,7 +27,7 @@
 <link rel="stylesheet" href="{{ asset('backend/assets/css/custom.css') }}">
 
 <!-- FAVICON -->
-<link href="{{ asset('backend/assets/img/favicon.png') }}" rel="shortcut icon" />
+<link href="{{ asset('image/logo/walkie-talkie.png') }}" rel="shortcut icon" />
 
 <link href="{{ asset('backend/assets/vendor/remixicon/remixicon.css') }}" rel="stylesheet">
 

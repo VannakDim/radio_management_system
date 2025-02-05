@@ -45,9 +45,9 @@ class StockOutController extends Controller
         $stock_out->note = $request->note;
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('image/product/stock_out/'), $name_gen);
-            $stock_out->image = 'image/product/stock_out/' . $name_gen;
+            $name_gen = 'stock_out_'. hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('image/product/stock_out/'), $name_gen, 'public');
+            $stock_out->image = 'storage/image/product/stock_out/' . $name_gen;
             // Simulate a long process (e.g., 1 seconds)
             sleep(1);
         }

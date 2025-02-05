@@ -43,6 +43,9 @@
                                                             <a href="#" onclick="openPreview({{ $stock->id }})" class="text-dark">
                                                                 <i class="fas fa-print mr-2"></i>Preview
                                                             </a>
+                                                            <a href="{{ route('stockin.edit', $stock->id) }}" class="text-dark mt-2">
+                                                                <i class="fas fa-edit mr-2"></i>Edit
+                                                            </a>
                                                             @if ($stock->image)
                                                             <a href="{{ route('stockin.download', $stock->id) }}" class="text-dark mt-2">
                                                                 <i class="fas fa-download mr-2"></i>Download

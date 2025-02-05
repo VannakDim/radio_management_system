@@ -3,6 +3,10 @@
   width: 192px;
 }
 
+.brand-name{
+  margin-left: 0px !important;
+}
+
 /* Embed font */
 @font-face {
   font-family: "battambang";
