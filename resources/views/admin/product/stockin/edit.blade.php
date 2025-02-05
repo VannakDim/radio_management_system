@@ -89,7 +89,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="post-img" id="img-preview"
-                                                style="display: flex; justify-content: center; align-items: center; background-image: url({{ $stock_in->image ? asset( $stock_in->image) : asset('backend/assets/img/default-image.avif') }}); background-size: cover; background-position: center; width: 100%; height: 100%;">
+                                                style="display: flex; justify-content: center; align-items: center; background-image: url({{ $stock_in->image ? asset( $stock_in->image) : asset('backend/assets/img/default-image.avif') }}); background-size: contain; background-repeat:no-repeat; background-position: center; width: 100%; height: 100%;">
                                             </div>
                                         </div>
                                     </div>
