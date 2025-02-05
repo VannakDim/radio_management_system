@@ -49,10 +49,11 @@
                                                     <div class="form-group">
                                                         <select name="models" id="model" class="form-control">
                                                             @foreach ($models as $model)
-                                                                <option value="{{ $model->id }}"
-                                                                    {{ $model->id == $stockout->model_id ? 'selected' : '' }}>
-                                                                    {{ $model->name }}
-                                                                </option>
+                                                                @if ($model->accessory != 1)
+                                                                    <option value="{{ $model->id }}">
+                                                                        {{ $model->name }}
+                                                                    </option>
+                                                                @endif
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -83,9 +84,9 @@
                                             <table class="table table-bordered" id="itemsTable">
                                                 <thead>
                                                     <tr>
-                                                        <th style="width: 40%">Model name</th>
-                                                        <th style="width: 40%">S/N</th>
-                                                        <th style="width: 20%">Actions</th>
+                                                        <th style="width: 50%">Model name</th>
+                                                        <th style="width: 50%">S/N</th>
+                                                        <th class="text-right">Actions</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -101,7 +102,7 @@
                                                 <label class="switch">
                                                     <input type="checkbox" id="withAccessories"
                                                         onchange="toggleAccessories()"
-                                                        {{ $stockout->stockOutDetails ? 'checked' : '' }}>
+                                                        {{ $stockout->stockOutDetails->count() ? 'checked' : '' }}>
                                                     <span class="slider round"></span>
                                                 </label>
                                             </div>
@@ -138,9 +139,9 @@
                                                 <table class="table table-bordered" id="accessoryTable">
                                                     <thead>
                                                         <tr>
-                                                            <th style="width: 40%">Accessory name</th>
-                                                            <th style="width: 40%">Quantity</th>
-                                                            <th style="width: 20%">Actions</th>
+                                                            <th style="width: 50%">Accessory name</th>
+                                                            <th style="width: 50%">Quantity</th>
+                                                            <th class="text-right">Actions</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -159,7 +160,7 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="post-img" id="img-preview"
-                                                style="display: flex; justify-content: center; align-items: center; background-image: url({{ $stockout->image ? asset( $stockout->image) : asset('backend/assets/img/default-image.avif') }}); background-size: contain; background-repeat: no-repeat; background-position: center; width: 100%; height: 100%;">
+                                                style="display: flex; justify-content: center; align-items: center; background-image: url({{ $stockout->image ? asset($stockout->image) : asset('backend/assets/img/default-image.avif') }}); background-size: contain; background-repeat: no-repeat; background-position: center; width: 100%; height: 100%;">
                                             </div>
                                         </div>
                                     </div>
@@ -230,23 +231,29 @@
                 accessoriesSection.style.display = 'block';
             } else {
                 accessoriesSection.style.display = 'none';
+                accessories = []; // Clear the accessories array
+                updateAccessoryTable(); // Update the table to reflect the change
             }
         }
 
         let accessories = [];
 
         $(document).ready(function() {
-            // Loop through existing stockin details and add them to the items array
-            @foreach ($stockout->stockOutDetails as $detail)
-                accessories.push({
-                    model_id: '{{ $detail->product_model_id }}',
-                    model_text: '{{ $detail->product->name }}',
-                    quantity: '{{ $detail->quantity }}',
-                });
-            @endforeach
+            if ({{ $stockout->stockOutDetails->count() }}) {
+                // Loop through existing stockin details and add them to the items array
+                @foreach ($stockout->stockOutDetails as $detail)
+                    accessories.push({
+                        model_id: '{{ $detail->product_model_id }}',
+                        model_text: '{{ $detail->product->name }}',
+                        quantity: '{{ $detail->quantity }}',
+                    });
+                @endforeach
 
-            // Update the table with the existing items
-            updateAccessoryTable();
+                // Update the table with the existing items
+                updateAccessoryTable();
+            }else{
+                accessoriesSection.style.display = 'none';
+            }
         });
 
 
@@ -289,7 +296,7 @@
                 row.innerHTML = `
                 <td>${item.model_text}</td>
                 <td>${item.quantity}</td>
-                <td>
+                <td class="text-right">
                     <button type="button" class="btn btn-danger btn-sm" onclick="removeAccessory(${index})"><i class="fas fa-trash-alt"></i></button>
                 </td>
             `;
@@ -396,7 +403,7 @@
                 row.innerHTML = `
                 <td>${item.model_text}</td>
                 <td>${item.serial_number}</td>
-                <td>
+                <td class="text-right">
                     <button type="button" class="btn btn-danger btn-sm" onclick="removeItem(${index})"><i class="fas fa-trash-alt"></i></button>
                 </td>
             `;
