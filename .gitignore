@@ -13,4 +13,4 @@ _ide_helper_models.php
 /storage/cache_keys.json
 node_modules
 storage
-public
+public/*
