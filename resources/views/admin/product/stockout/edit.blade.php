@@ -1,9 +1,9 @@
+<!-- filepath: /Users/t2/Desktop/Radio TEAM/radio_management_system/resources/views/admin/product/stockout/edit.blade.php -->
 @extends('admin.layout.admin')
 @section('link')
     {{-- CK Editor --}}
     <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/44.0.0/ckeditor5.css" crossorigin>
 @endsection
-
 
 @section('main_body')
     <div class="py-12">
@@ -13,7 +13,7 @@
                     <div class="col-md-12">
                         <div class="card card-default">
                             <div class="card-header card-header-border-bottom">
-                                <h2 class="badge badge-warning text-danger">STOCK OUT</h2>
+                                <h2 class="badge badge-warning text-danger">EDIT STOCK OUT</h2>
                             </div>
 
                             <div class="card-body">
@@ -22,22 +22,25 @@
                                         {{ session('error') }}
                                     </div>
                                 @endif
-                                <form id="uploadForm" method="POST" action="{{ route('stockout.store') }}"
+                                <form id="uploadForm" method="POST" action="{{ route('stockout.update', $stockout->id) }}"
                                     enctype="multipart/form-data">
                                     @csrf
+                                    @method('PUT')
                                     <div class="row">
                                         <div class="col-md-6">
 
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1">Receiver:</label>
                                                 <input type="text" name="receiver" class="form-control"
-                                                    id="receiver_input" placeholder="Receiver">
+                                                    id="receiver_input" placeholder="Receiver"
+                                                    value="{{ $stockout->receiver }}">
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1">Purpose:</label>
                                                 <input type="text" name="type" class="form-control"
-                                                    id="exampleInputEmail1" placeholder="Purpose or unit">
+                                                    id="exampleInputEmail1" placeholder="Purpose or unit"
+                                                    value="{{ $stockout->type }}">
                                             </div>
 
                                             <label for="model">Product detail:</label>
@@ -46,17 +49,32 @@
                                                     <div class="form-group">
                                                         <select name="models" id="model" class="form-control">
                                                             @foreach ($models as $model)
-                                                                <option value="{{ $model->id }}">
+                                                                <option value="{{ $model->id }}"
+                                                                    {{ $model->id == $stockout->model_id ? 'selected' : '' }}>
                                                                     {{ $model->name }}
                                                                 </option>
                                                             @endforeach
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-5">
+                                                {{-- <div class="col-md-5">
                                                     <div class="form-group flex">
                                                         <input type="text" class="form-control mr-2" id="serial_number"
-                                                            placeholder="Serial number">
+                                                            placeholder="Serial number"
+                                                            value="{{ $stockout->serial_number }}">
+                                                        <button type="button" class="btn btn-primary"
+                                                            onclick="addItem(event)"><i class="fas fa-plus"></i></button>
+                                                    </div>
+                                                </div> --}}
+                                                <div class="col-md-5">
+                                                    <div class="form-group d-flex">
+                                                        <input type="text" class="form-control mr-2" id="serial_number"
+                                                            placeholder="Serial number" list="availableProducts">
+                                                        <datalist id="availableProducts">
+                                                            @foreach ($availableProducts as $product)
+                                                                <option value="{{ $product->PID }}"></option>
+                                                            @endforeach
+                                                        </datalist>
                                                         <button type="button" class="btn btn-primary"
                                                             onclick="addItem(event)"><i class="fas fa-plus"></i></button>
                                                     </div>
@@ -82,11 +100,13 @@
                                                 <label for="accessory">With Accessory:</label>
                                                 <label class="switch">
                                                     <input type="checkbox" id="withAccessories"
-                                                        onchange="toggleAccessories()">
+                                                        onchange="toggleAccessories()"
+                                                        {{ $stockout->stockOutDetails ? 'checked' : '' }}>
                                                     <span class="slider round"></span>
                                                 </label>
                                             </div>
-                                            <div id="accessoriesSection" style="display: none;">
+                                            <div id="accessoriesSection"
+                                                style="display: {{ $stockout->stockOutDetails ? 'block' : 'none' }};">
                                                 <div class="row">
                                                     <div class="col-md-7">
                                                         <div class="form-group">
@@ -94,7 +114,8 @@
                                                                 class="form-control">
                                                                 @foreach ($models as $model)
                                                                     @if ($model->accessory == 1)
-                                                                        <option value="{{ $model->id }}">
+                                                                        <option value="{{ $model->id }}"
+                                                                            {{ $model->id == $stockout->accessory_model_id ? 'selected' : '' }}>
                                                                             {{ $model->name }}
                                                                         </option>
                                                                     @endif
@@ -105,7 +126,8 @@
                                                     <div class="col-md-5">
                                                         <div class="form-group flex">
                                                             <input type="number" class="form-control mr-2" id="quantity"
-                                                                placeholder="Quantity">
+                                                                placeholder="Quantity"
+                                                                value="{{ $stockout->accessory_quantity }}">
                                                             <button type="button" class="btn btn-primary"
                                                                 onclick="addAccessory(event)">
                                                                 <i class="fas fa-plus"></i>
@@ -131,19 +153,20 @@
 
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1">Photo</label>
-                                                <input type="file" name="image" id="input-image" class="form-control">
+                                                <input type="file" name="image" id="input-image" accept="image/*"
+                                                    class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="post-img" id="img-preview"
-                                            style="display: flex; justify-content: center; align-items: center; background-image: url({{ asset('backend/assets/img/default-image.avif') }}); background-size: contain; background-repeat: no-repeat; background-position: center; width: 100%; height: 100%;">
+                                                style="display: flex; justify-content: center; align-items: center; background-image: url({{ $stockout->image ? asset( $stockout->image) : asset('backend/assets/img/default-image.avif') }}); background-size: contain; background-repeat: no-repeat; background-position: center; width: 100%; height: 100%;">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Note:</label>
                                         <textarea name="note" class="form-control" id="exampleInputEmail1" placeholder="Description your note"
-                                            rows="3"></textarea>
+                                            rows="3">{{ $stockout->note }}</textarea>
                                     </div>
 
                                     <!-- Loading indicator -->
@@ -153,7 +176,7 @@
 
                                     <button type="submit" class="ladda-button btn btn-primary float-right"
                                         data-style="expand-left">
-                                        <span class="ladda-label">Save!</span>
+                                        <span class="ladda-label">Update!</span>
                                         <span class="ladda-spinner"></span>
                                     </button>
                                     <a href="{{ route('stockout.index') }}" class="btn btn-secondary float-right"
@@ -212,6 +235,21 @@
 
         let accessories = [];
 
+        $(document).ready(function() {
+            // Loop through existing stockin details and add them to the items array
+            @foreach ($stockout->stockOutDetails as $detail)
+                accessories.push({
+                    model_id: '{{ $detail->product_model_id }}',
+                    model_text: '{{ $detail->product->name }}',
+                    quantity: '{{ $detail->quantity }}',
+                });
+            @endforeach
+
+            // Update the table with the existing items
+            updateAccessoryTable();
+        });
+
+
         function addAccessory(event) {
             event.preventDefault(); // Prevent form submission
             const modelId = document.getElementById('model_accessory').value;
@@ -267,7 +305,11 @@
             accessories.splice(index, 1);
             updateAccessoryTable();
         }
+
+        // Initial call to populate the table with existing accessories
+        updateAccessoryTable();
     </script>
+
     <script>
         $('#uploadForm').on('submit', function(e) {
             e.preventDefault(); // Prevent the default form submission
@@ -285,17 +327,9 @@
                 success: function(response) {
                     // Hide loading indicator
                     $('#loading').hide();
-                    clearForm(); // Clear the form after successful submission
-                    
                     alert(response.message);
-                    // Open a popup window for the print view
-                    var popup = window.open('/product/stock-out/show/' + response.id,
-                        'PrintWindow', 'fullscreen=yes');
-
-                    // Focus on the popup and wait for it to load
-                    popup.onload = function() {
-                        popup.print();
-                    };
+                    window.location.href =
+                        '{{ route('stockout.index') }}'; // Redirect to the "index" route
                 },
                 error: function(xhr) {
                     // Hide loading indicator
@@ -308,6 +342,20 @@
     <script>
         // Array to store added items
         let items = [];
+
+        $(document).ready(function() {
+            // Loop through existing stockin details and add them to the items array
+            @foreach ($stockout->products as $detail)
+                items.push({
+                    model_id: '{{ $detail->product_id }}',
+                    model_text: '{{ $detail->product->model->name }}',
+                    serial_number: '{{ $detail->product->PID }}',
+                });
+            @endforeach
+
+            // Update the table with the existing items
+            updateTable();
+        });
 
         // Function to add an item to the list
         function addItem(event) {
@@ -328,6 +376,7 @@
                 model_text: modelText,
                 serial_number: serial_number,
             });
+
 
             // Update the table
             updateTable();
@@ -363,17 +412,8 @@
             items.splice(index, 1);
             updateTable();
         }
-    </script>
-    <script>
-        function clearForm() {
-            // Clear all form fields
-            $('#uploadForm')[0].reset();
-            items = [];
-            accessories = [];
-            updateTable();
-            updateAccessoryTable();
-            previewImage.style.backgroundImage = `url('${default_img}')`;
-            document.getElementById('receiver_input').focus();
-        }
+
+        // Initial call to populate the table with existing items
+        updateTable();
     </script>
 @endsection

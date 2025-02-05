@@ -79,7 +79,7 @@
                             </li>
 
                             <li class="{{ request()->is('product/stock-out') ? 'active' : '' }}">
-                                <a class="sidenav-item-link" href="{{ route('stockout.create') }}">
+                                <a class="sidenav-item-link" href="{{ route('stockout.index') }}">
                                     <i class="fa-solid fa-caret-right {{ request()->is('product/stock-out') ? 'fa-beat' : '' }}"></i>
                                     <span class="nav-text">ប្រគល់</span>
 
