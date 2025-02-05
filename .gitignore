@@ -12,5 +12,10 @@ _ide_helper_models.php
 /storage/app/backup
 /storage/cache_keys.json
 node_modules
-storage
-public/*
+*storage
+*.storage
+*.storage/*
+storage*
+*/storage
+public/image
+public/storage
