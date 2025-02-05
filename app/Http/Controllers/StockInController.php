@@ -40,7 +40,7 @@ class StockInController extends Controller
             $image = $request->file('image');
             $name_gen ='stock_in_'. hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
             $image->storeAs('image/product/stock_in/', $name_gen, 'public');
-            $stock_in->image = 'image/product/stock_in/' . $name_gen;
+            $stock_in->image = 'storage/image/product/stock_in/' . $name_gen;
             // Simulate a long process (e.g., 5 seconds)
             sleep(1);
         }
@@ -75,7 +75,7 @@ class StockInController extends Controller
             $image = $request->file('image');
             $name_gen ='stock_in_'. hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
             $image->storeAs(public_path('image/product/stock_in/'), $name_gen,'public');
-            $stock_in->image = 'image/product/stock_in/' . $name_gen;
+            $stock_in->image = 'storage/image/product/stock_in/' . $name_gen;
             // Simulate a long process (e.g., 5 seconds)
             sleep(1);
         }
@@ -98,13 +98,13 @@ class StockInController extends Controller
     public function download($id)
     {
         $stock_in = StockIn::findOrFail($id);
-        $file_path = asset($stock_in->image);
-        dd($file_path);
+        $file_path = public_path($stock_in->image);
+        // dd($file_path);
 
-        // if (file_exists($file_path)) {
-        //     return response()->download($file_path);
-        // } else {
-        //     return response()->json(['message' => 'File not found.'], 404);
-        // }
+        if (file_exists($file_path)) {
+            return response()->download($file_path);
+        } else {
+            return response()->json(['message' => 'File not found.'], 404);
+        }
     }
 }
