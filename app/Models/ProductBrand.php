@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class ProductBrand extends Model
 {
     use HasFactory;
-    
+    use SoftDeletes;
     protected $fillable = [
         'brand_name',
         'brand_logo',

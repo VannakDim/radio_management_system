@@ -66,8 +66,8 @@ class BorrowController extends Controller
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('image/product/borrow/'), $name_gen);
-            $borrow->image = 'image/product/borrow/' . $name_gen;
+            $image->storeAs('image/product/borrow/', $name_gen);
+            $borrow->image = 'storage/image/product/borrow/' . $name_gen;
             // Simulate a long process (e.g., 1 seconds)
             sleep(1);
         }

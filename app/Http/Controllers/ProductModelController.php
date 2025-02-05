@@ -9,6 +9,7 @@ use App\Models\ProductCategory;
 use App\Models\StockInDetail;
 use App\Models\StockOutProduct;
 use App\Models\BorrowDetail;
+use Illuminate\Support\Facades\Auth;
 
 class ProductModelController extends Controller
 {
@@ -92,9 +93,9 @@ class ProductModelController extends Controller
         $model->description = $request->description;
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('image/product/model/'), $name_gen);
-            $model->image = 'image/product/model/' . $name_gen;
+            $name_gen = 'rd_' . hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
+            $image->storeAs('image/product/model/', $name_gen);
+            $model->image = 'storage/image/product/model/' . $name_gen;
             // Simulate a long process (e.g., 5 seconds)
             sleep(1);
         }
@@ -137,7 +138,6 @@ class ProductModelController extends Controller
             'capacity' => 'nullable',
             'power' => 'nullable',
             'description' => 'nullable',
-
         ]);
 
         // Create or fetch categories
@@ -161,9 +161,9 @@ class ProductModelController extends Controller
         $model->description = $request->description;
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('image/product/model/'), $name_gen);
-            $model->image = 'image/product/model/' . $name_gen;
+            $name_gen = 'rd_' . hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
+            $image->storeAs('image/product/model/', $name_gen);
+            $model->image = 'storage/image/product/model/' . $name_gen;
             // Simulate a long process (e.g., 5 seconds)
             sleep(1);
         }
@@ -182,6 +182,8 @@ class ProductModelController extends Controller
     public function softDelete($id)
     {
         $model = ProductModel::find($id);
+        $model->description = 'This model has been deleted by user ' . Auth::user()->name;
+        $model->save();
         $model->delete();
         return redirect()->back()->with('success', 'Product model deleted successfully.');
     }

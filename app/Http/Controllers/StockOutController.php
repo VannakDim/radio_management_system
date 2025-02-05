@@ -9,10 +9,18 @@ use App\Models\StockOutDetail;
 use App\Models\StockOutProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 
 class StockOutController extends Controller
 {
+
+    public function index()
+    {
+        $stock_outs = StockOut::with('user')->orderBy('created_at', 'desc')->paginate(5); // 10 items per page
+        return view('admin.product.stockout.index', compact('stock_outs'));
+    }
 
     public function paginateData(Request $request)
     {
@@ -32,7 +40,90 @@ class StockOutController extends Controller
     public function create()
     {
         $models = ProductModel::all();
-        return view('admin.product.stockout.create', compact('models'));
+        $availableProducts = Product::whereNotIn('id', function ($query) {
+            $query->select('product_id')->from('borrow_details')->where('borrowed', 1);
+        })->whereNotIn('id', function ($query) {
+            $query->select('product_id')->from('stock_out_products');
+        })->get();
+        return view('admin.product.stockout.create', compact('models', 'availableProducts'));
+    }
+
+    public function edit($id)
+    {
+        $stockout = StockOut::with('products', 'stockOutDetails')->findOrFail($id);
+        $models = ProductModel::all();
+        $availableProducts = Product::whereNotIn('id', function ($query) {
+            $query->select('product_id')->from('borrow_details')->where('borrowed', 1);
+        })->whereNotIn('id', function ($query) {
+            $query->select('product_id')->from('stock_out_products');
+        })->get();
+        return view('admin.product.stockout.edit', compact('stockout', 'models', 'availableProducts'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $validated = $request->validate(['supplier' => 'nullable', 'items' => 'required|json']);
+        $stock_out = StockOut::findOrFail($id);
+        $stock_out->receiver = $request->receiver;
+        $stock_out->type = $request->type;
+        $stock_out->note = $request->note;
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $name_gen = 'stock_out_'. hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
+            $image->storeAs('image/product/stock_out/', $name_gen, 'public');
+            $stock_out->image = 'storage/image/product/stock_out/' . $name_gen;
+            // Simulate a long process (e.g., 1 seconds)
+            sleep(1);
+        }
+        $stock_out->save();
+
+        // Decode the items JSON
+        $items = json_decode($request->input('items'), true);
+
+        // Delete existing stock out products
+        $products = StockOutProduct::where('stock_out_id', $stock_out->id)->get();
+        foreach ($products as $product) {
+            $product->note = 'deleted by user ' . Auth::user()->name;
+            $product->save();
+            $product->delete();
+        }
+
+        if($items) {
+            foreach ($items as $item) {
+                $product = Product::firstOrCreate(['PID' => $item['serial_number']], ['model_id' => $item['model_id']]);
+                if ($product) {
+                    StockOutProduct::create([
+                        'stock_out_id' => $stock_out->id,
+                        'product_id' => $product->id,
+                    ]);
+                } else {
+                    return response()->json(['message' => 'Product not found!']);
+                }
+            }
+        }
+
+        // Decode the accessories JSON
+        $accessories = json_decode($request->input('accessories'), true);
+            // Delete existing stock out details
+            $acc = StockOutDetail::where('stock_out_id', $stock_out->id)->get();
+            foreach ($acc as $accessory) {
+                $accessory->note = 'deleted by user ' . Auth::user()->name;
+                $accessory->save();
+                $accessory->delete();
+            }
+
+            // Save the new stock out details
+            if($accessories) {
+                foreach ($accessories as $accessory) {
+                    StockOutDetail::create([
+                        'stock_out_id' => $stock_out->id,
+                        'product_model_id' => $accessory['model_id'],
+                        'quantity' => $accessory['quantity'],
+                    ]);
+                }
+            }
+
+        return response()->json(['message' => 'Update Successful!', 'id' => $stock_out->id]);
     }
 
     public function store(Request $request)
@@ -46,7 +137,7 @@ class StockOutController extends Controller
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $name_gen = 'stock_out_'. hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('image/product/stock_out/'), $name_gen, 'public');
+            $image->storeAs('image/product/stock_out/', $name_gen, 'public');
             $stock_out->image = 'storage/image/product/stock_out/' . $name_gen;
             // Simulate a long process (e.g., 1 seconds)
             sleep(1);
@@ -97,5 +188,13 @@ class StockOutController extends Controller
         } else {
             return response()->json(['message' => 'No image associated with this record!'], 404);
         }
+    }
+
+    public function destroy($id)
+    {
+        $stockOut = StockOut::findOrFail($id);
+        $stockOut->delete();
+
+        return response()->json(['message' => 'Deleted successfully!']);
     }
 }
