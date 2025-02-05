@@ -57,9 +57,12 @@ Route::middleware([
     Route::get('/product/stock-in/edit/{id}', [StockInController::class, 'edit'])->name('stockin.edit');
     Route::put('/product/stock-in/update/{id}', [StockInController::class, 'update'])->name('stockin.update');
 
+    Route::get('/product/stock-out/index', [StockOutController::class, 'index'])->name('stockout.index');
     Route::get('/product/stock-out', [StockOutController::class, 'create'])->name('stockout.create');
     Route::post('/product/stock-out/store', [StockOutController::class, 'store'])->name('stockout.store');
     Route::get('/product/stock-out/show/{id}', [ExportToPdf::class, 'exportStockOutPdf'])->name('stockout.show');
+    Route::get('/product/stock-out/edit/{id}', [StockOutController::class, 'edit'])->name('stockout.edit');
+    Route::put('/product/stock-out/update/{id}', [StockOutController::class, 'update'])->name('stockout.update');
 
     Route::get('/product/borrow', [BorrowController::class, 'create'])->name('borrow.create');
     Route::get('/product/borrow/show/{id}', [ExportToPdf::class, 'exportBorrow'])->name('borrow.show');
