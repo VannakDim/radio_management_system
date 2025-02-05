@@ -16,7 +16,7 @@
                     </g>
                 </svg> --}}
                 <img src="{{ asset('image/logo/walkie-talkie-logo.png') }}" alt="SPM-TELECOM" class="my-2"
-                    style="width: 40px; height: 70px;">
+                    style="width: 30px; height: 60px;">
                 <span class="text-white brand-name"><strong>TELECOM</strong></span>
             </a>
         </div>
