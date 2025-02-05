@@ -15,7 +15,8 @@
                         <path class="logo-fill-white" fill="#FFF" d="M11 4v25l8 4V0z" />
                     </g>
                 </svg> --}}
-                <img src="{{ asset('image/logo/walkie-talkie.png') }}" alt="SPM-TELECOM" width="50">
+                <img src="{{ asset('image/logo/walkie-talkie-logo.png') }}" alt="SPM-TELECOM" class="my-2"
+                    style="width: 40px; height: 70px;">
                 <span class="text-white brand-name"><strong>TELECOM</strong></span>
             </a>
         </div>
