@@ -70,25 +70,25 @@
                                 </a>
                             </li>
 
-                            <li class="{{ request()->is('product/stock-in') ? 'active' : '' }}">
+                            <li class="{{ request()->is('product/stock-in*') ? 'active' : '' }}">
                                 <a class="sidenav-item-link" href="{{ route('stockin.index') }}">
-                                    <i class="fa-solid fa-caret-right {{ request()->is('product/stock-in') ? 'fa-beat' : '' }}"></i>
+                                    <i class="fa-solid fa-caret-right {{ request()->is('product/stock-in*') ? 'fa-beat' : '' }}"></i>
                                     <span class="nav-text">នាំចូល</span>
 
                                 </a>
                             </li>
 
-                            <li class="{{ request()->is('product/stock-out') ? 'active' : '' }}">
+                            <li class="{{ request()->is('product/stock-out*') ? 'active' : '' }}">
                                 <a class="sidenav-item-link" href="{{ route('stockout.index') }}">
-                                    <i class="fa-solid fa-caret-right {{ request()->is('product/stock-out') ? 'fa-beat' : '' }}"></i>
+                                    <i class="fa-solid fa-caret-right {{ request()->is('product/stock-out*') ? 'fa-beat' : '' }}"></i>
                                     <span class="nav-text">ប្រគល់</span>
 
                                 </a>
                             </li>
 
-                            <li class="{{ request()->is('product/borrow') ? 'active' : '' }}">
+                            <li class="{{ request()->is('product/borrow*') ? 'active' : '' }}">
                                 <a class="sidenav-item-link" href="{{ route('borrow.create') }}">
-                                    <i class="fa-solid fa-caret-right {{ request()->is('product/borrow') ? 'fa-beat' : '' }}"></i>
+                                    <i class="fa-solid fa-caret-right {{ request()->is('product/borrow*') ? 'fa-beat' : '' }}"></i>
                                     <span class="nav-text">ខ្ចី/សង</span>
 
                                 </a>
