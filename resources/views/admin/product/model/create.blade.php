@@ -54,6 +54,16 @@
                                                     @endforeach
                                                 </select>
                                             </div>
+
+
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Type:</label>
+                                                <input type="text" name="type" class="form-control" id="exampleInputEmail1" placeholder="Product type">
+                                                @error('type')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+                                            
                                             <div class="form-group">
                                                 <label for="accessory">Is Accessory:</label>
                                                 <label class="switch">
@@ -67,13 +77,6 @@
                                                     <input type="text" name="frequency" class="form-control" id="exampleInputEmail1" placeholder="Frequency band">
                                                 </div>
                                                 
-                                                <div class="form-group">
-                                                    <label for="exampleInputEmail1">Type:</label>
-                                                    <input type="text" name="type" class="form-control" id="exampleInputEmail1" placeholder="Product type">
-                                                    @error('type')
-                                                        <span class="text-danger">{{ $message }}</span>
-                                                    @enderror
-                                                </div>
                                                 
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1">Power:</label>
@@ -200,7 +203,7 @@
                         // Hide loading indicator
                         $('#loading').hide();
                         // Redirect to the "home" route
-                        window.location.href = "{{ route('product.model') }}";
+                        window.location.href = "{{ route('product.model.create') }}";
                         alert(response.message);
                     },
                     error: function(xhr) {

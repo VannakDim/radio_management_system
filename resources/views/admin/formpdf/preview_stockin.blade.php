@@ -1,40 +1,37 @@
 @extends('frontend.layout.web')
 
-@section('style')
-@endsection
-
 @section('content')
     <div class="container" style="padding: 0 20px">
         <div class="row" style="margin-bottom: 20px">
-            <img src="{{ asset('/image/leterhead/head.png') }}" alt="" width="100%">
+            <img src="{{asset('/image/leterhead/head.png')}}" alt="" width="100%">
         </div>
-        <h5 class="battambang text-center mb-3" style="font-weight: bold;">លិខិតប្រគល់វិទ្យុទាក់ទង</h5>
-        <h6 class="battambang text-center mb-5">({{$stockOut->type}})</h6>
+        <h5 class="battambang text-center mb-3" style="font-weight: bold;">លិខិតនាំចូល</h5>
+        <h6 class="battambang text-center mb-5">({{$stockIn->invoice_no}})</h6>
         
         <table class="table table-bordered">
             <thead>
                 <tr>
                     <th class="text-center" width=90>ល.រ</th>
-                    <th style="width: 30%">លេខសម្គាល់</th>
+                    <th style="width: 30%">ក្រុមហ៊ុន</th>
                     <th style="width: 20%">ម៉ូដែល</th>
-                    <th style="width: 20%">ប្រភេទ</th>
+                    <th style="width: 20%">ចំនួន</th>
                     <th>ផ្សេងៗ</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($stockOut->products as $key => $item)
+                @foreach ($stockIn->detail as $key => $item)
                     <tr>
                         <td class="text-center">{{ $key + 1 }}</td>
-                        <td>{{ $item->product->PID }}</td>
-                        <td>{{ $item->product->model->name }}</td>
-                        <td>{{ $item->product->model->type }}</td>
+                        <td>{{ $item->product->brand->brand_name }}</td>
+                        <td>{{ $item->product->name }}</td>
+                        <td>{{ $item->quantity }}</td>
                         <td></td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
 
-        @if ($stockOut->stockOutDetails->count() > 0)
+        {{-- @if ($stockIn->details->count() > 0)
             <h6 class="battambang text-center my-5" style="font-weight: bold;">និងឧបករណ៍ភ្ជាប់បន្ថែម</h6>
 
             <table class="table table-bordered">
@@ -48,7 +45,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($stockOut->stockOutDetails as $key => $item)
+                    @foreach ($stockIn->details as $key => $item)
                         <tr>
                             <td class="text-center">{{ $key + 1 }}</td>
                             <td>{{ $item->product->name }}</td>
@@ -59,7 +56,7 @@
                     @endforeach
                 </tbody>
             </table>
-        @endif
+        @endif --}}
 
         <div class="row" style="margin: 50px 0 5px">
             <div class="col-sm-12">
@@ -89,7 +86,7 @@
             </div>
             <div class="col-sm-3">
                 <p class="battambang text-center
-            "><strong>អ្នកប្រគល់</strong></p>
+            "><strong>អ្នកផ្គត់ផ្គង់</strong></p>
             </div>
         </div>
 
@@ -100,14 +97,14 @@
             </div>
             <div class="col-sm-3">
                 <p class="battambang text-center
-            ">{{ $stockOut->receiver }}</p>
+            ">{{ $stockIn->user->name }}</p>
             </div>
             <div class="col-sm-3">
                 <p class="battambang text-center
-            ">{{ $stockOut->user->name }}</p>
+            ">{{ $stockIn->supplier }}</p>
             </div>
 
         </div>
-        {{ $stockOut->created_at }}
+        {{ $stockIn->created_at }}
     </div>
 @endsection

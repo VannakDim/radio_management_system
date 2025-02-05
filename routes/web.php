@@ -129,13 +129,15 @@ Route::middleware([
     Route::get('/product/model/edit/{id}', [ProductModelController::class, 'edit'])->name('model.edit');
     Route::post('/product/model/update/{id}', [ProductModelController::class, 'update'])->name('model.update');
     Route::get('/product/softDel/{id}', [ProductModelController::class, 'softDelete']);
-    Route::get('/product/model', [ProductModelController::class, 'create'])->name('product.model');
+    Route::get('/product/model', [ProductModelController::class, 'create'])->name('product.model.create');
     Route::post('/product/store', [ProductModelController::class, 'store'])->name('store.model');
     Route::post('/product/check-serial-number', [ProductController::class, 'checkSerialNumber'])->name('check.serial.number');
 
     Route::get('/product/stock-in/index', [StockInController::class, 'index'])->name('stockin.index');
     Route::get('/product/stock-in', [StockInController::class, 'create'])->name('stockin.create');
     Route::post('/product/stock-in/store', [StockInController::class, 'store'])->name('stockin.store');
+    Route::get('/product/stock-in/show/{id}', [ExportToPdf::class, 'previewStockIn'])->name('stockin.preview');
+    Route::get('/product/stock-in/download/{id}', [StockInController::class, 'download'])->name('stockin.download');
 
     Route::get('/product/stock-out', [StockOutController::class, 'create'])->name('stockout.create');
     Route::post('/product/stock-out/store', [StockOutController::class, 'store'])->name('stockout.store');
@@ -148,6 +150,9 @@ Route::middleware([
 
     Route::get('/product/stock-out/data', [StockOutController::class, 'paginateData'])->name('stockout.paginate');
     Route::get('/product/borrow/data', [BorrowController::class, 'paginateData'])->name('borrow.paginate');
+
+    Route::get('/product/borrow/download/{id}', [BorrowController::class, 'download'])->name('borrow.download');
+    Route::get('/product/stock-out/download/{id}', [StockOutController::class, 'download'])->name('stockout.download');
 
     Route::get('/logout', [UserAuthController::class, 'logout'])->name('user.logout');
 

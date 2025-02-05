@@ -1,31 +1,14 @@
 @extends('frontend.layout.web')
 
 @section('style')
-    <style>
-        /* @font-face {
-            font-family: 'battambang';
-            src: url('{{ public_path('font/KhmerOSBattambang-Regular.ttf') }}') format('truetype');
-            font-weight: normal;
-            font-style: normal;
-        }
-
-        .battambang {
-            font-family: 'battambang', sans-serif !important;
-            word-spacing: 0;
-        } */
-
-        /* body {
-            font-family: 'battambang', sans-serif !important;
-        } */
-    </style>
 @endsection
 
 @section('content')
     <div class="container" style="padding: 0 20px">
         <div class="row" style="margin-bottom: 20px">
-            <img src="/image/leterhead/head.png" alt="" width="100%">
+            <img src="{{asset('/image/leterhead/head.png')}}" alt="" width="100%">
         </div>
-        <h5 class="battambang text-center my-5" style="font-weight: bold;">បញ្ចីខ្ចីវិទ្យុទាក់ទង</h5>
+        <h5 class="battambang text-center my-5" style="font-weight: bold;">លិខិតខ្ចីវិទ្យុទាក់ទង</h5>
 
         <table class="table table-bordered">
             <thead>

@@ -23,15 +23,16 @@
                                 @foreach ($data as $stock)
                                     <tr>
                                         <td>{{ str_pad($stock['id'], 2, '0', STR_PAD_LEFT) }}</td>
-                                        <td><a class="text-dark mr-2" href="">{{ $stock['model_name'] }}</a><span class="badge badge-primary">{{ $stock['stock_in'] }}</span>
-                                            <span class="badge badge-warning">{{ $stock['stock_out'] }}</span></td>
+                                        <td><a class="text-dark mr-2" href="">{{ $stock['model_name'] }}</a><span
+                                                class="badge badge-primary">{{ $stock['stock_in'] }}</span>
+                                            <span class="badge badge-warning">{{ $stock['stock_out'] }}</span>
+                                        </td>
                                         <td>{{ $stock['brand_name'] }}</td>
                                         <td><span class="badge badge-success">{{ $stock['available_stock'] }}</span></td>
-                                        <td>@if($stock['borrow'] > 0)<span class="badge badge-danger">{{ $stock['borrow'] }}</span>@endif</td>
-                                        <td class="text-right">
-                                            {{-- <x-dropdown>
-                                                <x-dropdown-item href="#">View</x-dropdown-item>
-                                            </x-dropdown> --}}
+                                        <td>
+                                            @if ($stock['borrow'] > 0)
+                                                <span class="badge badge-danger">{{ $stock['borrow'] }}</span>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
@@ -43,10 +44,11 @@
                             <div class="card-header justify-content-between">
                                 <h2 class="badge badge-warning text-white">STOCK-OUT REPORT</h2>
                                 <div class="date-range-report" id="filterStockOut"><span></span></div>
-                                
+
                             </div>
                             <div class="card-body pt-0 pb-5">
-                                <table class="table card-table table-responsive table-responsive-large table-striped" style="width:100%">
+                                <table class="table card-table table-responsive table-responsive-large table-striped"
+                                    style="width:100%">
                                     <thead>
                                         <tr>
                                             <th>ID</th>
@@ -73,10 +75,11 @@
                             <div class="card-header justify-content-between">
                                 <h2 class="badge badge-danger text-white">BORROWING REPORT</h2>
                                 <div class="date-range-report" id="filterBorrow"><span></span></div>
-                                
+
                             </div>
                             <div class="card-body pt-0 pb-5">
-                                <table class="table card-table table-responsive table-responsive-large table-striped" style="width:100%">
+                                <table class="table card-table table-responsive table-responsive-large table-striped"
+                                    style="width:100%">
                                     <thead>
                                         <tr>
                                             <th>ID</th>
@@ -166,7 +169,7 @@
 
         function dateRangeDisplay(page, view) {
             let dateRange;
-            
+
             if (view === 'stockout') {
                 dateRange = $('#filterStockOut span').text();
                 url = "{{ route('stockout.paginate') }}?page=" + page;
@@ -198,15 +201,20 @@
 
         function updateTable(selector, data) {
             let rows = '';
-            let command = '';
+            // let command = '';
 
             $.each(data, function(index, value) {
+                let download = '';
                 if (selector === '#stockout-table-body') {
                     view = "stock-out";
                 } else {
                     view = "borrow";
                 }
-                // console.log(view);
+                if(value.image !== null){
+                    download = `<li class="dropdown-item">
+                                    <a href="product/${view}/download/${value.id}" ><i class="fas fa-download mr-2"></i>ទាញ</a>
+                                  </li>`;
+                }
                 rows += `<tr>
                             <td>${value.id}</td>
                             <td>${value.receiver}</td>
@@ -216,14 +224,15 @@
                             <td class="text-right">
                               <div class="dropdown show d-inline-block widget-dropdown">
                                 <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdown-recent-order5" data-toggle="dropdown" aria-haspopup="true"
-                                  aria-expanded="false" data-display="static"></a>
+                                  aria-expanded="false" data-display="dynamic"></a>
                                 <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-recent-order5">
                                   <li class="dropdown-item">
-                                    <a href="#" onclick="openViewPopup('${view}',${value.id})">View</a>
+                                    <a href="#" onclick="openViewPopup('${view}',${value.id})"><i class="fas fa-eye mr-2"></i>មើល</a>
                                   </li>
                                   <li class="dropdown-item">
-                                    <a href="#" onclick="openPrintPopup('${view}',${value.id})">Print</a>
+                                    <a href="#" onclick="openPrintPopup('${view}',${value.id})"><i class="fas fa-print mr-2"></i>ព្រីន</a>
                                   </li>
+                                    ${download}
                                 </ul>
                               </div>
                             </td>
@@ -294,7 +303,7 @@
             window.open(`/product/${view}/show/${id}`, 'ViewWindow',
                 `width=${screen.width},height=${screen.height},top=0,left=0`);
             // console.log(command);
-            window.open(command, 'PrintWindow', `width=${screen.width},height=${screen.height},top=0,left=0`);
+            window.open('PrintWindow', `width=${screen.width},height=${screen.height},top=0,left=0`);
         }
 
         function openPrintPopup(view, id) {

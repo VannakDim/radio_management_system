@@ -53,4 +53,16 @@ class StockInController extends Controller
         }
         return response()->json(['message'=> 'Successful!']);
     }
+
+    public function download($id)
+    {
+        $stock_in = StockIn::findOrFail($id);
+        $file_path = public_path($stock_in->image);
+
+        if (file_exists($file_path)) {
+            return response()->download($file_path);
+        } else {
+            return response()->json(['message' => 'File not found.'], 404);
+        }
+    }
 }

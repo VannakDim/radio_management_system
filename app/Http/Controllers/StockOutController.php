@@ -82,4 +82,20 @@ class StockOutController extends Controller
 
         return response()->json(['message' => 'Successful!', 'id' => $stock_out->id]);
     }
+
+    public function download($id)
+    {
+        $stockOut = StockOut::findOrFail($id);
+
+        if ($stockOut->image) {
+            $filePath = public_path($stockOut->image);
+            if (file_exists($filePath)) {
+                return response()->download($filePath);
+            } else {
+                return response()->json(['message' => 'File not found!'], 404);
+            }
+        } else {
+            return response()->json(['message' => 'No image associated with this record!'], 404);
+        }
+    }
 }

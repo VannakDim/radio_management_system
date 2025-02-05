@@ -6,8 +6,8 @@
             <div class="container">
                 <div class="row">
                     <div class="col">
-                        <a class="btn btn-primary btn-pill mb-6 float-right" id="add-post" href="{{ route('product.model') }}"
-                            role="button"><i class="bi bi-database-add"></i> ADD MODEL </a>
+                        <a class="btn btn-primary mb-3 d-flex align-items-center justify-content-center" id="add-post" href="{{ route('product.model.create') }}"
+                        style="height: 50px"><i class="bi bi-database-add"></i><strong> ADD NEW MODEL </strong></a>
                     </div>
                 </div>
                 <div class="row">

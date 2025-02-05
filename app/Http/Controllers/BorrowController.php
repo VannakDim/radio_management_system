@@ -103,4 +103,20 @@ class BorrowController extends Controller
 
         return response()->json(['message' => 'Successful!', 'id' => $borrow->id]);
     }
+
+    public function download($id)
+    {
+        $borrow = Borrow::findOrFail($id);
+
+        if ($borrow->image) {
+            $filePath = public_path($borrow->image);
+            if (file_exists($filePath)) {
+                return response()->download($filePath);
+            } else {
+                return response()->json(['message' => 'File not found!'], 404);
+            }
+        } else {
+            return response()->json(['message' => 'No image associated with this borrow record!'], 404);
+        }
+    }
 }

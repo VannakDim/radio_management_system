@@ -13,7 +13,7 @@
                     <div class="col-md-12">
                         <div class="card card-default">
                             <div class="card-header card-header-border-bottom">
-                                <h2 class="badge badge-primary">STOCK IN</h2>
+                                <h2 class="badge badge-primary text-white">STOCK IN</h2>
                             </div>
 
                             <div class="card-body">
@@ -42,7 +42,7 @@
 
                                             <label for="model">Product list:</label>
                                             <div class="row">
-                                                <div class="col-md-6">
+                                                <div class="col-md-7">
                                                     <div class="form-group">
                                                         <select name="models" id="model" class="form-control">
                                                             @foreach ($models as $model)
@@ -53,7 +53,7 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3">
+                                                {{-- <div class="col-md-3">
                                                     <div class="form-group">
                                                         <input type="number" class="form-control" id="quantity"
                                                             placeholder="Quantity" min="1">
@@ -62,6 +62,16 @@
                                                 <div class="col-md-3">
                                                     <button type="button" class="btn btn-primary"
                                                         onclick="addItem(event)">ADD TO LIST</button>
+                                                </div> --}}
+                                                <div class="col-md-5">
+                                                    <div class="form-group flex">
+                                                        <input type="number" class="form-control mr-2" id="quantity"
+                                                            placeholder="Quantity" min="1">
+                                                        <button type="button" class="btn btn-primary"
+                                                            onclick="addItem(event)">
+                                                            <i class="fas fa-plus"></i>
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <table class="table table-bordered" id="itemsTable">
@@ -108,7 +118,7 @@
                                         <span class="ladda-label">Save!</span>
                                         <span class="ladda-spinner"></span>
                                     </button>
-                                    <a href="{{ route('all.product') }}" class="btn btn-secondary float-right"
+                                    <a href="{{ route('stockin.index') }}" class="btn btn-secondary float-right"
                                         style="margin-right: 6px">Back</a>
                                 </form>
                             </div>
