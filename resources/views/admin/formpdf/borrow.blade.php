@@ -4,9 +4,9 @@
 @endsection
 
 @section('content')
-    <div class="container" style="padding: 0 20px">
-        <div class="row" style="margin-bottom: 20px">
-            <img src="{{asset('/image/leterhead/head.png')}}" alt="" width="100%">
+    <div class="container">
+        <div class="row" style="margin-bottom: 20px; padding:0 20px;">
+            <img src="{{asset('/image/leterhead/head.png')}}" alt="" style="width: 100%; height: auto;">
         </div>
         <h5 class="battambang text-center my-5" style="font-weight: bold;">លិខិតខ្ចីវិទ្យុទាក់ទង</h5>
 
@@ -23,7 +23,7 @@
             <tbody>
                 @foreach ($borrow->details as $key => $item)
                     <tr>
-                        <td class="text-center">{{ $key + 1 }}</td>
+                        <td class="text-center">{{ sprintf('%02d', $key + 1) }}</td>
                         <td>{{ $item->product->PID }}</td>
                         <td>{{ $item->product->model->name }}</td>
                         <td>{{ $item->product->model->type }}</td>
@@ -48,7 +48,7 @@
                 <tbody>
                     @foreach ($borrow->accessory as $key => $item)
                         <tr>
-                            <td class="text-center">{{ $key + 1 }}</td>
+                            <td class="text-center">{{ sprintf('%02d', $key + 1) }}</td>
                             <td>{{ $item->model->name }}</td>
                             <td>{{ $item->model->type }}</td>
                             <td>{{ $item->quantity }}</td>
@@ -59,20 +59,20 @@
             </table>
         @endif
 
-        <div class="row" style="margin: 50px 0 5px">
+        {{-- <div class="row" style="margin: 50px 0 5px">
             <div class="col-sm-12">
                 <p class="battambang text-right
             ">ធ្វើនៅ ក្រុងតាខ្មៅ ថ្ងៃ<span
                         style="padding-right: 150px"></span>ខែ<span style="padding-right: 90px"></span>ឆ្នាំ<span
                         style="padding-right: 80px"></span>ពស ២៥៦__</p>
             </div>
-        </div>
+        </div> --}}
 
-        <div class="row" style="margin: 0 0 50px">
+        <div class="row" style="margin: 50px 0 50px">
 
             <div class="col-sm-12">
                 <p class="battambang text-right
-            ">ត្រូវនឹងថ្ងៃទី<span
+            ">ក្រុងតាខ្មៅ​ ថ្ងៃទី<span
                         style="padding-right: 100px"></span>ខែ<span style="padding-right: 80px"></span>ឆ្នាំ២០២__</p>
             </div>
         </div>

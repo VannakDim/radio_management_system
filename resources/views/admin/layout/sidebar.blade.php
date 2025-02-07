@@ -26,8 +26,6 @@
             <!-- sidebar menu -->
             <ul class="nav sidebar-inner" id="sidebar-menu">
 
-
-
                 <li class="has-sub {{ request()->is('dashboard*') ? 'active' : '' }}">
                     <a class="sidenav-item-link" href="/dashboard">
                         <i class="fa-solid fa-chart-simple"></i>
