@@ -3,6 +3,9 @@
   width: 192px;
 }
 
+button:focus {
+  outline: none !important;
+}
 
 /* Embed font */
 @font-face {
