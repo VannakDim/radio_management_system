@@ -1,49 +1,82 @@
-@extends('admin.layout.admin')
-{{-- <x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Profile') }}
-        </h2>
-    </x-slot> --}}
+<!DOCTYPE html>
+<html lang="en">
 
-@section('main_body')
-<div>
-    <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
-        @if (Laravel\Fortify\Features::canUpdateProfileInformation())
-            @livewire('profile.update-profile-information-form')
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>PROFILE</title>
+    @include('admin.layout.head')
+</head>
 
-            <x-section-border />
-        @endif
+<body class="sidebar-fixed sidebar-dark header-light header-fixed" id="body">
+    <script>
+        NProgress.configure({
+            showSpinner: false
+        });
+        NProgress.start();
+    </script>
 
-        @if (Laravel\Fortify\Features::enabled(Laravel\Fortify\Features::updatePasswords()))
-            <div class="mt-10 sm:mt-0">
-                @livewire('profile.update-password-form')
+    <div class="mobile-sticky-body-overlay"></div>
+
+    <div class="wrapper">
+
+
+        @include('admin.layout.sidebar')
+
+
+        <div class="page-wrapper">
+
+            {{-- @include('admin.layout.navbar') --}}
+
+            <div class="content-wrapper">
+                <div>
+                    <div class="max-w-7xl mx-auto py-10 sm:px-6 lg:px-8">
+                        @if (Laravel\Fortify\Features::canUpdateProfileInformation())
+                            @livewire('profile.update-profile-information-form')
+
+                            <x-section-border />
+                        @endif
+
+                        @if (Laravel\Fortify\Features::enabled(Laravel\Fortify\Features::updatePasswords()))
+                            <div class="mt-10 sm:mt-0">
+                                @livewire('profile.update-password-form')
+                            </div>
+
+                            <x-section-border />
+                        @endif
+
+                        @if (Laravel\Fortify\Features::canManageTwoFactorAuthentication())
+                            <div class="mt-10 sm:mt-0">
+                                @livewire('profile.two-factor-authentication-form')
+                            </div>
+
+                            <x-section-border />
+                        @endif
+
+                        <div class="mt-10 sm:mt-0">
+                            @livewire('profile.logout-other-browser-sessions-form')
+                        </div>
+
+                        @if (Laravel\Jetstream\Jetstream::hasAccountDeletionFeatures())
+                            <x-section-border />
+
+                            <div class="mt-10 sm:mt-0">
+                                @livewire('profile.delete-user-form')
+                            </div>
+                        @endif
+                    </div>
+                </div>
             </div>
 
-            <x-section-border />
-        @endif
+            @include('admin.layout.footer')
 
-        @if (Laravel\Fortify\Features::canManageTwoFactorAuthentication())
-            <div class="mt-10 sm:mt-0">
-                @livewire('profile.two-factor-authentication-form')
-            </div>
-
-            <x-section-border />
-        @endif
-
-        <div class="mt-10 sm:mt-0">
-            @livewire('profile.logout-other-browser-sessions-form')
         </div>
-
-        @if (Laravel\Jetstream\Jetstream::hasAccountDeletionFeatures())
-            <x-section-border />
-
-            <div class="mt-10 sm:mt-0">
-                @livewire('profile.delete-user-form')
-            </div>
-        @endif
     </div>
-</div>
-@endsection
+
+</body>
+
+</html>
+
 
 {{-- </x-app-layout> --}}
