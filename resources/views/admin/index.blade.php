@@ -31,13 +31,13 @@
                                         </td>
                                         <td>{{ $stock['brand_name'] }}</td>
                                         <td>
-                                            <span class="badge badge-primary">{{ str_pad($stock['stock_in'], 3, '0', STR_PAD_LEFT) }}</span>
-                                            <span class="badge badge-danger">{{ str_pad($stock['stock_out'], 3, '0', STR_PAD_LEFT) }}</span>
-                                            <span class="badge badge-success">{{ str_pad($stock['available_stock'], 3, '#', STR_PAD_LEFT) }}</span>
+                                            <span style="font-size: 0.98rem !important;" class="badge badge-primary">{{ str_pad($stock['stock_in'], 3, '0', STR_PAD_LEFT) }}</span>
+                                            <span style="font-size: 0.98rem !important;" class="badge badge-danger">{{ str_pad($stock['stock_out'], 3, '0', STR_PAD_LEFT) }}</span>
+                                            <span style="font-size: 0.98rem !important;" class="badge badge-success">{{ str_pad($stock['available_stock'], 3, '#', STR_PAD_LEFT) }}</span>
                                         </td>
                                         <td>
                                             @if ($stock['borrow'] > 0)
-                                                <span class="badge badge-warning">{{ $stock['borrow'] }}</span>
+                                                <span style="font-size: 0.98rem !important;" class="badge badge-warning">{{ $stock['borrow'] }}</span>
                                             @endif
                                         </td>
                                         <td></td>
