@@ -14,7 +14,11 @@
                                     <th>ID</th>
                                     <th style="width: 30%">Model</th>
                                     <th style="width: 30%" class="d-none d-md-table-cell">Brand</th>
-                                    <th style="width: 20%" class="d-none d-md-table-cell">Available</th>
+                                    <th style="width: 20%" class="d-none d-md-table-cell">
+                                        <label class="badge badge-primary">ALL</label>
+                                        <label class="badge badge-danger">OUT</label>
+                                        <label class="badge badge-success">FREE</label>
+                                    </th>
                                     <th style="width: 30%" class="d-none d-md-table-cell">Borrowed</th>
                                     <th></th>
                                 </tr>
@@ -23,17 +27,20 @@
                                 @foreach ($data as $stock)
                                     <tr>
                                         <td>{{ str_pad($stock['id'], 2, '0', STR_PAD_LEFT) }}</td>
-                                        <td><a class="text-dark mr-2" href="">{{ $stock['model_name'] }}</a><span
-                                                class="badge badge-primary">{{ $stock['stock_in'] }}</span>
-                                            <span class="badge badge-warning">{{ $stock['stock_out'] }}</span>
+                                        <td><a class="text-dark mr-2" href="">{{ $stock['model_name'] }}</a>
                                         </td>
                                         <td>{{ $stock['brand_name'] }}</td>
-                                        <td><span class="badge badge-success">{{ $stock['available_stock'] }}</span></td>
+                                        <td>
+                                            <span class="badge badge-primary">{{ str_pad($stock['stock_in'], 3, '0', STR_PAD_LEFT) }}</span>
+                                            <span class="badge badge-danger">{{ str_pad($stock['stock_out'], 3, '0', STR_PAD_LEFT) }}</span>
+                                            <span class="badge badge-success">{{ str_pad($stock['available_stock'], 3, '#', STR_PAD_LEFT) }}</span>
+                                        </td>
                                         <td>
                                             @if ($stock['borrow'] > 0)
-                                                <span class="badge badge-danger">{{ $stock['borrow'] }}</span>
+                                                <span class="badge badge-warning">{{ $stock['borrow'] }}</span>
                                             @endif
                                         </td>
+                                        <td></td>
                                     </tr>
                                 @endforeach
                             </x-slot>

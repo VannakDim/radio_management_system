@@ -34,4 +34,11 @@ class ExportToPdf extends Controller
         return view('admin.formpdf.preview_stockin', compact('stockIn'));
     }
 
+    public function printReturn($id)
+    {
+        $borrow = Borrow::findOrFail($id);
+
+        return view('admin.formpdf.return', compact('borrow'));
+    }
+
 }

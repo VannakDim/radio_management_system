@@ -39,6 +39,9 @@
                                         <td>{{ $borrow->purpose }}</td>
                                         <td>{{ $borrow->created_at->format('Y-m-d') }}</td>
                                         <td>
+                                            @if(!$borrow->borrowed)
+                                                <span class="badge badge-danger">Returned</span>
+                                            @endif
                                             @if ($borrow->image)
                                                 <a href="#"
                                                     onclick="openImageModal('{{ asset($borrow->image) }}'); return false;">
@@ -55,7 +58,8 @@
                                                     aria-labelledby="dropdown-recent-order5" style="width: 120px;">
                                                     <li class="dropdown-item">
                                                         <div class="d-flex flex-column">
-                                                            <a href="#" onclick="openPreview({{ $borrow->id }})"
+                                                            @if($borrow->borrowed)
+                                                            <a href="#" onclick="openPreviewBorrow({{ $borrow->id }})"
                                                                 class="text-dark">
                                                                 <i class="fas fa-print mr-2"></i>Preview
                                                             </a>
@@ -69,9 +73,16 @@
                                                                     <i class="fas fa-download mr-2"></i>Download
                                                                 </a>
                                                             @endif
-                                                            <a href="{{ route('return.index', $borrow->id) }}" class="text-dark mt-2">
-                                                                <i class="fas fa-undo mr-2"></i>Return
-                                                            </a>
+                                                            
+                                                                <a href="{{ route('return.index', $borrow->id) }}" class="text-dark mt-2">
+                                                                    <i class="fas fa-undo mr-2"></i>Return
+                                                                </a>
+                                                            @else
+                                                                <a href="#" onclick="openPreviewReturn({{ $borrow->id }})"
+                                                                    class="text-dark">
+                                                                    <i class="fas fa-print mr-2"></i>Preview
+                                                                </a>
+                                                            @endif
                                                         </div>
                                                     </li>
                                                 </ul>
@@ -91,10 +102,12 @@
     </div>
     <script src="{{ asset('backend/assets/js/image-viewer.js') }}"></script>
     <script>
-        function openPreview(id) {
+        function openPreviewBorrow(id) {
             window.open(`/product/borrow/show/${id}`, 'ViewWindow',
                 `width=${screen.width},height=${screen.height},top=0,left=0`);
-            window.open(`/product/borrow/show/${id}`, 'PrintWindow',
+        }
+        function openPreviewReturn(id) {
+            window.open(`/product/return/show/${id}`, 'PrintWindow',
                 `width=${screen.width},height=${screen.height},top=0,left=0`);
         }
     </script>

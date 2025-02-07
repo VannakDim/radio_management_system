@@ -8,32 +8,40 @@
         <div class="row" style="margin-bottom: 20px; padding:0 20px;">
             <img src="{{asset('/image/leterhead/head.png')}}" alt="" style="width: 100%; height: auto;">
         </div>
-        <h5 class="battambang text-center my-5" style="font-weight: bold;">លិខិតខ្ចីវិទ្យុទាក់ទង</h5>
+        <h5 class="battambang text-center my-5" style="font-weight: bold;">លិខិតខ្ចីសម្ភារៈវិទ្យុទាក់ទង</h5>
 
-        <table class="table table-bordered">
-            <thead>
-                <tr class="battambang">
-                    <th class="text-center" width=90>ល.រ</th>
-                    <th style="width: 30%">លេខសម្គាល់</th>
-                    <th style="width: 20%">ម៉ូដែល</th>
-                    <th style="width: 20%">ប្រភេទ</th>
-                    <th>ផ្សេងៗ</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($borrow->details as $key => $item)
+        @if($borrow->details->count() > 0)
+            {{-- <h6 class="battambang text-center my-5" style="font-weight: bold;">មតិយោបល់</h6> --}}
+
+            <table class="table table-bordered">
+                <thead>
                     <tr>
-                        <td class="text-center">{{ sprintf('%02d', $key + 1) }}</td>
-                        <td>{{ $item->product->PID }}</td>
-                        <td>{{ $item->product->model->name }}</td>
-                        <td>{{ $item->product->model->type }}</td>
-                        <td></td>
+                        <th class="text-center" width=90>ល.រ</th>
+                        <th style="width: 30%">លេខសំគាល់</th>
+                        <th style="width: 20%">ម៉ូដែល</th>
+                        <th style="width: 20%">ប្រភេទ</th>
+                        <th>ផ្សេងៗ</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
-        @if ($borrow->accessory->count() > 0)
-            <h6 class="battambang text-center my-5" style="font-weight: bold;">និងឧបករណ៍ភ្ជាប់បន្ថែម</h6>
+                </thead>
+                <tbody>
+                    @foreach ($borrow->details as $key => $item)
+                        <tr>
+                            <td class="text-center">{{ sprintf('%02d', $key + 1) }}</td>
+                            <td>{{ $item->product->PID }}</td>
+                            <td>{{ $item->product->model->name }}</td>
+                            <td>{{ $item->product->model->type }}</td>
+                            <td>@if ($item->borrowed == 0) <span class="badge badge-danger">បានសង</span> @endif</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        @endif
+        @if ($borrow->accessory->count() <> 0)
+            <h6 class="battambang text-center my-5" style="font-weight: bold;">
+                @if($borrow->details->count() > 0)
+                    និងឧបករណ៍ភ្ជាប់បន្ថែម
+                @endif
+            </h6>
 
             <table class="table table-bordered">
                 <thead>
@@ -52,21 +60,12 @@
                             <td>{{ $item->model->name }}</td>
                             <td>{{ $item->model->type }}</td>
                             <td>{{ $item->quantity }}</td>
-                            <td></td>
+                            <td>@if ($item->borrowed == 0) <span class="badge badge-danger">បានសង</span> @endif</td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
         @endif
-
-        {{-- <div class="row" style="margin: 50px 0 5px">
-            <div class="col-sm-12">
-                <p class="battambang text-right
-            ">ធ្វើនៅ ក្រុងតាខ្មៅ ថ្ងៃ<span
-                        style="padding-right: 150px"></span>ខែ<span style="padding-right: 90px"></span>ឆ្នាំ<span
-                        style="padding-right: 80px"></span>ពស ២៥៦__</p>
-            </div>
-        </div> --}}
 
         <div class="row" style="margin: 50px 0 50px">
 

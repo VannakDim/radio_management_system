@@ -16,9 +16,10 @@ class BorrowController extends Controller
     public function index()
     {
         $borrows = Borrow::with(['user', 'details.product', 'accessory']);
-        $borrows = $borrows->where('borrowed', 1)->orderBy('created_at', 'desc')->paginate(5);
+        $borrows = $borrows->orderBy('created_at', 'desc')->paginate(5);
+        // $borrows = $borrows->where('borrowed', 1)->orderBy('created_at', 'desc')->paginate(5);
         return view('admin.product.borrow.index', compact('borrows'));
-        return response()->json(['message' => $completed_return ? 'Return successful!' : 'Return partially successful!', 'id' => $borrow->id]);
+        // return response()->json(['message' => $completed_return ? 'Return successful!' : 'Return partially successful!', 'id' => $borrow->id]);
     }
 
     public function paginateData(Request $request)
@@ -229,7 +230,11 @@ class BorrowController extends Controller
 
     public function return_index($id)
     {
-        $borrow = Borrow::with(['details.product', 'accessory'])->findOrFail($id);
+        $borrow = Borrow::with(['details' => function ($query) {
+            $query->where('borrowed', 1);
+        }, 'accessory' => function ($query) {
+            $query->where('borrowed', 1);
+        }])->findOrFail($id);
         $models = ProductModel::all();
         $availableProducts = Product::whereNotIn('id', function ($query) {
             $query->select('product_id')->from('borrow_details')->where('borrowed', 1);
@@ -258,67 +263,72 @@ class BorrowController extends Controller
         $return->note = $request->note;
         $return->save();
 
+        if($borrow->details){
         // Decode the items JSON
         $items = json_decode($request->input('items'), true);
 
+        // if ($borrow->details->where('borrowed', 1)->count() <> count($items)) {
+        //     $completed_return = false;
+        // }
+
         // Get existing borrow details
-        $existingDetails = BorrowDetail::where('borrow_id', $borrow->id)->get()->keyBy('product_id');
+        $existingProduct = BorrowDetail::where('borrow_id', $borrow->id)->get()->keyBy('product_id');
 
         // Loop through the items and update or delete them in the database
         foreach ($items as $item) {
             $product = Product::where('PID', $item['serial_number'])->first();
             if ($product) {
-            // If the item exists, update it if necessary
-            $borrowDetail = $existingDetails[$product->id];
-            if ($borrowDetail->product_id == $product->id) {
-                $borrowDetail->log = 'Record has been return to stock by ' . $request->returner_name . ' and response by ' . Auth::user()->name;
-                $borrowDetail->borrowed = 0;
-                $borrowDetail->save();
-                $borrowDetail->delete();
+                // If the item exists, update it if necessary
+                $borrowDetail = $existingProduct[$product->id];
+                if ($borrowDetail->product_id == $product->id) {
+                    $borrowDetail->log = 'Record has been return to stock by ' . $request->returner_name . ' and response by ' . Auth::user()->name;
+                    $borrowDetail->borrowed = 0;
+                    $borrowDetail->save();
+                    // $borrowDetail->delete();
+                } else {
+                    $completed_return = false;
+                }
             } else {
-                $completed_return = false;
-            }
-            } else {
-            return response()->json(['message' => 'Product not found!']);
+                return response()->json(['message' => 'Product not found!']);
             }
         }
-
+        }
         // Decode the accessories JSON
         $accessories = json_decode($request->input('accessories'), true);
-
+        
         // Get existing borrow accessories
         $existingAccessories = BorrowAccessory::where('borrow_id', $borrow->id)->get()->keyBy('model_id');
 
         if ($accessories) {
-            foreach ($accessories as $accessory) {
-            $borrowAccessory = $existingAccessories[$accessory['model_id']];
-            if ($borrowAccessory->quantity == $accessory['quantity']) {
-                $borrowAccessory->log = 'Record has been return to stock by ' . $request->returner_name . ' and response by ' . Auth::user()->name;
-                $borrowAccessory->borrowed = 0;
-                $borrowAccessory->save();
-                $borrowAccessory->delete();
-            } else {
+            if ($borrow->accessory->where('borrowed',1)->count() <> count($accessories)) {
                 $completed_return = false;
             }
+            foreach ($accessories as $accessory) {
+                $borrowAccessory = $existingAccessories[$accessory['model_id']];
+                if ($borrowAccessory->quantity == $accessory['quantity']) {
+                    $borrowAccessory->log = 'Record has been return to stock by ' . $request->returner_name . ' and response by ' . Auth::user()->name;
+                    $borrowAccessory->borrowed = 0;
+                    $borrowAccessory->save();
+                    // $borrowAccessory->delete();
+                } else {
+                    $completed_return = false;
+                }
             }
         }
 
         // Check if the count of items and accessories match the existing details and accessories
-        if (count($items) != $existingDetails->count() || count($accessories) != $existingAccessories->count()) {
-            $completed_return = false;
-        }
         if ($completed_return) {
             $borrow->borrowed = 0;
             $borrow->log = 'Product(s) has been return 100% items back to stock by ' . $request->returner_name . ' and response by ' . Auth::user()->name;
             $borrow->save();
-            $borrow->delete();
-        }else{
+            // $borrow->delete();
+        } else {
             $borrow->log = 'Some item(s) has been return to stock by ' . $request->returner_name . ' and response by ' . Auth::user()->name;
-            $borrow->save();
+            // $borrow->save();
             return response()->json(['message' => 'Some items are not return!']);
         }
-
-        return response()->json(['message' => $completed_return ? 'Return successful!' : 'Return partially successful!', 'id' => $borrow->id]);
+        // return response()->json(['items' => $completed_return ]);
+        return response()->json(['message' => $completed_return ? 'The products you borrowed have been returned successfully!' : 'Return partially successful!', 'id' => $borrow->id]);
     }
 
     public function download($id)

@@ -55,6 +55,10 @@ Route::middleware([
     Route::put('/product/borrow/update/{id}', [BorrowController::class, 'update'])->name('borrow.update');
     Route::get('/product/borrow/retrun/{id}', [BorrowController::class, 'return_index'])->name('return.index');
     Route::put('/product/borrow/return/{id}', [BorrowController::class, 'return'])->name('borrow.return');
+    
+    //Print return
+    Route::get('/product/return/show/{id}', [ExportToPdf::class, 'printReturn'])->name('return.print');
+
 
 
     Route::get('/product/stock-out/data', [StockOutController::class, 'paginateData'])->name('stockout.paginate');

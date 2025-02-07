@@ -114,31 +114,7 @@
     <script>
         // Get the input file and preview image elements
         const default_img = '{{ URL::to('') }}' + '/backend/assets/img/default-image.avif';
-        const imageInput = document.getElementById('input-image');
         const previewImage = document.getElementById('img-preview');
-
-        // Listen for the file input change event
-        imageInput.addEventListener('change', function(event) {
-            const file = event.target.files[0]; // Get the selected file
-
-            if (file) {
-                // Create a file reader
-                const reader = new FileReader();
-
-                // Load the image and set it as the src of the previewImage
-                reader.onload = function(e) {
-                    previewImage.style.backgroundImage = `url('${e.target.result}')`;
-                    previewImage.style.display = 'block'; // Make the image visible
-                };
-
-                // Read the file as a data URL
-                reader.readAsDataURL(file);
-            } else {
-                // If no file is selected, hide the image preview
-                previewImage.style.backgroundImage = `url('${default_img}')`;
-                previewImage.style.display = 'none';
-            }
-        });
     </script>
 
     {{-- Submit the form via AJAX --}}
