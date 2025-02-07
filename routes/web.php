@@ -1,31 +1,14 @@
 <?php
 
-use App\Http\Controllers\AboutController;
 use App\Http\Controllers\BorrowController;
-use App\Http\Controllers\BrandController;
-use App\Http\Controllers\ContactController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExportToPdf;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductModelController;
-use App\Http\Controllers\SearchController;
-use App\Http\Controllers\ServiceController;
-use App\Http\Controllers\SliderController;
 use App\Http\Controllers\StockInController;
 use App\Http\Controllers\StockOutController;
-use App\Http\Controllers\TeamController;
 use App\Http\Controllers\UserAuthController;
-use App\Models\Borrow;
-use App\Models\BorrowDetail;
-use App\Models\ProductModel;
-use App\Models\StockInDetail;
-use App\Models\StockOut;
-use App\Models\StockOutDetail;
-use App\Models\StockOutProduct;
-use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
@@ -68,6 +51,11 @@ Route::middleware([
     Route::get('/product/borrow/show/{id}', [ExportToPdf::class, 'exportBorrow'])->name('borrow.show');
     Route::post('/product/borrow/store', [BorrowController::class, 'store'])->name('borrow.store');
     Route::get('/product/borrow/index', [BorrowController::class, 'index'])->name('borrow.index');
+    Route::get('/product/borrow/edit/{id}', [BorrowController::class, 'edit'])->name('borrow.edit');
+    Route::put('/product/borrow/update/{id}', [BorrowController::class, 'update'])->name('borrow.update');
+    Route::get('/product/borrow/retrun/{id}', [BorrowController::class, 'return_index'])->name('return.index');
+    Route::put('/product/borrow/return/{id}', [BorrowController::class, 'return'])->name('borrow.return');
+
 
     Route::get('/product/stock-out/data', [StockOutController::class, 'paginateData'])->name('stockout.paginate');
     Route::get('/product/borrow/data', [BorrowController::class, 'paginateData'])->name('borrow.paginate');

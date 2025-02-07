@@ -5,14 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class BorrowAccessory extends Model
+class borrow_return extends Model
 {
     use SoftDeletes;
     protected $fillable = [
         'borrow_id',
-        'model_id',
-        'quantity',
-        'borrowed',
+        'user_id',
+        'returner_name',
+        'image',
+        'note',
+        'log',
     ];
 
     public function borrow()
@@ -20,8 +22,8 @@ class BorrowAccessory extends Model
         return $this->belongsTo(Borrow::class);
     }
 
-    public function model()
+    public function user()
     {
-        return $this->belongsTo(ProductModel::class);
+        return $this->belongsTo(User::class);
     }
 }

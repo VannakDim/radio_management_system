@@ -86,7 +86,7 @@
                             </li>
 
                             <li class="{{ request()->is('product/borrow*') ? 'active' : '' }}">
-                                <a class="sidenav-item-link" href="{{ route('borrow.create') }}">
+                                <a class="sidenav-item-link" href="{{ route('borrow.index') }}">
                                     <i class="fa-solid fa-caret-right {{ request()->is('product/borrow*') ? 'fa-beat' : '' }}"></i>
                                     <span class="nav-text">ខ្ចី/សង</span>
 

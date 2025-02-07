@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class BorrowDetail extends Model
 {
+    use softDeletes;
     protected $fillable = [
         'borrow_id',
         'product_id',

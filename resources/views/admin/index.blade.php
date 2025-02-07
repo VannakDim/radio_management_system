@@ -71,35 +71,35 @@
                         </div>
 
                         <!-- Borrowing Report -->
-                        <div class="card card-table-border-none" id="recent-orders">
-                            <div class="card-header justify-content-between">
-                                <h2 class="badge badge-danger text-white">BORROWING REPORT</h2>
-                                <div class="date-range-report" id="filterBorrow"><span></span></div>
-
-                            </div>
-                            <div class="card-body pt-0 pb-5">
-                                <table class="table card-table table-responsive table-responsive-large table-striped"
-                                    style="width:100%">
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th style="width: 30%">អ្នកទទួល</th>
-                                            <th style="width: 30%" class="d-none d-md-table-cell">អ្នកប្រគល់</th>
-                                            <th style="width: 20%" class="d-none d-md-table-cell">Date</th>
-                                            <th style="width: 30%" class="d-none d-md-table-cell">Note</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="borrow-table-body">
-                                    </tbody>
-                                </table>
-                                <div id="borrowPagination" data-url="{{ route('borrow.paginate') }}">
-                                    <nav aria-label="Page navigation example">
-                                        <ul class="pagination justify-content-center"></ul>
-                                    </nav>
+                        @if ($data->sum('borrow') > 0)
+                            <div class="card card-table-border-none" id="recent-orders">
+                                <div class="card-header justify-content-between">
+                                    <h2 class="badge badge-danger text-white">BORROWING REPORT</h2>
+                                    <div class="date-range-report" id="filterBorrow"><span></span></div>
+                                </div>
+                                <div class="card-body pt-0 pb-5">
+                                    <table class="table card-table table-responsive table-responsive-large table-striped" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th style="width: 30%">អ្នកទទួល</th>
+                                                <th style="width: 30%" class="d-none d-md-table-cell">អ្នកប្រគល់</th>
+                                                <th style="width: 20%" class="d-none d-md-table-cell">Date</th>
+                                                <th style="width: 30%" class="d-none d-md-table-cell">Note</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="borrow-table-body">
+                                        </tbody>
+                                    </table>
+                                    <div id="borrowPagination" data-url="{{ route('borrow.paginate') }}">
+                                        <nav aria-label="Page navigation example">
+                                            <ul class="pagination justify-content-center"></ul>
+                                        </nav>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
                     </div>
                 </div>
                 <div class="row">

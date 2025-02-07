@@ -1,9 +1,9 @@
+<!-- filepath: /Users/t2/Desktop/Radio TEAM/radio_management_system/resources/views/admin/product/borrow/edit.blade.php -->
 @extends('admin.layout.admin')
 @section('link')
     {{-- CK Editor --}}
     <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/44.0.0/ckeditor5.css" crossorigin>
 @endsection
-
 
 @section('main_body')
     <div class="py-12">
@@ -13,7 +13,7 @@
                     <div class="col-md-12">
                         <div class="card card-default">
                             <div class="card-header card-header-border-bottom">
-                                <h2 class="badge badge-danger text-white">BORROW PRODUCT</h2>
+                                <h2 class="badge badge-warning text-white">EDIT BORROW</h2>
                             </div>
 
                             <div class="card-body">
@@ -22,31 +22,34 @@
                                         {{ session('error') }}
                                     </div>
                                 @endif
-                                <form id="uploadForm" method="POST" action="{{ route('borrow.store') }}"
+                                <form id="uploadForm" method="POST" action="{{ route('borrow.update', $borrow->id) }}"
                                     enctype="multipart/form-data">
                                     @csrf
+                                    @method('PUT')
                                     <div class="row">
                                         <div class="col-md-6">
 
                                             <div class="form-group">
-                                                <label for="exampleInputEmail1">Receiver:</label>
+                                                <label for="exampleInputEmail1">Borrower:</label>
                                                 <input type="text" name="receiver" class="form-control"
-                                                    id="exampleInputEmail1" placeholder="Receiver">
+                                                    id="borrower_input" placeholder="Borrower"
+                                                    value="{{ $borrow->receiver }}">
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1">Purpose:</label>
                                                 <input type="text" name="purpose" class="form-control"
-                                                    id="exampleInputEmail1" placeholder="Purpose of borrow">
+                                                    id="exampleInputEmail1" placeholder="Purpose or unit"
+                                                    value="{{ $borrow->purpose }}">
                                             </div>
 
-                                            <label for="model">Product detail:</label>
+                                            <label for="model">Product:</label>
                                             <div class="row">
                                                 <div class="col-md-7">
                                                     <div class="form-group">
                                                         <select name="models" id="model" class="form-control">
                                                             @foreach ($models as $model)
-                                                                @if ($model->accessory == 0)
+                                                                @if ($model->accessory != 1)
                                                                     <option value="{{ $model->id }}">
                                                                         {{ $model->name }}
                                                                     </option>
@@ -72,10 +75,9 @@
                                             <table class="table table-bordered" id="itemsTable">
                                                 <thead>
                                                     <tr>
-                                                        <th>Model ID</th>
-                                                        <th>Model name</th>
-                                                        <th>S/N</th>
-                                                        <th style="width: 50px">Actions</th>
+                                                        <th style="width: 50%">Model name</th>
+                                                        <th style="width: 50%">S/N</th>
+                                                        <th class="text-right">Actions</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -85,15 +87,18 @@
                                             <!-- Hidden input to store the items data -->
                                             <input type="hidden" name="items" id="itemsInput" required>
 
+
                                             <div class="form-group">
                                                 <label for="accessory">With Accessory:</label>
                                                 <label class="switch">
                                                     <input type="checkbox" id="withAccessories"
-                                                        onchange="toggleAccessories()">
+                                                        onchange="toggleAccessories()"
+                                                        {{ $borrow->accessory->count() ? 'checked' : '' }}>
                                                     <span class="slider round"></span>
                                                 </label>
                                             </div>
-                                            <div id="accessoriesSection" style="display: none;">
+                                            <div id="accessoriesSection"
+                                                style="display: {{ $borrow->accessory->count() ? 'block' : 'none' }};">
                                                 <div class="row">
                                                     <div class="col-md-7">
                                                         <div class="form-group">
@@ -123,10 +128,9 @@
                                                 <table class="table table-bordered" id="accessoryTable">
                                                     <thead>
                                                         <tr>
-                                                            <th>ID</th>
-                                                            <th>Accessory name</th>
-                                                            <th>Quantity</th>
-                                                            <th style="width: 50px">Actions</th>
+                                                            <th style="width: 50%">Accessory name</th>
+                                                            <th style="width: 50%">Quantity</th>
+                                                            <th class="text-right">Actions</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -139,19 +143,20 @@
 
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1">Photo</label>
-                                                <input type="file" name="image" id="input-image" class="form-control">
+                                                <input type="file" name="image" id="input-image" accept="image/*"
+                                                    class="form-control">
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="post-img" id="img-preview"
-                                                style="display: flex; justify-content: center; align-items: center; background-image: url({{ asset('backend/assets/img/default-image.avif') }}); background-size: contain; background-repeat: no-repeat; background-position: center; width: 100%; height: 100%;">
+                                                style="display: flex; justify-content: center; align-items: center; background-image: url({{ $borrow->image ? asset($borrow->image) : asset('backend/assets/img/default-image.avif') }}); background-size: contain; background-repeat: no-repeat; background-position: center; width: 100%; height: 100%;">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Note:</label>
                                         <textarea name="note" class="form-control" id="exampleInputEmail1" placeholder="Description your note"
-                                            rows="3"></textarea>
+                                            rows="3">{{ $borrow->note }}</textarea>
                                     </div>
 
                                     <!-- Loading indicator -->
@@ -161,7 +166,7 @@
 
                                     <button type="submit" class="ladda-button btn btn-primary float-right"
                                         data-style="expand-left">
-                                        <span class="ladda-label">Save!</span>
+                                        <span class="ladda-label">Update!</span>
                                         <span class="ladda-spinner"></span>
                                     </button>
                                     <a href="{{ route('borrow.index') }}" class="btn btn-secondary float-right"
@@ -215,141 +220,31 @@
                 accessoriesSection.style.display = 'block';
             } else {
                 accessoriesSection.style.display = 'none';
+                accessories = []; // Clear the accessories array
+                updateAccessoryTable(); // Update the table to reflect the change
             }
         }
-    </script>
-    <script>
-        $('#uploadForm').on('submit', function(e) {
-            e.preventDefault(); // Prevent the default form submission
 
-            // Show loading indicator
-            $('#loading').show();
-
-            // Submit the form via AJAX
-            $.ajax({
-                url: $(this).attr('action'),
-                type: 'POST',
-                data: new FormData(this),
-                processData: false,
-                contentType: false,
-                success: function(response) {
-                    // Hide loading indicator
-                    $('#loading').hide();
-
-                    alert(response.message);
-
-                    // Open a popup window for the print view
-                    var popup = window.open('/product/borrow/show/' + response.id,
-                        'PrintWindow', 'width=800,height=600');
-
-                    // Focus on the popup and wait for it to load
-                    popup.onload = function() {
-                        popup.print();
-                    };
-                },
-                error: function(xhr) {
-                    // Hide loading indicator
-                    $('#loading').hide();
-                    alert('Upload failed: ' + xhr.responseJSON.message);
-                }
-            });
-        });
-    </script>
-    <script>
-        // Array to store added items
-        let items = [];
-
-        // Function to add an item to the list
-        function addItem(event) {
-            event.preventDefault(); // Prevent form submission
-            const modelId = document.getElementById('model').value;
-            const modelText = document.getElementById('model').options[document.getElementById('model').selectedIndex]
-                .text;
-            const serial_number = document.getElementById('serial_number').value;
-
-            if (!modelId || !serial_number) {
-                alert('Please fill the product and serial_number.');
-                return;
-            }
-
-            // Check if the serial number exists in the product table
-            $.ajax({
-                url: '/product/check-serial-number', // Adjust the URL to your route
-                type: 'POST',
-                data: {
-                    serial_number: serial_number,
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function(response) {
-                    if (response.exists) {
-                        // Add item to the array
-                        items.push({
-                            model_id: response.product.model_id,
-                            model_text: response.model,
-                            serial_number: response.product.PID,
-                        });
-                        console.log(response.model);
-
-                        // Update the table
-                        updateTable();
-
-                        // Clear the form fields
-                        document.getElementById('serial_number').value = '';
-                    } else {
-                        console.log('Serial number does not exist.');
-                        // Add item to the array
-                        items.push({
-                            model_id: modelId,
-                            model_text: modelText,
-                            serial_number: serial_number,
-                        });
-                    }
-                },
-                error: function(xhr) {
-                    alert('Error checking serial number: ' + xhr.responseText);
-                }
-            });
-
-
-            // Update the table
-            updateTable();
-
-            // Clear the form fields
-            // document.getElementById('model').value = '';
-            document.getElementById('serial_number').value = '';
-        }
-
-        // Function to update the table with added items
-        function updateTable() {
-            const tableBody = document.querySelector('#itemsTable tbody');
-            tableBody.innerHTML = '';
-
-            items.forEach((item, index) => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                <td>${item.model_id}</td>
-                <td>${item.model_text}</td>
-                <td>${item.serial_number}</td>
-                <td>
-                    <button type="button" class="btn btn-danger btn-sm" onclick="removeItem(${index})"><i class="fas fa-trash-alt"></i></button>
-                </td>
-            `;
-                tableBody.appendChild(row);
-            });
-
-            // Update the hidden input with the items data
-            document.getElementById('itemsInput').value = JSON.stringify(items);
-        }
-
-        // Function to remove an item from the list
-        function removeItem(index) {
-            items.splice(index, 1);
-            updateTable();
-        }
-    </script>
-
-    <script>
         let accessories = [];
+
+        $(document).ready(function() {
+            if ({{ $borrow->accessory->count() }}) {
+                // Loop through existing borrow details and add them to the items array
+                @foreach ($borrow->accessory as $accessory)
+                    accessories.push({
+                        model_id: '{{ $accessory->model_id }}',
+                        model_text: '{{ $accessory->model->name }}',
+                        quantity: '{{ $accessory->quantity }}',
+                    });
+                @endforeach
+
+                // Update the table with the existing items
+                updateAccessoryTable();
+            }else{
+                accessoriesSection.style.display = 'none';
+            }
+        });
+
 
         function addAccessory(event) {
             event.preventDefault(); // Prevent form submission
@@ -361,6 +256,7 @@
 
             if (!modelId || !quantity) {
                 alert('Please fill the product and quantity.');
+                document.getElementById('quantity').focus();
                 return;
             }
 
@@ -387,10 +283,9 @@
             accessories.forEach((item, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                <td>${item.model_id}</td>
                 <td>${item.model_text}</td>
                 <td>${item.quantity}</td>
-                <td>
+                <td class="text-right">
                     <button type="button" class="btn btn-danger btn-sm" onclick="removeAccessory(${index})"><i class="fas fa-trash-alt"></i></button>
                 </td>
             `;
@@ -406,5 +301,115 @@
             accessories.splice(index, 1);
             updateAccessoryTable();
         }
+
+        // Initial call to populate the table with existing accessories
+        updateAccessoryTable();
+    </script>
+
+    <script>
+        $('#uploadForm').on('submit', function(e) {
+            e.preventDefault(); // Prevent the default form submission
+
+            // Show loading indicator
+            $('#loading').show();
+
+            // Submit the form via AJAX
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'POST',
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    // Hide loading indicator
+                    $('#loading').hide();
+                    alert(response.message);
+                    window.location.href =
+                        '{{ route('borrow.index') }}'; // Redirect to the "index" route
+                },
+                error: function(xhr) {
+                    // Hide loading indicator
+                    $('#loading').hide();
+                    alert('Upload failed: ' + xhr.responseJSON.message);
+                }
+            });
+        });
+    </script>
+    <script>
+        // Array to store added items
+        let items = [];
+
+        $(document).ready(function() {
+            // Loop through existing borrow details and add them to the items array
+            @foreach ($borrow->details as $product)
+                items.push({
+                    model_id: '{{ $product->product_id }}',
+                    model_text: '{{ $product->product->model->name }}',
+                    serial_number: '{{ $product->product->PID }}',
+                });
+            @endforeach
+
+            // Update the table with the existing items
+            updateTable();
+        });
+
+        // Function to add an item to the list
+        function addItem(event) {
+            event.preventDefault(); // Prevent form submission
+            const modelId = document.getElementById('model').value;
+            const modelText = document.getElementById('model').options[document.getElementById('model').selectedIndex]
+                .text;
+            const serial_number = document.getElementById('serial_number').value;
+
+            if (!modelId || !serial_number) {
+                alert('Please fill the product and serial_number.');
+                return;
+            }
+
+            // Add item to the array
+            items.push({
+                model_id: modelId,
+                model_text: modelText,
+                serial_number: serial_number,
+            });
+
+
+            // Update the table
+            updateTable();
+
+            // Clear the form fields
+            // document.getElementById('model').value = '';
+            document.getElementById('serial_number').value = '';
+        }
+
+        // Function to update the table with added items
+        function updateTable() {
+            const tableBody = document.querySelector('#itemsTable tbody');
+            tableBody.innerHTML = '';
+
+            items.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                <td>${item.model_text}</td>
+                <td>${item.serial_number}</td>
+                <td class="text-right">
+                    <button type="button" class="btn btn-danger btn-sm" onclick="removeItem(${index})"><i class="fas fa-trash-alt"></i></button>
+                </td>
+            `;
+                tableBody.appendChild(row);
+            });
+
+            // Update the hidden input with the items data
+            document.getElementById('itemsInput').value = JSON.stringify(items);
+        }
+
+        // Function to remove an item from the list
+        function removeItem(index) {
+            items.splice(index, 1);
+            updateTable();
+        }
+
+        // Initial call to populate the table with existing items
+        updateTable();
     </script>
 @endsection
