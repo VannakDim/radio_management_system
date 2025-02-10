@@ -34,19 +34,19 @@
                                                     <h1>TOTAL:</h1>
                                                 </div>
                                                 <div class="col-3 text-right" style="item-align:top">
-                                                    <p class="badge-success"><strong>{{ $item['stock_in'] }}</strong></p>
+                                                    <p class="badge badge-primary"><strong>{{ $item['stock_in'] }}</strong></p>
                                                 </div>
                                                 <div class="col-9 text-right pr-0">
                                                     <h1>STOCK OUT:</h1>
                                                 </div>
                                                 <div class="col-3 text-right text-top">
-                                                    <p class="badge-warning"><strong>{{ $item['stock_out'] }}</strong></p>
+                                                    <p class="badge badge-warning"><strong>{{ $item['stock_out'] }}</strong></p>
                                                 </div>
                                                 <div class="col-9 text-right pr-0">
                                                     <h1>BORROWED:</h1>
                                                 </div>
                                                 <div class="col-3 text-right text-top">
-                                                    <p class="badge-danger"><strong>{{ $item['borrowed'] }}</strong></p>
+                                                    <p class="badge badge-danger"><strong>{{ $item['borrowed'] }}</strong></p>
                                                 </div>
                                             </div>
                                             <a href="/product/model/edit/{{$item['id']}}" class="btn btn-outline-primary edit-button">Edit</a>
