@@ -94,7 +94,7 @@ class ProductModelController extends Controller
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $name_gen = 'rd_' . hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
-            $image->storeAs('image/product/model/', $name_gen);
+            $image->storeAs('image/product/model/', $name_gen, 'public');
             $model->image = 'storage/image/product/model/' . $name_gen;
             // Simulate a long process (e.g., 5 seconds)
             sleep(1);
