@@ -94,7 +94,7 @@ class ProductModelController extends Controller
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $name_gen = 'rd_' . hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
-            $image->storeAs('image/product/model/', $name_gen, 'public');
+            $image->storeAs('image/product/model/', $name_gen , 'public');
             $model->image = 'storage/image/product/model/' . $name_gen;
             // Simulate a long process (e.g., 5 seconds)
             sleep(1);
@@ -103,13 +103,6 @@ class ProductModelController extends Controller
         return response()->json(['message' => 'Model created successfully.']);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -162,7 +155,7 @@ class ProductModelController extends Controller
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $name_gen = 'rd_' . hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
-            $image->storeAs('image/product/model/', $name_gen);
+            $image->storeAs('image/product/model/', $name_gen,'public');
             $model->image = 'storage/image/product/model/' . $name_gen;
             // Simulate a long process (e.g., 5 seconds)
             sleep(1);
