@@ -17,4 +17,8 @@ class Product extends Model
     }
 
 
+    public function stockIn()
+    {
+        return $this->belongsToMany(StockIn::class, 'stock_in_product', 'product_id', 'stock_in_id');
+    }
 }

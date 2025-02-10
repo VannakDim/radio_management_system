@@ -25,4 +25,9 @@ class ProductModel extends Model
         return $this->belongsTo(ProductCategory::class);
     }
 
+    public function stockInDetails()
+    {
+        return $this->hasMany(StockInDetail::class);
+    }
+
 }

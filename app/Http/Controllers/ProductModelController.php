@@ -63,7 +63,7 @@ class ProductModelController extends Controller
             'categories.*' => 'string|max:50',
             'brands' => 'required|array',
             'name' => 'required',
-            'accessory' => 'required|boolean',
+            'accessory' => 'boolean',
             'frequency' => 'nullable',
             'type' => 'nullable',
             'capacity' => 'nullable',

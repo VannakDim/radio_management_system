@@ -26,4 +26,9 @@ class StockIn extends Model
     {
         return $this->hasMany(StockInDetail::class);
     }
+
+    public function product()
+    {
+        return $this->hasMany(Product::class);
+    }
 }

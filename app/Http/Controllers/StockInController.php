@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ProductModel;
+use App\Models\stock_in_product;
 use App\Models\StockIn;
 use App\Models\StockInDetail;
 
@@ -92,6 +94,42 @@ class StockInController extends Controller
                 'quantity' => $item['quantity'],
             ]);
         }
+        return response()->json(['message'=> 'Successful!']);
+    }
+
+
+    public function create_product($id)
+    {
+        $stock_in = StockIn::findOrFail($id);
+        $models = ProductModel::select('product_models.*', 'stock_in_details.quantity')
+            ->join('stock_in_details', 'product_models.id', '=', 'stock_in_details.product_model_id')
+            ->where('stock_in_details.stock_in_id', $id)
+            ->get();
+        return view('admin.product.stockin.create_product', compact('stock_in', 'models'));
+    }
+
+    public function store_product(Request $request)
+    {
+        $validated = $request->validate(['stock_in_id' => 'required']);
+        $stock_in = StockIn::findOrFail($request->stock_in_id);
+
+        $items = json_decode($request->input('items'), true);
+
+        foreach ($items as $item) {
+            $existingProduct = Product::where('PID', $item['serial_number'])->first();
+            if ($existingProduct) {
+            return response()->json(['message' => 'Duplicate product found: ' . $item['serial_number']], 400);
+            }
+            Product::create([
+            'model_id' => $item['model_id'],
+            'PID' => $item['serial_number'],
+            ]);
+        }
+        stock_in_product::create([
+            'stock_in_id' => $stock_in->id,
+            'product_id' => $request->serial_number,
+        ]);
+
         return response()->json(['message'=> 'Successful!']);
     }
 
