@@ -58,6 +58,10 @@
                                                                 class="text-dark">
                                                                 <i class="fas fa-print mr-2"></i>Preview
                                                             </a>
+                                                            <a href="{{ route('stockin.product', $stock->id) }}"
+                                                                class="text-dark mt-2">
+                                                                <i class="fas fa-edit mr-2"></i>Add detail
+                                                            </a>
                                                             <a href="{{ route('stockin.edit', $stock->id) }}"
                                                                 class="text-dark mt-2">
                                                                 <i class="fas fa-edit mr-2"></i>Edit

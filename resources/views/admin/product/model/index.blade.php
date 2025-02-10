@@ -30,22 +30,22 @@
                                             <h4 class="card-title text-primary"><strong class="badge-primary kh-battambang px-1 mr-1">{{$item['model_name']}}</strong>{{$item['brand_name']}}</h4>
                                             <p class="badge badge-warning mr-2">{{ $item['frequency']}}</p><span  class="badge badge-success">{{$item['type']}}</span>
                                             <div class="row">
-                                                <div class="col-10 text-right">
+                                                <div class="col-9 text-right pr-0">
                                                     <h1>TOTAL:</h1>
                                                 </div>
-                                                <div class="col-2 text-right" style="item-align:top">
+                                                <div class="col-3 text-right" style="item-align:top">
                                                     <p class="badge-success"><strong>{{ $item['stock_in'] }}</strong></p>
                                                 </div>
-                                                <div class="col-10 text-right">
+                                                <div class="col-9 text-right pr-0">
                                                     <h1>STOCK OUT:</h1>
                                                 </div>
-                                                <div class="col-2 text-right text-top">
+                                                <div class="col-3 text-right text-top">
                                                     <p class="badge-warning"><strong>{{ $item['stock_out'] }}</strong></p>
                                                 </div>
-                                                <div class="col-10 text-right">
+                                                <div class="col-9 text-right pr-0">
                                                     <h1>BORROWED:</h1>
                                                 </div>
-                                                <div class="col-2 text-right text-top">
+                                                <div class="col-3 text-right text-top">
                                                     <p class="badge-danger"><strong>{{ $item['borrowed'] }}</strong></p>
                                                 </div>
                                             </div>

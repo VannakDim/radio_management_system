@@ -21,9 +21,7 @@
 
     <div class="wrapper">
 
-
         @include('admin.layout.sidebar')
-
 
         <div class="page-wrapper">
 

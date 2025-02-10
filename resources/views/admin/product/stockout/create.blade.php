@@ -46,9 +46,11 @@
                                                     <div class="form-group">
                                                         <select name="models" id="model" class="form-control">
                                                             @foreach ($models as $model)
-                                                                <option value="{{ $model->id }}">
-                                                                    {{ $model->name }}
-                                                                </option>
+                                                                @if ($model->accessory != 1)
+                                                                    <option value="{{ $model->id }}">
+                                                                        {{ $model->name }}
+                                                                    </option>
+                                                                @endif
                                                             @endforeach
                                                         </select>
                                                     </div>
