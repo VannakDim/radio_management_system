@@ -39,6 +39,10 @@ Route::middleware([
     Route::get('/product/stock-in/download/{id}', [StockInController::class, 'download'])->name('stockin.download');
     Route::get('/product/stock-in/edit/{id}', [StockInController::class, 'edit'])->name('stockin.edit');
     Route::put('/product/stock-in/update/{id}', [StockInController::class, 'update'])->name('stockin.update');
+    
+    // StockIn with Product
+    Route::get('/product/stock-in/{id}', [StockInController::class, 'create_product'])->name('stockin.product');
+    Route::post('/product/stock-in/store-product', [StockInController::class, 'store_product'])->name('stockin.store.product');
 
     Route::get('/product/stock-out/index', [StockOutController::class, 'index'])->name('stockout.index');
     Route::get('/product/stock-out', [StockOutController::class, 'create'])->name('stockout.create');
