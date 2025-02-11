@@ -30,7 +30,7 @@
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1">Model:</label>
                                                 <input type="text" name="name" class="form-control"
-                                                    id="exampleInputEmail1" placeholder="Model">
+                                                    id="exampleInputEmail1" placeholder="Model" required>
                                             </div>
 
                                             <div class="form-group">

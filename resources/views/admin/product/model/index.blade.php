@@ -30,23 +30,28 @@
                                             <h4 class="card-title text-primary"><strong class="badge-primary kh-battambang px-1 mr-1">{{$item['model_name']}}</strong>{{$item['brand_name']}}</h4>
                                             <p class="badge badge-warning mr-2">{{ $item['frequency']}}</p><span  class="badge badge-success">{{$item['type']}}</span>
                                             <div class="row">
-                                                <div class="col-9 text-right pr-0">
-                                                    <h1>TOTAL:</h1>
+                                                <div class="col-10 text-right pr-0">
+                                                    <h1>TOTAL:
+                                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+                                                            {{ $item['stock_in'] }}
+                                                        </span>
+                                                    </h1>
                                                 </div>
-                                                <div class="col-3 text-right" style="item-align:top">
-                                                    <p class="badge badge-primary"><strong>{{ $item['stock_in'] }}</strong></p>
+                                                
+                                                <div class="col-10 text-right pr-0">
+                                                    <h1>STOCK OUT:
+                                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                                            {{ $item['stock_out'] }}
+                                                        </span>
+                                                    </h1>
                                                 </div>
-                                                <div class="col-9 text-right pr-0">
-                                                    <h1>STOCK OUT:</h1>
-                                                </div>
-                                                <div class="col-3 text-right text-top">
-                                                    <p class="badge badge-warning"><strong>{{ $item['stock_out'] }}</strong></p>
-                                                </div>
-                                                <div class="col-9 text-right pr-0">
-                                                    <h1>BORROWED:</h1>
-                                                </div>
-                                                <div class="col-3 text-right text-top">
-                                                    <p class="badge badge-danger"><strong>{{ $item['borrowed'] }}</strong></p>
+                                                
+                                                <div class="col-10 text-right pr-0">
+                                                    <h1>BORROWED:
+                                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
+                                                            {{ $item['borrowed'] }}
+                                                        </span>
+                                                    </h1>
                                                 </div>
                                             </div>
                                             <a href="/product/model/edit/{{$item['id']}}" class="btn btn-outline-primary edit-button">Edit</a>
