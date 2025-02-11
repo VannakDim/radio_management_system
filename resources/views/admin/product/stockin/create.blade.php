@@ -1,9 +1,4 @@
 @extends('admin.layout.admin')
-@section('link')
-    {{-- CK Editor --}}
-    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/44.0.0/ckeditor5.css" crossorigin>
-@endsection
-
 
 @section('main_body')
     <div class="py-12">
@@ -31,16 +26,16 @@
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1">Invoice No:</label>
                                                 <input type="text" name="invoice_no" class="form-control"
-                                                    id="exampleInputEmail1" placeholder="invoice_no">
+                                                    id="invoice-no" placeholder="invoice_no">
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1">Supplier:</label>
                                                 <input type="text" name="supplier" class="form-control"
-                                                    id="exampleInputEmail1" placeholder="supplier">
+                                                    id="supplier" placeholder="supplier">
                                             </div>
 
-                                            <label for="model">Product list:</label>
+                                            <label for="model"><span class="badge badge-info" style="font-size: 1rem">ជ្រើសរើសម៉ូដែល និងបំពេញចំនួនអោយបានត្រឹមត្រូវ:</span></label>
                                             <div class="row">
                                                 <div class="col-md-7">
                                                     <div class="form-group">
@@ -53,20 +48,11 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                                {{-- <div class="col-md-3">
-                                                    <div class="form-group">
-                                                        <input type="number" class="form-control" id="quantity"
-                                                            placeholder="Quantity" min="1">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <button type="button" class="btn btn-primary"
-                                                        onclick="addItem(event)">ADD TO LIST</button>
-                                                </div> --}}
                                                 <div class="col-md-5">
                                                     <div class="form-group flex">
                                                         <input type="number" class="form-control mr-2" id="quantity"
                                                             placeholder="Quantity" min="1">
+                                                            {{-- placeholder="Quantity" min="1" onblur="if(this.value) addItem(event)"> --}}
                                                         <button type="button" class="btn btn-primary"
                                                             onclick="addItem(event)">
                                                             <i class="fas fa-plus"></i>
@@ -77,9 +63,9 @@
                                             <table class="table table-bordered" id="itemsTable">
                                                 <thead>
                                                     <tr>
-                                                        <th>Model ID</th>
-                                                        <th>Model name</th>
-                                                        <th>Quantity</th>
+                                                        {{-- <th>Model ID</th> --}}
+                                                        <th style="width: 70%">Model name</th>
+                                                        <th style="width: 30%">Quantity</th>
                                                         <th>Actions</th>
                                                     </tr>
                                                 </thead>
@@ -91,21 +77,20 @@
                                             <input type="hidden" name="items" id="itemsInput" required>
 
                                             <div class="form-group">
-                                                <label for="exampleInputEmail1">Invoice image</label>
-                                                <input type="file" name="image" id="input-image" class="form-control">
+                                                <label for="exampleInputEmail1">Attachment:</label>
+                                                <input type="file" name="image" id="input-image" class="form-control" accept="image/*,.pdf">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Note:</label>
+                                                <textarea name="note" class="form-control" id="exampleInputEmail1" placeholder="Description your note"
+                                                    rows="3"></textarea>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="post-img" id="img-preview"
-                                                style="display: flex; justify-content: center; align-items: center; background-image: url({{ asset('backend/assets/img/default-image.avif') }}); background-size: cover; background-position: center; width: 100%; height: 100%;">
-                                                {{-- <img id="img-preview" src="" alt="Image Preview" style="max-width: 100%;max-height: 350px;object-fit: cover;"> --}}
+                                                style="display: flex; justify-content: center; align-items: center; background-image: url({{ asset('backend/assets/img/default-image.avif') }}); background-size: contain; background-repeat:no-repeat; background-position: center; width: 100%; height: 100%;">
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="exampleInputEmail1">Note:</label>
-                                        <textarea name="note" class="form-control" id="exampleInputEmail1" placeholder="Description your note"
-                                            rows="3"></textarea>
                                     </div>
 
                                     <!-- Loading indicator -->
@@ -113,12 +98,12 @@
                                         Uploading..., please wait...
                                     </div>
 
-                                    <button type="submit" class="ladda-button btn btn-primary float-right"
+                                    <button type="submit" class="ladda-button btn btn-primary float-right mt-3"
                                         data-style="expand-left">
                                         <span class="ladda-label">Save!</span>
                                         <span class="ladda-spinner"></span>
                                     </button>
-                                    <a href="{{ route('stockin.index') }}" class="btn btn-secondary float-right"
+                                    <a href="{{ route('stockin.index') }}" class="btn btn-secondary float-right mt-3"
                                         style="margin-right: 6px">Back</a>
                                 </form>
                             </div>
@@ -133,6 +118,16 @@
 
 @section('script')
     <script>
+        $(document).ready(function() {
+            $('#invoice-no').focus();
+        });
+
+        // Add event listener for Enter key on quantity input
+        document.getElementById('quantity').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+            addItem(event);
+            }
+        });
         // Get the input file and preview image elements
         const default_img = '{{ URL::to('') }}' + '/backend/assets/img/default-image.avif';
         const imageInput = document.getElementById('input-image');
@@ -161,8 +156,6 @@
             }
         });
     </script>
-    <script src="https://cdn.tiny.cloud/1/qdi8ljnwutu3zjh290nqmze8oo8w5x9wqh925tzk9eyqpqmk/tinymce/7/tinymce.min.js"
-        referrerpolicy="origin"></script>
 
     <script>
         $('#uploadForm').on('submit', function(e) {
@@ -201,27 +194,34 @@
         function addItem(event) {
             event.preventDefault(); // Prevent form submission
             const modelId = document.getElementById('model').value;
-            const modelText = document.getElementById('model').options[document.getElementById('model').selectedIndex]
-                .text;
+            const modelText = document.getElementById('model').options[document.getElementById('model').selectedIndex].text;
             const quantity = document.getElementById('quantity').value;
 
             if (!modelId || !quantity) {
-                alert('Please fill the product and quantity.');
-                return;
+            alert('Please fill the product and quantity.');
+            $('#quantity').focus();
+            return;
+            }
+
+            // Check if the model already exists in the items array
+            const existingItem = items.find(item => item.model_id === modelId);
+            if (existingItem) {
+            alert('This model is already added.');
+            $('#model').focus();
+            return;
             }
 
             // Add item to the array
             items.push({
-                model_id: modelId,
-                model_text: modelText,
-                quantity: quantity
+            model_id: modelId,
+            model_text: modelText,
+            quantity: quantity
             });
 
             // Update the table
             updateTable();
 
             // Clear the form fields
-            // document.getElementById('model').value = '';
             document.getElementById('quantity').value = '';
         }
 
@@ -233,11 +233,10 @@
             items.forEach((item, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                <td>${item.model_id}</td>
                 <td>${item.model_text}</td>
                 <td>${item.quantity}</td>
-                <td>
-                    <button type="button" class="btn btn-danger btn-sm" onclick="removeItem(${index})">Remove</button>
+                <td class="text-center">
+                    <button type="button" class="btn btn-danger btn-sm" onclick="removeItem(${index})"><i class="fas fa-trash"></i></button>
                 </td>
             `;
                 tableBody.appendChild(row);
@@ -245,6 +244,9 @@
 
             // Update the hidden input with the items data
             document.getElementById('itemsInput').value = JSON.stringify(items);
+
+            // Set focus to the quantity input
+            // document.getElementById('model').focus();
         }
 
         // Function to remove an item from the list

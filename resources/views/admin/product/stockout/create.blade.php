@@ -1,8 +1,4 @@
 @extends('admin.layout.admin')
-@section('link')
-    {{-- CK Editor --}}
-    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/44.0.0/ckeditor5.css" crossorigin>
-@endsection
 
 
 @section('main_body')
@@ -42,7 +38,7 @@
 
                                             <label for="model">Product detail:</label>
                                             <div class="row">
-                                                <div class="col-md-7">
+                                                <div class="col-md-6">
                                                     <div class="form-group">
                                                         <select name="models" id="model" class="form-control">
                                                             @foreach ($models as $model)
@@ -55,7 +51,7 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-5">
+                                                <div class="col-md-6">
                                                     <div class="form-group flex">
                                                         <input type="text" class="form-control mr-2" id="serial_number"
                                                             placeholder="Serial number">
@@ -67,9 +63,9 @@
                                             <table class="table table-bordered" id="itemsTable">
                                                 <thead>
                                                     <tr>
-                                                        <th style="width: 40%">Model name</th>
+                                                        <th style="width: 60%">Model name</th>
                                                         <th style="width: 40%">S/N</th>
-                                                        <th style="width: 20%">Actions</th>
+                                                        <th class="text-center">Actions</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -135,6 +131,12 @@
                                                 <label for="exampleInputEmail1">Photo</label>
                                                 <input type="file" name="image" id="input-image" class="form-control">
                                             </div>
+
+                                            <div class="form-group">
+                                                <label for="exampleInputEmail1">Note:</label>
+                                                <textarea name="note" class="form-control" id="exampleInputEmail1" placeholder="Description your note"
+                                                    rows="3"></textarea>
+                                            </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="post-img" id="img-preview"
@@ -142,12 +144,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="exampleInputEmail1">Note:</label>
-                                        <textarea name="note" class="form-control" id="exampleInputEmail1" placeholder="Description your note"
-                                            rows="3"></textarea>
-                                    </div>
-
+                                    
                                     <!-- Loading indicator -->
                                     <div id="loading" style="display: none;">
                                         Uploading..., please wait...
@@ -173,6 +170,22 @@
 @endsection
 
 @section('script')
+    <script>
+        $('#receiver_input').focus();
+        // Listen for the Enter key press event
+        document.getElementById('serial_number').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                addItem(event);
+            }
+        });
+
+        // Listen for the Enter key press event
+        document.getElementById('quantity').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                addAccessory(event);
+            }
+        });
+    </script>
     <script>
         // Get the input file and preview image elements
         const default_img = '{{ URL::to('') }}' + '/backend/assets/img/default-image.avif';
@@ -349,7 +362,7 @@
                 row.innerHTML = `
                 <td>${item.model_text}</td>
                 <td>${item.serial_number}</td>
-                <td>
+                <td class="text-center">
                     <button type="button" class="btn btn-danger btn-sm" onclick="removeItem(${index})"><i class="fas fa-trash-alt"></i></button>
                 </td>
             `;

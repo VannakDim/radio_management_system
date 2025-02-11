@@ -152,8 +152,14 @@
             }
         });
     </script>
-    <script src="https://cdn.tiny.cloud/1/qdi8ljnwutu3zjh290nqmze8oo8w5x9wqh925tzk9eyqpqmk/tinymce/7/tinymce.min.js"
-        referrerpolicy="origin"></script>
+    <script>
+        // Add event listener for Enter key on quantity input
+        document.getElementById('quantity').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+            addItem(event);
+            }
+        });
+    </script>
 
     <script>
         $('#uploadForm').on('submit', function(e) {
@@ -210,8 +216,17 @@
             const quantity = document.getElementById('quantity').value;
 
             if (!modelId || !quantity) {
-                alert('Please fill the product and quantity.');
-                return;
+            alert('Please fill the product and quantity.');
+            $('#quantity').focus();
+            return;
+            }
+
+            // Check if the model already exists in the items array
+            const existingItem = items.find(item => item.model_id === modelId);
+            if (existingItem) {
+            alert('This model is already added.');
+            $('#model').focus();
+            return;
             }
 
             // Add item to the array

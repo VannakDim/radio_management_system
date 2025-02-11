@@ -58,15 +58,6 @@
                                                         </select>
                                                     </div>
                                                 </div>
-                                                {{-- <div class="col-md-5">
-                                                    <div class="form-group flex">
-                                                        <input type="text" class="form-control mr-2" id="serial_number"
-                                                            placeholder="Serial number"
-                                                            value="{{ $stockout->serial_number }}">
-                                                        <button type="button" class="btn btn-primary"
-                                                            onclick="addItem(event)"><i class="fas fa-plus"></i></button>
-                                                    </div>
-                                                </div> --}}
                                                 <div class="col-md-5">
                                                     <div class="form-group d-flex">
                                                         <input type="text" class="form-control mr-2" id="serial_number"
@@ -86,7 +77,7 @@
                                                     <tr>
                                                         <th style="width: 50%">Model name</th>
                                                         <th style="width: 50%">S/N</th>
-                                                        <th class="text-right">Actions</th>
+                                                        <th class="text-center"></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -141,7 +132,7 @@
                                                         <tr>
                                                             <th style="width: 50%">Accessory name</th>
                                                             <th style="width: 50%">Quantity</th>
-                                                            <th class="text-right">Actions</th>
+                                                            <th class="text-center"></th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -271,6 +262,12 @@
                 return;
             }
 
+            // Check if the model_id already exists in the accessories array
+            if (accessories.some(item => item.model_id === modelId)) {
+                alert('This accessory has already been added.');
+                return;
+            }
+
             // Add item to the array
             accessories.push({
                 model_id: modelId,
@@ -296,7 +293,7 @@
                 row.innerHTML = `
                 <td>${item.model_text}</td>
                 <td>${item.quantity}</td>
-                <td class="text-right">
+                <td class="text-center">
                     <button type="button" class="btn btn-danger btn-sm" onclick="removeAccessory(${index})"><i class="fas fa-trash-alt"></i></button>
                 </td>
             `;
@@ -377,6 +374,12 @@
                 return;
             }
 
+            // Check if the serial_number already exists in the items array
+            if (items.some(item => item.serial_number === serial_number)) {
+                alert('This serial number has already been added.');
+                return;
+            }
+
             // Add item to the array
             items.push({
                 model_id: modelId,
@@ -403,7 +406,7 @@
                 row.innerHTML = `
                 <td>${item.model_text}</td>
                 <td>${item.serial_number}</td>
-                <td class="text-right">
+                <td class="text-center">
                     <button type="button" class="btn btn-danger btn-sm" onclick="removeItem(${index})"><i class="fas fa-trash-alt"></i></button>
                 </td>
             `;
