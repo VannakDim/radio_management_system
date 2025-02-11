@@ -31,7 +31,7 @@
                                             <p class="badge badge-warning mr-2">{{ $item['frequency']}}</p><span  class="badge badge-success">{{$item['type']}}</span>
                                             <div class="row">
                                                 <div class="col-10 text-right pr-0">
-                                                    <h1>TOTAL:
+                                                    <h1 class="text-primary">TOTAL:
                                                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
                                                             {{ $item['stock_in'] }}
                                                         </span>
@@ -39,7 +39,7 @@
                                                 </div>
                                                 
                                                 <div class="col-10 text-right pr-0">
-                                                    <h1>STOCK OUT:
+                                                    <h1 class="text-danger">STOCK OUT:
                                                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                                                             {{ $item['stock_out'] }}
                                                         </span>
@@ -47,7 +47,7 @@
                                                 </div>
                                                 
                                                 <div class="col-10 text-right pr-0">
-                                                    <h1>BORROWED:
+                                                    <h1 class="text-warning">BORROWED:
                                                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning">
                                                             {{ $item['borrowed'] }}
                                                         </span>
