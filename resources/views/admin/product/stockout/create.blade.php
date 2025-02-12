@@ -333,7 +333,13 @@
             const serial_number = document.getElementById('serial_number').value;
 
             if (!modelId || !serial_number) {
-                alert('Please fill the product and serial_number.');
+                alert('Please fill the product and serial number.');
+                return;
+            }
+
+            // Check if the serial number already exists
+            if (items.some(item => item.serial_number === serial_number)) {
+                alert('This serial number already exists.');
                 return;
             }
 
