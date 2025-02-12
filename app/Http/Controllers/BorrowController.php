@@ -61,14 +61,13 @@ class BorrowController extends Controller
 
     public function create()
     {
-
         $models = ProductModel::all();
         $availableProducts = Product::whereNotIn('id', function ($query) {
             $query->select('product_id')->from('borrow_details')->where('borrowed', 1);
         })->whereNotIn('id', function ($query) {
             $query->select('product_id')->from('stock_out_products');
         })->get();
-
+        // return $availableProducts;
         return view('admin.product.borrow.create', compact('models', 'availableProducts'));
     }
 
@@ -88,7 +87,7 @@ class BorrowController extends Controller
         $borrow->note = $request->note;
         if ($request->hasFile('image')) {
             $image = $request->file('image');
-            $name_gen = hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
+            $name_gen = 'br_' . hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
             $image->storeAs('image/product/borrow/', $name_gen);
             $borrow->image = 'storage/image/product/borrow/' . $name_gen;
             // Simulate a long process (e.g., 1 seconds)
@@ -103,12 +102,17 @@ class BorrowController extends Controller
         foreach ($items as $item) {
             $product = Product::firstOrCreate(['PID' => $item['serial_number']], ['model_id' => $item['model_id']]);
             if ($product) {
-                BorrowDetail::create([
-                    'borrow_id' => $borrow->id,
-                    'product_id' => $product->id,
-                ]);
+            // Check if the product is already borrowed
+            $existingBorrowDetail = BorrowDetail::where('product_id', $product->id)->where('borrowed', 1)->first();
+            if ($existingBorrowDetail) {
+                return response()->json(['message' => 'Product with serial number ' . $item['serial_number'] . ' is already borrowed!']);
+            }
+            BorrowDetail::create([
+                'borrow_id' => $borrow->id,
+                'product_id' => $product->id,
+            ]);
             } else {
-                return response()->json(['message' => 'Product not found!']);
+            return response()->json(['message' => 'Product not found!']);
             }
         }
 

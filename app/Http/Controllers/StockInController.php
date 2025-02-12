@@ -51,16 +51,40 @@ class StockInController extends Controller
         // Decode the items JSON
         $items = json_decode($request->input('items'), true);
 
-        // Delete old details
-        StockInDetail::where('stock_in_id', $stock_in->id)->delete();
+        // Get the existing details for the stock_in
+        $existingDetails = StockInDetail::where('stock_in_id', $stock_in->id)->get();
 
-        // Loop through the items and save them to the database
+        // Loop through the items and update or create them in the database
         foreach ($items as $item) {
+            $existingDetail = $existingDetails->firstWhere('product_model_id', $item['model_id']);
+
+            if ($existingDetail) {
+            // If the quantity is the same, ignore the change
+            if ($existingDetail->quantity != $item['quantity']) {
+                //Note the change
+                $existingDetail->note = 'Updated quantity from ' . $existingDetail->quantity . ' to ' . $item['quantity'] . ' by ' . Auth::user()->name;
+                $existingDetail->quantity = $item['quantity'];
+                $existingDetail->save();
+            }
+            } else {
+            // Create new detail if it doesn't exist
             StockInDetail::create([
                 'stock_in_id' => $stock_in->id,
                 'product_model_id' => $item['model_id'],
                 'quantity' => $item['quantity'],
             ]);
+            }
+        }
+
+        // Remove details that are not in the items
+        foreach ($existingDetails as $existingDetail) {
+            if (!collect($items)->contains('model_id', $existingDetail->product_model_id)) {
+                $existingDetail->note = 'Deleted by '. Auth::user()->name;
+                //Save the note befor delete
+                $existingDetail->save();
+
+                $existingDetail->delete();
+            }
         }
         return response()->json(['message'=> 'Update Successful!']);
     }
@@ -101,9 +125,11 @@ class StockInController extends Controller
     public function create_product($id)
     {
         $stock_in = StockIn::findOrFail($id);
+        
         $models = ProductModel::select('product_models.*', 'stock_in_details.quantity')
             ->join('stock_in_details', 'product_models.id', '=', 'stock_in_details.product_model_id')
             ->where('stock_in_details.stock_in_id', $id)
+            ->whereNull('stock_in_details.deleted_at')
             ->get();
         return view('admin.product.stockin.create_product', compact('stock_in', 'models'));
     }

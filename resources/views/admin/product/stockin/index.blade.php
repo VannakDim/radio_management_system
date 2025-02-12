@@ -60,7 +60,7 @@
                                                             </a>
                                                             <a href="{{ route('stockin.product', $stock->id) }}"
                                                                 class="text-dark mt-2">
-                                                                <i class="fas fa-edit mr-2"></i>Add detail
+                                                                <i class="fas fa-walkie-talkie mr-2"></i>Detail
                                                             </a>
                                                             <a href="{{ route('stockin.edit', $stock->id) }}"
                                                                 class="text-dark mt-2">

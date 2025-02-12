@@ -13,7 +13,7 @@
                     <div class="col-md-12">
                         <div class="card card-default">
                             <div class="card-header card-header-border-bottom">
-                                <h2>Add Model</h2>
+                                <h2 class="badge badge-secondary text-white">Add new Model</h2>
                             </div>
 
                             <div class="card-body">
@@ -30,7 +30,7 @@
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1">Model:</label>
                                                 <input type="text" name="name" class="form-control"
-                                                    id="exampleInputEmail1" placeholder="Model" required>
+                                                    id="model" placeholder="Model" required>
                                             </div>
 
                                             <div class="form-group">
@@ -58,7 +58,7 @@
 
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1">Type:</label>
-                                                <input type="text" name="type" class="form-control" id="exampleInputEmail1" placeholder="Product type">
+                                                <input type="text" name="type" class="form-control" id="type" placeholder="Product type">
                                                 @error('type')
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
@@ -181,11 +181,11 @@
             }
         });
     </script>
-    <script src="https://cdn.tiny.cloud/1/qdi8ljnwutu3zjh290nqmze8oo8w5x9wqh925tzk9eyqpqmk/tinymce/7/tinymce.min.js"
-        referrerpolicy="origin"></script>
-    
     <script>
         $(document).ready(function() {
+
+            $('#model').focus();
+
             $('#uploadForm').on('submit', function(e) {
                 e.preventDefault(); // Prevent the default form submission
 

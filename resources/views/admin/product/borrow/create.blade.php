@@ -58,7 +58,7 @@
                                                 <div class="col-md-5">
                                                     <div class="form-group d-flex">
                                                         <input type="text" class="form-control mr-2" id="serial_number"
-                                                            placeholder="Serial number" list="availableProducts">
+                                                            placeholder="Serial number" list="availableProducts" value="">
                                                         <datalist id="availableProducts">
                                                             @foreach ($availableProducts as $product)
                                                                 <option value="{{ $product->PID }}"></option>
@@ -72,10 +72,9 @@
                                             <table class="table table-bordered" id="itemsTable">
                                                 <thead>
                                                     <tr>
-                                                        <th>Model ID</th>
-                                                        <th>Model name</th>
-                                                        <th>S/N</th>
-                                                        <th style="width: 50px">Actions</th>
+                                                        <th style="width: 50%">Model name</th>
+                                                        <th style="width: 50%">S/N</th>
+                                                        <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -123,10 +122,9 @@
                                                 <table class="table table-bordered" id="accessoryTable">
                                                     <thead>
                                                         <tr>
-                                                            <th>ID</th>
-                                                            <th>Accessory name</th>
-                                                            <th>Quantity</th>
-                                                            <th style="width: 50px">Actions</th>
+                                                            <th style="width: 50%">Accessory name</th>
+                                                            <th style="width: 50%">Quantity</th>
+                                                            <th></th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -209,6 +207,25 @@
         });
     </script>
     <script>
+        $(document).ready(function() {
+            $('#exampleInputEmail1').focus();
+        });
+
+        // Add event listener for pressing Enter key on serial_number input
+        document.getElementById('serial_number').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+            addItem(event);
+            }
+        });
+
+        // Add event listener for pressing Enter key on quantity input
+        document.getElementById('quantity').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                addAccessory(event);
+            }
+        });
+
+        // Function to toggle the accessories section
         function toggleAccessories() {
             const accessoriesSection = document.getElementById('accessoriesSection');
             if (document.getElementById('withAccessories').checked) {
@@ -268,7 +285,13 @@
             const serial_number = document.getElementById('serial_number').value;
 
             if (!modelId || !serial_number) {
-                alert('Please fill the product and serial_number.');
+                alert('Please fill the product and serial number.');
+                return;
+            }
+
+            // Check if the serial number already exists in the items array
+            if (items.some(item => item.serial_number === serial_number)) {
+                alert('This serial number is already added.');
                 return;
             }
 
@@ -327,7 +350,6 @@
             items.forEach((item, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                <td>${item.model_id}</td>
                 <td>${item.model_text}</td>
                 <td>${item.serial_number}</td>
                 <td>
@@ -339,6 +361,7 @@
 
             // Update the hidden input with the items data
             document.getElementById('itemsInput').value = JSON.stringify(items);
+            document.getElementById('serial_number').focus();
         }
 
         // Function to remove an item from the list
@@ -361,6 +384,12 @@
 
             if (!modelId || !quantity) {
                 alert('Please fill the product and quantity.');
+                return;
+            }
+
+            // Check if the model ID already exists in the accessories array
+            if (accessories.some(accessory => accessory.model_id === modelId)) {
+                alert('This accessory is already added.');
                 return;
             }
 
@@ -387,7 +416,6 @@
             accessories.forEach((item, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
-                <td>${item.model_id}</td>
                 <td>${item.model_text}</td>
                 <td>${item.quantity}</td>
                 <td>
@@ -399,6 +427,7 @@
 
             // Update the hidden input with the items data
             document.getElementById('accessoryInput').value = JSON.stringify(accessories);
+            document.getElementById('model_accessory').focus();
         }
 
         // Function to remove an item from the list

@@ -1,8 +1,4 @@
 @extends('admin.layout.admin')
-@section('link')
-    {{-- CK Editor --}}
-    <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/44.0.0/ckeditor5.css" crossorigin>
-@endsection
 
 
 @section('main_body')
@@ -13,7 +9,7 @@
                     <div class="col-md-12">
                         <div class="card card-default">
                             <div class="card-header card-header-border-bottom">
-                                <h2>Add Product</h2>
+                                <h2 class="badge badge-success text-white">Add detail stock-in</h2>
                             </div>
 
                             <div class="card-body">
@@ -55,9 +51,9 @@
                                             <table class="table table-bordered" id="itemsTable">
                                                 <thead>
                                                     <tr>
-                                                        <th style="width: 40%">Model name</th>
-                                                        <th style="width: 40%">S/N</th>
-                                                        <th style="width: 20%">Actions</th>
+                                                        <th style="width: 50%">Model name</th>
+                                                        <th style="width: 50%">S/N</th>
+                                                        <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
