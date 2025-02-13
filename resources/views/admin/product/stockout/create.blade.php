@@ -63,6 +63,7 @@
                                             <table class="table table-bordered" id="itemsTable">
                                                 <thead>
                                                     <tr>
+                                                        <th>#</th>
                                                         <th style="width: 60%">Model name</th>
                                                         <th style="width: 40%">S/N</th>
                                                         <th class="text-center">Actions</th>
@@ -366,6 +367,7 @@
             items.forEach((item, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
+                <td>${index + 1}</td>
                 <td>${item.model_text}</td>
                 <td>${item.serial_number}</td>
                 <td class="text-center">
