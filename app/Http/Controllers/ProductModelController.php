@@ -9,6 +9,7 @@ use App\Models\ProductCategory;
 use App\Models\StockInDetail;
 use App\Models\StockOutProduct;
 use App\Models\BorrowDetail;
+use App\Models\StockOutDetail;
 use Illuminate\Support\Facades\Auth;
 
 class ProductModelController extends Controller
@@ -20,9 +21,15 @@ class ProductModelController extends Controller
     {
         $data = ProductModel::with('brand')->get()->map(function ($model) {
             $stockIn = StockInDetail::where('product_model_id', $model->id)->sum('quantity');
-            $stockOut = StockOutProduct::whereHas('product', function ($query) use ($model) {
-                $query->where('model_id', $model->id);
-            })->count('id');
+            if ($model->accessory) {
+                $stockOut = StockOutDetail::whereHas('product', function ($query) use ($model) {
+                    $query->where('product_model_id', $model->id);
+                })->sum('quantity');
+            } else {
+                $stockOut = StockOutProduct::whereHas('product', function ($query) use ($model) {
+                    $query->where('model_id', $model->id);
+                })->count('id');
+            }
             $borrow = BorrowDetail::whereHas('product', function ($query) use ($model) {
                 $query->where('model_id', $model->id)
                     ->where('borrowed', 1); // Add condition to filter borrowed products
