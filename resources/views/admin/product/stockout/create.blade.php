@@ -27,13 +27,13 @@
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1">Receiver:</label>
                                                 <input type="text" name="receiver" class="form-control"
-                                                    id="receiver_input" placeholder="Receiver">
+                                                    id="receiver_input" placeholder="Receiver" required>
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="exampleInputEmail1">Purpose:</label>
                                                 <input type="text" name="type" class="form-control"
-                                                    id="exampleInputEmail1" placeholder="Purpose or unit">
+                                                    id="exampleInputEmail1" placeholder="Purpose or unit" required>
                                             </div>
 
                                             <label for="model">Product detail:</label>
