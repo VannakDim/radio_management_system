@@ -65,7 +65,6 @@
                                 <a class="sidenav-item-link" href="{{ route('model.show') }}">
                                     <i class="fa-solid fa-caret-right {{ request()->is('product/model*') ? 'fa-beat' : '' }}"></i>
                                     <span class="nav-text">បញ្ជីសម្ភារៈ</span>
-
                                 </a>
                             </li>
 
@@ -73,7 +72,6 @@
                                 <a class="sidenav-item-link" href="{{ route('stockin.index') }}">
                                     <i class="fa-solid fa-caret-right {{ request()->is('product/stock-in*') ? 'fa-beat' : '' }}"></i>
                                     <span class="nav-text">នាំចូល</span>
-
                                 </a>
                             </li>
 
@@ -81,7 +79,6 @@
                                 <a class="sidenav-item-link" href="{{ route('stockout.index') }}">
                                     <i class="fa-solid fa-caret-right {{ request()->is('product/stock-out*') ? 'fa-beat' : '' }}"></i>
                                     <span class="nav-text">ប្រគល់</span>
-
                                 </a>
                             </li>
 
@@ -89,7 +86,13 @@
                                 <a class="sidenav-item-link" href="{{ route('borrow.index') }}">
                                     <i class="fa-solid fa-caret-right {{ request()->is('product/borrow*') ? 'fa-beat' : '' }}"></i>
                                     <span class="nav-text">ខ្ចី/សង</span>
+                                </a>
+                            </li>
 
+                            <li class="{{ request()->is('product/frequency*') ? 'active' : '' }}">
+                                <a class="sidenav-item-link" href="{{ route('frequency.create') }}">
+                                    <i class="fa-solid fa-caret-right {{ request()->is('product/frequency*') ? 'fa-beat' : '' }}"></i>
+                                    <span class="nav-text">បញ្ចូល/ប្តូប្រេកង់</span>
                                 </a>
                             </li>
                         </div>

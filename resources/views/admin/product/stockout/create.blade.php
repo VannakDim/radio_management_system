@@ -76,7 +76,6 @@
                                             <!-- Hidden input to store the items data -->
                                             <input type="hidden" name="items" id="itemsInput" required>
 
-
                                             <div class="form-group">
                                                 <label for="accessory">With Accessory:</label>
                                                 <label class="switch">
