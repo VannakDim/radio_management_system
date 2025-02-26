@@ -31,12 +31,8 @@ class SetFrequencyController extends Controller
         $trimester = $this->getTrimester(now());
         
         $models = ProductModel::all();
-        $lastSetup = SetFrequencyDetail::whereHas('setFrequency', function ($query) {
-            $query->where('trimester', '=', $this->getTrimester(now()))
-              ->whereYear('date_of_setup', '=', now()->year);
-        })->with('setFrequency')->get();
-        // return $lastSetup;
-        return view('admin.product.set_frequency.create', compact('models', 'lastSetup', 'trimester'));
+        $availableProducts = Product::all();
+        return view('admin.product.set_frequency.create', compact('models', 'trimester', 'availableProducts'));
     }
 
     public function store(Request $request)
