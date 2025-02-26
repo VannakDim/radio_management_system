@@ -77,11 +77,11 @@
                                                         <input type="text" class="form-control mr-2" id="serial_number"
                                                             placeholder="Serial number" list="availableProducts"
                                                             value="">
-                                                        {{-- <datalist id="availableProducts">
-                                                            @foreach ($availableProducts as $product)
-                                                                <option value="{{ $product->PID }}"></option>
-                                                            @endforeach
-                                                        </datalist> --}}
+                                                            <datalist id="availableProducts">
+                                                                @foreach ($availableProducts as $product)
+                                                                    <option value="{{ $product->PID }}"></option>
+                                                                @endforeach
+                                                            </datalist>
                                                         <button type="button" class="btn btn-primary"
                                                             onclick="addItem(event)"><i class="fas fa-plus"></i></button>
                                                     </div>
