@@ -26,7 +26,7 @@
                                     <th style="width: 30%">អ្នកប្រគល់</th>
                                     <th style="width: 30%" class="d-none d-md-table-cell">អ្នកទទួល</th>
                                     <th style="width: 20%" class="d-none d-md-table-cell">កាលបរិច្ឆេទ</th>
-                                    <th style="width: 30%" class="d-none d-md-table-cell"></th>
+                                    <th style="width: 30%" class="d-none d-md-table-cell">ចំនួនវិទ្យុ</th>
                                     <th></th>
                                 </tr>
                             </x-slot>
@@ -37,14 +37,8 @@
                                         <td>{{ $record->name }}</td>
                                         <td>{{ $record->user->name }}</td>
                                         <td>{{ $record->created_at->format('Y-m-d') }}</td>
-                                        <td>
-                                            @if ($record->image)
-                                                <a href="#"
-                                                    onclick="openImageModal('{{ asset($record->image) }}'); return false;">
-                                                    <span class="badge badge-success">Image</span>
-                                                </a>
-                                            @endif
-                                        </td>
+                                        <td><span class="badge badge-secondary">{{ str_pad($record->detail->count(), 2, '0', STR_PAD_LEFT) }}</span></td>
+                                        
                                         <td class="text-right">
                                             <div class="dropdown show d-inline-block widget-dropdown">
                                                 <a class="dropdown-toggle icon-burger-mini" href="#" role="button"
@@ -58,7 +52,7 @@
                                                                 class="text-dark">
                                                                 <i class="fas fa-print mr-2"></i>Preview
                                                             </a>
-                                                            <a href="{{ route('stockin.product', $record->id) }}"
+                                                            {{-- <a href="{{ route('stockin.product', $record->id) }}"
                                                                 class="text-dark mt-2">
                                                                 <i class="fas fa-walkie-talkie mr-2"></i>Detail
                                                             </a>
@@ -71,7 +65,7 @@
                                                                     class="text-dark mt-2">
                                                                     <i class="fas fa-download mr-2"></i>Download
                                                                 </a>
-                                                            @endif
+                                                            @endif --}}
                                                         </div>
                                                     </li>
                                                 </ul>
@@ -94,9 +88,6 @@
         function openPreview(id) {
             window.open(`/product/set-frequency/print/${id}`, 'ViewWindow',
                 `width=${screen.width},height=${screen.height},top=0,left=0`);
-            // console.log('fail');
-            // window.open(`/product/stock-in/show/${id}`, 'PrintWindow',
-            //     `width=${screen.width},height=${screen.height},top=0,left=0`);
         }
     </script>
 @endsection

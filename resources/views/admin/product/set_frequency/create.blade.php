@@ -113,9 +113,9 @@
 
 
                                     <!-- Loading indicator -->
-                                    <div id="loading" style="display: none;">
+                                    {{-- <div id="loading" style="display: none;">
                                         Uploading..., please wait...
-                                    </div>
+                                    </div> --}}
 
                                     <button type="submit" class="ladda-button btn btn-primary float-right"
                                         data-style="expand-left">
