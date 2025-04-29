@@ -28,6 +28,14 @@ class SetFrequencyController extends Controller
         return view('admin.product.set_frequency.index', compact('set_frequency'));
     }
 
+    public function create()
+    {
+        $trimester = $this->getTrimester(now());
+        
+        $models = ProductModel::all();
+        $availableProducts = Product::all();
+        return view('admin.product.set_frequency.create', compact('models', 'trimester', 'availableProducts'));
+    }
     
     public function store(Request $request)
     {
@@ -85,7 +93,7 @@ class SetFrequencyController extends Controller
         $availableProducts = Product::all();
         return view('admin.product.set_frequency.edit', compact('set_frequency', 'models', 'availableProducts'));
     }
-    
+
     // public function update(Request $request, $id)
     // {
     //     $validator = Validator::make($request->all(), [
@@ -133,14 +141,7 @@ class SetFrequencyController extends Controller
 
     //     return response()->json(['message' => 'Record updated successfully']);
     // }
-    // public function create()
-    // {
-    //     $trimester = $this->getTrimester(now());
-        
-    //     $models = ProductModel::all();
-    //     $availableProducts = Product::all();
-    //     return view('admin.product.set_frequency.create', compact('models', 'trimester', 'availableProducts'));
-    // }
+    
 
     
 }
