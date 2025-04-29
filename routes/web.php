@@ -58,14 +58,16 @@ Route::middleware([
     Route::put('/product/borrow/return/{id}', [BorrowController::class, 'return'])->name('borrow.return');
 
     //Set Frequency
-    Route::get('/set-frequency', [SetFrequencyController::class, 'create'])->name('frequency.create');
-    Route::post('/set-frequency/store', [SetFrequencyController::class, 'store'])->name('frequency.store');
+    Route::get('/product/set-frequency', [SetFrequencyController::class, 'index'])->name('frequency.index');
+    Route::get('/product/set-frequency/create', [SetFrequencyController::class, 'create'])->name('frequency.create');
+    Route::post('/product/set-frequency/store', [SetFrequencyController::class, 'store'])->name('frequency.store');
     
     //Print feature
     Route::get('/product/stock-in/show/{id}', [ExportToPdf::class, 'previewStockIn'])->name('stockin.preview');
     Route::get('/product/stock-out/show/{id}', [ExportToPdf::class, 'exportStockOutPdf'])->name('stockout.show');
     Route::get('/product/borrow/show/{id}', [ExportToPdf::class, 'exportBorrow'])->name('borrow.show');
     Route::get('/product/return/show/{id}', [ExportToPdf::class, 'printReturn'])->name('return.print');
+    Route::get('/product/set-frequency/print/{id}', [ExportToPdf::class, 'printSetFrequency'])->name('setfrequency.print');
 
 
     // Paginattion data

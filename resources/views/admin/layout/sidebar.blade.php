@@ -89,9 +89,9 @@
                                 </a>
                             </li>
 
-                            <li class="{{ request()->is('product/frequency*') ? 'active' : '' }}">
-                                <a class="sidenav-item-link" href="{{ route('frequency.create') }}">
-                                    <i class="fa-solid fa-caret-right {{ request()->is('product/frequency*') ? 'fa-beat' : '' }}"></i>
+                            <li class="{{ request()->is('product/set-frequency*') ? 'active' : '' }}">
+                                <a class="sidenav-item-link" href="{{ route('frequency.index') }}">
+                                    <i class="fa-solid fa-caret-right {{ request()->is('product/set-frequency*') ? 'fa-beat' : '' }}"></i>
                                     <span class="nav-text">បញ្ចូល/ប្តូប្រេកង់</span>
                                 </a>
                             </li>

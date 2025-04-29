@@ -6,6 +6,8 @@ use App\Models\Borrow;
 use Illuminate\Http\Request;
 use App\Models\StockOut;
 use App\Models\StockIn;
+use App\Models\SetFrequency;
+use App\Models\SetFrequencyDetail;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class ExportToPdf extends Controller
@@ -39,6 +41,14 @@ class ExportToPdf extends Controller
         $borrow = Borrow::findOrFail($id);
 
         return view('admin.formpdf.return', compact('borrow'));
+    }
+
+    public function printSetFrequency($id)
+    {
+        $set_frequency = SetFrequency::findOrFail($id);
+        $set_frequency_details = SetFrequencyDetail::where('set_frequency_id', $id)->get();
+
+        return view('admin.formpdf.set_frequency', compact('set_frequency', 'set_frequency_details'));
     }
 
 }

@@ -42,13 +42,13 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label for="tag">Trimester:</label>
-                                                <select name="trimester" class="form-control" id="trimester" required disabled>
+                                                <label for="trimester">Trimester:</label>
+                                                <select name="trimester" class="form-control" id="trimester" required>
                                                     <option value="" disabled selected>Select Trimester</option>
-                                                    <option value="1" {{ $trimester == 1 ? 'selected' : '' }}>ត្រីមាស ១</option>
-                                                    <option value="2" {{ $trimester == 2 ? 'selected' : '' }}>ត្រីមាស ២</option>
-                                                    <option value="3" {{ $trimester == 3 ? 'selected' : '' }}>ត្រីមាស ៣</option>
-                                                    <option value="4" {{ $trimester == 4 ? 'selected' : '' }}>ត្រីមាស ៤</option>
+                                                    <option value="1" {{ old('trimester', $trimester ?? '') == 1 ? 'selected' : '' }}>ត្រីមាស ១</option>
+                                                    <option value="2" {{ old('trimester', $trimester ?? '') == 2 ? 'selected' : '' }}>ត្រីមាស ២</option>
+                                                    <option value="3" {{ old('trimester', $trimester ?? '') == 3 ? 'selected' : '' }}>ត្រីមាស ៣</option>
+                                                    <option value="4" {{ old('trimester', $trimester ?? '') == 4 ? 'selected' : '' }}>ត្រីមាស ៤</option>
                                                 </select>
                                             </div>
 
@@ -122,7 +122,7 @@
                                         <span class="ladda-label">Save!</span>
                                         <span class="ladda-spinner"></span>
                                     </button>
-                                    <a href="{{ route('borrow.index') }}" class="btn btn-secondary float-right"
+                                    <a href="{{ route('frequency.index') }}" class="btn btn-secondary float-right"
                                         style="margin-right: 6px">Back</a>
 
                                 </form>
@@ -166,7 +166,7 @@
             e.preventDefault(); // Prevent the default form submission
 
             // Show loading indicator
-            $('#loading').show();
+            // $('#loading').show();
 
             // Submit the form via AJAX
             $.ajax({
@@ -179,21 +179,27 @@
                     // Hide loading indicator
                     $('#loading').hide();
 
-                    alert(response.message);
-
-                    // Open a popup window for the print view
-                    // var popup = window.open('/product/borrow/show/' + response.id,
-                    //     'PrintWindow', 'width=800,height=600');
-
-                    // Focus on the popup and wait for it to load
-                    // popup.onload = function() {
-                    //     popup.print();
-                    // };
+                    // alert(response.message);
+                    alert(response.message)
                 },
-                error: function(xhr) {
+                error: function(xhr, status, error) {
                     // Hide loading indicator
                     $('#loading').hide();
-                    console.log('Upload failed: ' + xhr.responseJSON.message);
+
+                    // Display error messages
+                    if (xhr.responseJSON && xhr.responseJSON.errors) {
+                        let errors = xhr.responseJSON.errors;
+                        let errorMessage = '';
+                        for (let key in errors) {
+                            if (errors.hasOwnProperty(key)) {
+                                errorMessage += errors[key].join(', ') + '\n';
+                            }
+                        }
+                        alert(errorMessage);
+                    } else {
+                        alert(xhr.responseJSON.message);
+                    }
+
                 }
             });
         });

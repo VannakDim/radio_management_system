@@ -9,16 +9,11 @@ use App\Models\SetFrequencyDetail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Laravel\Pail\ValueObjects\Origin\Console;
 
 class SetFrequencyController extends Controller
 {
-    // int function trimester(Date $date){
-    //     $setupDate = new \DateTime(now());
-    //     $month = (int)$setupDate->format('m');
-    //     $trimester = ceil($month / 3);
-    //     $year = $setupDate->format('Y');
-    //     return $trimester;
-    // }
+   
     public function getTrimester($date)
     {
         $setupDate = new \DateTime($date);
@@ -26,18 +21,18 @@ class SetFrequencyController extends Controller
         $trimester = ceil($month / 3);
         return $trimester;
     }
-    public function create()
+
+    public function index()
     {
-        $trimester = $this->getTrimester(now());
-        
-        $models = ProductModel::all();
-        $availableProducts = Product::all();
-        return view('admin.product.set_frequency.create', compact('models', 'trimester', 'availableProducts'));
+        $set_frequency = SetFrequency::with('user')->orderBy('id', 'desc')->paginate(5);
+        return view('admin.product.set_frequency.index', compact('set_frequency'));
     }
 
+    
     public function store(Request $request)
     {
-        $validate = Validator::make($request->all(), [
+      
+        $validator = Validator::make($request->all(), [
             'name' => 'required',
             'unit' => 'required',
             'purpose' => 'required',
@@ -45,9 +40,9 @@ class SetFrequencyController extends Controller
             'setup_date' => 'required',
         ]);
 
-        if ($validate->fails()) {
-            return response()->json(['message' => $validate->errors()], 400);
-        };
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
 
         $set_frequency = new SetFrequency();
         $set_frequency->user_id = Auth::user()->id;
@@ -55,9 +50,7 @@ class SetFrequencyController extends Controller
         $set_frequency->unit = $request->unit;
         $set_frequency->purpose = $request->purpose;
         $set_frequency->date_of_setup = $request->setup_date;
-
         $set_frequency->trimester = $request->trimester;
-
 
         // Decode the items JSON
         $items = json_decode($request->input('items'), true);
@@ -67,7 +60,6 @@ class SetFrequencyController extends Controller
 
         $set_frequency->save();
 
-        // return response()->json(['message' => $request->items]);
         foreach ($items as $item) {
 
             $existingProduct = Product::where('PID', $item['serial_number'])->first();
@@ -85,4 +77,70 @@ class SetFrequencyController extends Controller
 
         return response()->json(['message' => 'Record add successfully']);
     }
+
+    public function edit($id)
+    {
+        $set_frequency = SetFrequency::with('user')->find($id);
+        $models = ProductModel::all();
+        $availableProducts = Product::all();
+        return view('admin.product.set_frequency.edit', compact('set_frequency', 'models', 'availableProducts'));
+    }
+    
+    // public function update(Request $request, $id)
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         'name' => 'required',
+    //         'unit' => 'required',
+    //         'purpose' => 'required',
+    //         'trimester' => 'required',
+    //         'setup_date' => 'required',
+    //     ]);
+
+    //     if ($validator->fails()) {
+    //         return response()->json(['errors' => $validator->errors()], 400);
+    //     }
+
+    //     $set_frequency = SetFrequency::find($id);
+    //     $set_frequency->user_id = Auth::user()->id;
+    //     $set_frequency->name = $request->name;
+    //     $set_frequency->unit = $request->unit;
+    //     $set_frequency->purpose = $request->purpose;
+    //     $set_frequency->date_of_setup = $request->setup_date;
+    //     $set_frequency->trimester = $request->trimester;
+
+    //     // Decode the items JSON
+    //     $items = json_decode($request->input('items'), true);
+    //     if (empty($items)) {
+    //         return response()->json(['message' => 'Please add items'], 400);
+    //     }
+
+    //     // Clear existing details
+    //     SetFrequencyDetail::where('set_frequency_id', $id)->delete();
+
+    //     foreach ($items as $item) {
+    //         $existingProduct = Product::where('PID', $item['serial_number'])->first();
+    //         if (!$existingProduct) {
+    //             $existingProduct = Product::create([
+    //                 'PID' => $item['serial_number'],
+    //                 'model_id' => $item['model_id'],
+    //             ]);
+    //         }
+    //         SetFrequencyDetail::create([
+    //             'set_frequency_id' => $set_frequency->id,
+    //             'product_id' => $existingProduct->id,
+    //         ]);
+    //     }
+
+    //     return response()->json(['message' => 'Record updated successfully']);
+    // }
+    // public function create()
+    // {
+    //     $trimester = $this->getTrimester(now());
+        
+    //     $models = ProductModel::all();
+    //     $availableProducts = Product::all();
+    //     return view('admin.product.set_frequency.create', compact('models', 'trimester', 'availableProducts'));
+    // }
+
+    
 }
