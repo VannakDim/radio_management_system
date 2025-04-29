@@ -36,7 +36,7 @@ class SetFrequencyController extends Controller
         $availableProducts = Product::all();
         return view('admin.product.set_frequency.create', compact('models', 'trimester', 'availableProducts'));
     }
-    
+
     public function store(Request $request)
     {
       
@@ -58,7 +58,7 @@ class SetFrequencyController extends Controller
         $set_frequency->unit = $request->unit;
         $set_frequency->purpose = $request->purpose;
         $set_frequency->date_of_setup = $request->setup_date;
-        $set_frequency->trimester = $request->trimester;
+        $set_frequency->trimester = now()->format('Y') . '-T' . $request->trimester;
 
         // Decode the items JSON
         $items = json_decode($request->input('items'), true);
