@@ -9,7 +9,7 @@
             <img src="{{asset('/image/leterhead/head.png')}}" alt="" style="width: 100%; height: auto;">
         </div>
         <h5 class="battambang text-center mb-3" style="font-weight: bold;">បញ្ជីផ្លាស់ប្តូប្រេកង់វិទ្យុទាក់ទង</h5>
-        {{-- <h6 class="battambang text-center mb-5">({{$stockOut->type}})</h6> --}}
+        <h6 class="battambang text-center mb-5">( អង្គភាព: {{ $set_frequency->unit }})</h6>
         
         <table class="table table-bordered">
             <thead>
@@ -64,7 +64,7 @@
             </div>
             <div class="col-sm-3">
                 <p class="battambang text-center
-            "><strong>អ្នកប្រគល់</strong></p>
+            "><strong>ប្រធានផ្នែក</strong></p>
             </div>
         </div>
 
