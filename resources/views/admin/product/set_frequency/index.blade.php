@@ -24,7 +24,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th style="width: 30%">អ្នកប្រគល់</th>
-                                    <th style="width: 30%" class="d-none d-md-table-cell">អ្នកទទួល</th>
+                                    <th style="width: 30%" class="d-none d-md-table-cell">អង្គភាព</th>
                                     <th style="width: 20%" class="d-none d-md-table-cell">កាលបរិច្ឆេទ</th>
                                     <th style="width: 30%" class="d-none d-md-table-cell">ចំនួនវិទ្យុ</th>
                                     <th></th>
@@ -35,7 +35,7 @@
                                     <tr>
                                         <td>{{ str_pad($record['id'], 2, '0', STR_PAD_LEFT) }}</td>
                                         <td>{{ $record->name }}</td>
-                                        <td>{{ $record->user->name }}</td>
+                                        <td>{{ $record->unit }}</td>
                                         <td>{{ $record->created_at->format('Y-m-d') }}</td>
                                         <td><span class="badge badge-secondary">{{ str_pad($record->detail->count(), 2, '0', STR_PAD_LEFT) }}</span></td>
                                         
