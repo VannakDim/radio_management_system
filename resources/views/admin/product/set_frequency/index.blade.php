@@ -103,9 +103,6 @@
                                 @endforeach
                             </x-slot>
                         </x-card-table>
-                        <div class="mt-4 text-center">
-                            {{ $set_frequency->links() }}
-                        </div>
                     </div>
                 </div>
             </div>
