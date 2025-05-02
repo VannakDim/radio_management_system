@@ -33,7 +33,21 @@ class SetFrequencyController extends Controller
             ->count();
             return $model;
         })->sortByDesc('product_count')->values();
-        return view('admin.product.set_frequency.index', compact('set_frequency', 'radio'));
+
+        $unit = SetFrequency::with('detail')
+            ->select('unit')
+            ->distinct()
+            ->get()
+            ->map(function ($item) {
+            $item->product_count = SetFrequencyDetail::whereHas('setFrequency', function ($query) use ($item) {
+                $query->where('unit', $item->unit);
+            })->count();
+            return $item;
+            });
+
+        
+
+        return view('admin.product.set_frequency.index', compact('set_frequency', 'radio', 'unit'));
     }
 
     public function create()
