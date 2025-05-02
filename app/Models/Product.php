@@ -21,4 +21,9 @@ class Product extends Model
     {
         return $this->belongsToMany(StockIn::class, 'stock_in_product', 'product_id', 'stock_in_id');
     }
+
+    public function setFrequency()
+    {
+        return $this->hasMany(SetFrequencyDetail::class);
+    }
 }
