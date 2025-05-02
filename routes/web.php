@@ -68,6 +68,7 @@ Route::middleware([
     Route::get('/product/borrow/show/{id}', [ExportToPdf::class, 'exportBorrow'])->name('borrow.show');
     Route::get('/product/return/show/{id}', [ExportToPdf::class, 'printReturn'])->name('return.print');
     Route::get('/product/set-frequency/print/{id}', [ExportToPdf::class, 'printSetFrequency'])->name('setfrequency.print');
+    Route::get('/product/set-frequency-detail/print', [ExportToPdf::class, 'printSetFrequencyReport'])->name('setfrequency.print.report');
 
 
     // Paginattion data
