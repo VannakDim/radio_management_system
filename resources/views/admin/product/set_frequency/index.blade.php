@@ -125,7 +125,7 @@
                             </x-slot>
                         </x-card-table>
 
-                        {{ $unit }}
+                        {{-- {{ $unit }} --}}
                     </div>
                 </div>
             </div>
