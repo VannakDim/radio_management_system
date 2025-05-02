@@ -118,7 +118,7 @@
                                     <tr>
                                         <td>{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</td>
                                         <td>{{ $record->unit }}</td>
-                                        <td><span class="badge badge-info">{{ $record->product_count }}</span></td>
+                                        <td>{{ $record->product_count }}</td>
                                         
                                     </tr>
                                 @endforeach
