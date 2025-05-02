@@ -91,7 +91,7 @@
                             </x-slot>
                             <x-slot name="body">
                                 @foreach ($radio as $record)
-                                    @if ($record->accessory == 0)
+                                    @if ($record->accessory == 0 && $record->product_count > 0)
                                     <tr>
                                         <td>{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</td>
                                         <td>{{ $record->brand->brand_name }}</td>
