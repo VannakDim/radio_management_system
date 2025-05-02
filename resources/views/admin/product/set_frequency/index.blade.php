@@ -93,7 +93,7 @@
                                 @foreach ($radio as $record)
                                     @if ($record->accessory == 0)
                                     <tr>
-                                        <td>{{ str_pad($record['id'], 2, '0', STR_PAD_LEFT) }}</td>
+                                        <td>{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</td>
                                         <td>{{ $record->brand->brand_name }}</td>
                                         <td>{{ $record->name }}</td>
                                         <td><span class="badge badge-info">{{ $record->product_count }}</span></td>
