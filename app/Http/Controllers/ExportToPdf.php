@@ -51,4 +51,30 @@ class ExportToPdf extends Controller
         return view('admin.formpdf.set_frequency', compact('set_frequency', 'set_frequency_details'));
     }
 
+    public function printSetFrequencyReport(){
+        $unit = SetFrequency::select('unit')
+            ->distinct()
+            ->get()
+            ->map(function ($item) {
+            $item->product_count = SetFrequencyDetail::whereHas('setFrequency', function ($query) use ($item) {
+                $query->where('unit', $item->unit);
+            })->count();
+            return $item;
+            });
+
+        $details = $unit->map(function ($item) {
+            $item->products = SetFrequencyDetail::whereHas('setFrequency', function ($query) use ($item) {
+            $query->where('unit', $item->unit);
+            })->with('product:id,PID,model_id')->get()->map(function ($detail) {
+            return [
+                'PID' => $detail->product->PID,
+                'model' => $detail->product->model->name,
+            ];
+            });
+            return $item;
+        });
+
+        return view('admin.formpdf.set_frequency_detail_report', compact('unit', 'details'));
+    }
+
 }

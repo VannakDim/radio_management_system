@@ -128,6 +128,11 @@
                         {{-- LIST OF DEATAIL PRODUCT EACH UNIT --}}
                         <x-card-table title="RADIOS SET FREQUENCRY RECORD" badge="success">   
                             <x-slot name="header">
+                                <div class="float-right mb-2">
+                                    <button class="btn btn-secondary" onclick="printTable()">
+                                        <i class="fas fa-print"></i> Print
+                                    </button>
+                                </div>
                                 <tr>
                                     <th>ID</th>
                                     <th style="width: 30%">អង្គភាព</th>
@@ -165,6 +170,10 @@
     <script>
         function openPreview(id) {
             window.open(`/product/set-frequency/print/${id}`, 'ViewWindow',
+                `width=${screen.width},height=${screen.height},top=0,left=0`);
+        }
+        function printTable() {
+            window.open(`/product/set-frequency-detail/print`, 'ViewWindow',
                 `width=${screen.width},height=${screen.height},top=0,left=0`);
         }
     </script>
