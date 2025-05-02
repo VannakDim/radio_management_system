@@ -34,8 +34,7 @@ class SetFrequencyController extends Controller
             return $model;
         })->sortByDesc('product_count')->values();
 
-        $unit = SetFrequency::with('detail')
-            ->select('unit')
+        $unit = SetFrequency::select('unit')
             ->distinct()
             ->get()
             ->map(function ($item) {
@@ -45,9 +44,19 @@ class SetFrequencyController extends Controller
             return $item;
             });
 
-        
+        $details = $unit->map(function ($item) {
+            $item->products = SetFrequencyDetail::whereHas('setFrequency', function ($query) use ($item) {
+            $query->where('unit', $item->unit);
+            })->with('product:id,PID,model_id')->get()->map(function ($detail) {
+            return [
+                'PID' => $detail->product->PID,
+                'model' => $detail->product->model->name,
+            ];
+            });
+            return $item;
+        });
 
-        return view('admin.product.set_frequency.index', compact('set_frequency', 'radio', 'unit'));
+        return view('admin.product.set_frequency.index', compact('set_frequency', 'radio', 'unit', 'details'));
     }
 
     public function create()
