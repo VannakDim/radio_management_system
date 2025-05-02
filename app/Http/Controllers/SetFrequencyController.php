@@ -27,12 +27,12 @@ class SetFrequencyController extends Controller
         $set_frequency = SetFrequency::with('user')->orderBy('id', 'desc')->paginate(5);
         $radio = ProductModel::with('brand')->get()->map(function ($model) {
             $model->product_count = Product::where('model_id', $model->id)
-                ->whereHas('setFrequency.setFrequency', function ($query) {
-                    $query->where('trimester', '2025-T2');
-                })
-                ->count();
+            ->whereHas('setFrequency.setFrequency', function ($query) {
+                $query->where('trimester', '2025-T2');
+            })
+            ->count();
             return $model;
-        });
+        })->sortByDesc('product_count')->values();
         return view('admin.product.set_frequency.index', compact('set_frequency', 'radio'));
     }
 
