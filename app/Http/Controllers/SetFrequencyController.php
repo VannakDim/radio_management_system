@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\ProductModel;
 use App\Models\SetFrequency;
 use App\Models\SetFrequencyDetail;
+use App\Models\Unit;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -44,6 +45,26 @@ class SetFrequencyController extends Controller
             return $item;
             });
 
+        
+        $unit = $unit->sortBy('unit_id')->values();
+
+        $data = SetFrequency::with(['units' => function ($query) {
+            $query->select('id', 'unit_name');
+        }])->get();
+
+        $data = $data->map(function ($item) {
+            $item->detail = $item->detail->map(function ($detail) {
+                return [
+                    'model' => $detail->product->model->name,
+                    'PID' => $detail->product->PID,
+                ];
+            });
+            return $item;
+        });
+
+        $data = $data->sortBy('unit_id')->values();
+        
+
         $details = $unit->map(function ($item) {
             $item->products = SetFrequencyDetail::whereHas('setFrequency', function ($query) use ($item) {
             $query->where('unit', $item->unit);
@@ -56,7 +77,8 @@ class SetFrequencyController extends Controller
             return $item;
         });
 
-        return view('admin.product.set_frequency.index', compact('set_frequency', 'radio', 'unit', 'details'));
+        
+        return view('admin.product.set_frequency.index', compact('set_frequency', 'radio', 'unit', 'data', 'details'));
     }
 
     public function create()

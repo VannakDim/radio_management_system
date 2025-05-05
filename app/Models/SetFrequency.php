@@ -20,4 +20,9 @@ class SetFrequency extends Model
     {
         return $this->hasMany(SetFrequencyDetail::class);
     }
+
+    public function units()
+    {
+        return $this->belongsTo(Unit::class,'unit_id','id');
+    }
 }

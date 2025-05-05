@@ -103,29 +103,47 @@
                                 @endforeach
                             </x-slot>
                         </x-card-table>
+                        
 
-                        {{-- LIST OF EACH UNIT --}}
+                        {{-- LIST OF DEATAIL PRODUCT EACH UNIT --}}
                         {{-- <x-card-table title="RADIOS SET FREQUENCRY RECORD" badge="success">   
                             <x-slot name="header">
+                                <div class="float-right mb-2">
+                                    <button class="btn btn-secondary" onclick="printTable()">
+                                        <i class="fas fa-print"></i> Print
+                                    </button>
+                                </div>
                                 <tr>
                                     <th>ID</th>
-                                    <th style="width: 50%">អង្គភាព</th>
+                                    <th style="width: 30%">អង្គភាព</th>
                                     <th style="width: 30%" class="d-none d-md-table-cell">ចំនួនវិទ្យុ</th>
+                                    <th style="width: 30%">លេខវិទ្យុ</th>
                                 </tr>
                             </x-slot>
                             <x-slot name="body">
-                                @foreach ($unit as $record)
+                                @foreach ($details as $record)
                                     <tr>
                                         <td>{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</td>
                                         <td>{{ $record->unit }}</td>
                                         <td>{{ $record->product_count }}</td>
-                                        
+                                        <td>
+                                            @foreach (collect(json_decode($record->products))->groupBy('model') as $model => $products)
+                                                <strong>{{ $model }} ({{ $products->count() }})</strong><br>
+                                                <hr>
+                                                @foreach ($products as $product)
+                                                    {{ $product->PID }}<br>
+                                                @endforeach
+                                            @endforeach
+                                        </td>
                                     </tr>
                                 @endforeach
                             </x-slot>
                         </x-card-table> --}}
 
-                        {{-- LIST OF DEATAIL PRODUCT EACH UNIT --}}
+                        {{-- @foreach ($data as $item)
+                            {{ $item }}<br>
+                        @endforeach --}}
+
                         <x-card-table title="RADIOS SET FREQUENCRY RECORD" badge="success">   
                             <x-slot name="header">
                                 <div class="float-right mb-2">
@@ -136,31 +154,45 @@
                                 <tr>
                                     <th>ID</th>
                                     <th style="width: 30%">អង្គភាព</th>
-                                    <th style="width: 30%">លេខវិទ្យុ</th>
                                     <th style="width: 30%" class="d-none d-md-table-cell">ចំនួនវិទ្យុ</th>
+                                    <th style="width: 30%">លេខវិទ្យុ</th>
                                 </tr>
                             </x-slot>
                             <x-slot name="body">
-                                @foreach ($details as $record)
+                                @php
+                                    $uniqueRecords = $data->groupBy(function ($item) {
+                                        return $item->units->unit_name;
+                                    });
+                                @endphp
+                                @foreach ($uniqueRecords as $unitName => $records)
                                     <tr>
                                         <td>{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</td>
-                                        <td>{{ $record->unit }}</td>
+                                        <td>{{ $unitName }}</td>
                                         <td>
-                                            @foreach (collect(json_decode($record->products))->groupBy('model') as $model => $products)
-                                                <strong>{{ $model }} ({{ $products->count() }})</strong><br>
-                                                <hr>
-                                                @foreach ($products as $product)
-                                                    {{ $product->PID }}<br>
+                                            @php
+                                                $totalCount = $records->reduce(function ($carry, $item) {
+                                                    return $carry + collect(json_decode($item->detail))->count();
+                                                }, 0);
+                                            @endphp
+                                            {{ $totalCount }}
+                                        </td>
+                                        <td>
+                                            @foreach ($records as $record)
+                                                @php
+                                                    $groupedProducts = collect(json_decode($record->detail))->groupBy('model');
+                                                @endphp
+                                                @foreach ($groupedProducts as $model => $products)
+                                                    <strong>{{ $model }} ({{ $products->count() }})</strong><br>
+                                                    @foreach ($products as $product)
+                                                        {{ $product->PID }}<br>
+                                                    @endforeach
                                                 @endforeach
                                             @endforeach
                                         </td>
-                                        <td>{{ $record->product_count }}</td>
                                     </tr>
                                 @endforeach
                             </x-slot>
                         </x-card-table>
-
-                        {{-- {{ $details }} --}}
                     </div>
                 </div>
             </div>

@@ -16,8 +16,8 @@
                 <tr>
                     <th class="text-center" width=90>ល.រ</th>
                     <th style="width: 20%">អង្គភាព</th>
-                    <th style="width: 30%">លេខសម្គាល់</th>
                     <th style="width: 20%">ចំនួនវិទ្យុ</th>
+                    <th style="width: 30%">លេខសម្គាល់</th>
                     <th>ផ្សេងៗ</th>
                 </tr>
             </thead>
@@ -26,6 +26,7 @@
                     <tr>
                         <td>{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</td>
                         <td>{{ $record->unit }}</td>
+                        <td>{{ $record->product_count }}</td>
                         <td>
                             @foreach (collect(json_decode($record->products))->groupBy('model') as $model => $products)
                                 <strong>{{ $model }} ({{ $products->count() }})</strong><br>
@@ -35,7 +36,6 @@
                                 <div class="pt-4"></div>
                             @endforeach
                         </td>
-                        <td>{{ $record->product_count }}</td>
                         <td></td>
                     </tr>
                 @endforeach
