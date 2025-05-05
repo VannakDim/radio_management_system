@@ -9,7 +9,7 @@ class SetFrequency extends Model
 {
     use SoftDeletes;
     protected $table = 'set_frequencies';
-    protected $fillable = ['user_id', 'unit', 'name', 'purpose', 'trimester', 'date_of_setup'];
+    protected $fillable = ['user_id', 'unit', 'unit_id', 'name', 'purpose', 'trimester', 'date_of_setup'];
 
     public function user()
     {

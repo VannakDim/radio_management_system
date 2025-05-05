@@ -97,6 +97,7 @@ class SetFrequencyController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'unit' => 'required',
+            'unit_id' => 'required|exists:units,id',
             'purpose' => 'required',
             'trimester' => 'required',
             'setup_date' => 'required',
@@ -110,6 +111,7 @@ class SetFrequencyController extends Controller
         $set_frequency->user_id = Auth::user()->id;
         $set_frequency->name = $request->name;
         $set_frequency->unit = $request->unit;
+        $set_frequency->unit_id = $request->unit_id;
         $set_frequency->purpose = $request->purpose;
         $set_frequency->date_of_setup = $request->setup_date;
         $set_frequency->trimester = now()->format('Y') . '-T' . $request->trimester;
