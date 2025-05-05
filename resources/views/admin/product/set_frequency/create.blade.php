@@ -36,6 +36,16 @@
                                             </div>
 
                                             <div class="form-group">
+                                                <label for="unit_id">Select Unit:</label>
+                                                <select name="unit_id" class="form-control" id="unit_id" required>
+                                                    <option value="" disabled selected>Select Unit</option>
+                                                    @foreach ($units as $unit)
+                                                        <option value="{{ $unit->id }}">{{ $unit->unit_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
                                                 <label for="purpose">Purpose:</label>
                                                 <input type="text" name="purpose" class="form-control" id="purpose"
                                                     placeholder="គោលបំណង" required>
