@@ -86,8 +86,9 @@ class SetFrequencyController extends Controller
         $trimester = $this->getTrimester(now());
         
         $models = ProductModel::all();
+        $units = Unit::all();
         $availableProducts = Product::all();
-        return view('admin.product.set_frequency.create', compact('models', 'trimester', 'availableProducts'));
+        return view('admin.product.set_frequency.create', compact('models', 'trimester', 'availableProducts', 'units'));
     }
 
     public function store(Request $request)
