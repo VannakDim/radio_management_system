@@ -154,7 +154,7 @@
                             </x-slot>
                         </x-card-table> --}}
 
-                        {{ $details }}
+                        {{-- {{ $details }} --}}
 
                         
                         <x-card-table title="DETAILS" badge="info">
