@@ -40,8 +40,8 @@
                 @endforeach
                 <tr>
                     <td class="text-center" colspan="2"><strong>សរុប</strong></td>
-                    <td><strong>{{ $sortedDetails->sum('product_count') }} គ្រឿង</strong></td>
-                    <td></td>
+                    <td colspan="2"><strong>{{ $sortedDetails->sum('product_count') }} គ្រឿង</strong></td>
+                    
                 </tr>
             </tbody>
         </table>
@@ -86,12 +86,12 @@
             "></p>
             </div>
             <div class="col-sm-3">
-                <p class="battambang text-center
-            {{-- ">{{ $set_frequency->name }}</p> --}}
+                {{-- <p class="battambang text-center
+            ">{{ $set_frequency->name }}</p> --}}
             </div>
             <div class="col-sm-3">
                 <p class="battambang text-center
-            {{-- ">{{ $set_frequency->user->name }}</p> --}}
+            ">ឌឹម វណ្ណៈ</p>
             </div>
 
         </div>
