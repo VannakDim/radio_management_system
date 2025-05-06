@@ -8,35 +8,34 @@
         <div class="row" style="margin-bottom: 20px; padding:0 20px;">
             <img src="{{asset('/image/leterhead/head.png')}}" alt="" style="width: 100%; height: auto;">
         </div>
-        <h5 class="battambang text-center mb-3" style="font-weight: bold;">របាយការណ៍ផ្លាស់ប្តូប្រេកង់វិទ្យុទាក់ទង</h5>
+        <h5 class="battambang text-center mb-3">តារាងរបាយការណ៍ផ្លាស់ប្តូប្រេកង់វិទ្យុទាក់ទង ប្រចាំត្រីមាសទី២ ឆ្នាំ២០២៥</h5>
         {{-- <h6 class="battambang text-center mb-5">( អង្គភាព: {{ $set_frequency->unit }})</h6> --}}
         
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th class="text-center" width=90>ល.រ</th>
-                    <th style="width: 20%">អង្គភាព</th>
+                    <th class="text-center" width=20>ល.រ</th>
+                    <th style="width: 30%">អង្គភាព</th>
                     <th style="width: 20%">ចំនួនវិទ្យុ</th>
-                    <th style="width: 30%">លេខសម្គាល់</th>
-                    <th>ផ្សេងៗ</th>
+                    <th style="width: 40%">ចំនួនតាមម៉ូដែល</th>
+                    {{-- <th>ផ្សេងៗ</th> --}}
                 </tr>
             </thead>
             <tbody>
-                @foreach ($details as $record)
+                {{-- {{ $details }} --}}
+                @php
+                    $sortedDetails = $details->sortBy('unit_id');
+                @endphp
+                @foreach ($sortedDetails as $record)
                     <tr>
-                        <td>{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</td>
+                        <td class="text-center">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</td>
                         <td>{{ $record->unit }}</td>
                         <td>{{ $record->product_count }}</td>
                         <td>
-                            @foreach (collect(json_decode($record->products))->groupBy('model') as $model => $products)
-                                <strong>{{ $model }} ({{ $products->count() }})</strong><br>
-                                @foreach ($products as $product)
-                                    <span style="margin-left: 5px;">{{ $product->PID }}</span><br>
-                                @endforeach
-                                <div class="pt-4"></div>
+                            @foreach (collect($record->products)->groupBy('model') as $model => $products)
+                                <strong>{{ $model }} ({{ $products->sum('count') }})</strong><br>
                             @endforeach
                         </td>
-                        <td></td>
                     </tr>
                 @endforeach
             </tbody>

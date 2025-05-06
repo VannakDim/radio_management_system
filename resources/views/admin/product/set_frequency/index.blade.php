@@ -159,6 +159,11 @@
                         
                         <x-card-table title="DETAILS" badge="info">
                             <x-slot name="header">
+                                <div class="float-right mb-2">
+                                    <button class="btn btn-secondary" onclick="printTable()">
+                                        <i class="fas fa-print"></i> Print
+                                    </button>
+                                </div>
                                 <tr>
                                     <th>ID</th>
                                     <th>Unit</th>

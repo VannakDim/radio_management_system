@@ -8,6 +8,7 @@ use App\Models\StockOut;
 use App\Models\StockIn;
 use App\Models\SetFrequency;
 use App\Models\SetFrequencyDetail;
+use App\Models\Unit;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class ExportToPdf extends Controller
@@ -52,6 +53,28 @@ class ExportToPdf extends Controller
     }
 
     public function printSetFrequencyReport(){
+        // $unit = SetFrequency::select('unit')
+        //     ->distinct()
+        //     ->get()
+        //     ->map(function ($item) {
+        //     $item->product_count = SetFrequencyDetail::whereHas('setFrequency', function ($query) use ($item) {
+        //         $query->where('unit', $item->unit);
+        //     })->count();
+        //     return $item;
+        //     });
+
+        // $details = $unit->map(function ($item) {
+        //     $item->products = SetFrequencyDetail::whereHas('setFrequency', function ($query) use ($item) {
+        //     $query->where('unit', $item->unit);
+        //     })->with('product:id,PID,model_id')->get()->map(function ($detail) {
+        //     return [
+        //         'PID' => $detail->product->PID,
+        //         'model' => $detail->product->model->name,
+        //     ];
+        //     });
+        //     return $item;
+        // });
+
         $unit = SetFrequency::select('unit')
             ->distinct()
             ->get()
@@ -64,13 +87,18 @@ class ExportToPdf extends Controller
 
         $details = $unit->map(function ($item) {
             $item->products = SetFrequencyDetail::whereHas('setFrequency', function ($query) use ($item) {
-            $query->where('unit', $item->unit);
-            })->with('product:id,PID,model_id')->get()->map(function ($detail) {
-            return [
-                'PID' => $detail->product->PID,
-                'model' => $detail->product->model->name,
-            ];
+            $query->whereHas('units', function ($unitQuery) use ($item) {
+                $unitQuery->where('unit', $item->unit);
             });
+            })->with('product:id,PID,model_id', 'product.model:id,name')->get()
+            ->groupBy('product.model.name')
+            ->map(function ($group, $modelName) {
+            return [
+                'model' => $modelName,
+                'count' => $group->count(),
+            ];
+            })->values();
+            $item->unit_id = SetFrequency::where('unit', $item->unit)->value('unit_id');
             return $item;
         });
 
