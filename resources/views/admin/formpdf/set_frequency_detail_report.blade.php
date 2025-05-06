@@ -38,6 +38,11 @@
                         </td>
                     </tr>
                 @endforeach
+                <tr>
+                    <td class="text-center" colspan="2"><strong>សរុប</strong></td>
+                    <td><strong>{{ $sortedDetails->sum('product_count') }} គ្រឿង</strong></td>
+                    <td></td>
+                </tr>
             </tbody>
         </table>
 
