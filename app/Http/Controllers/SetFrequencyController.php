@@ -48,32 +48,33 @@ class SetFrequencyController extends Controller
         
         $unit = $unit->sortBy('unit_id')->values();
 
-        $data = SetFrequency::with(['units' => function ($query) {
-            $query->select('id', 'unit_name');
-        }])->get();
-
-        $data = $data->map(function ($item) {
-            $item->detail = $item->detail->map(function ($detail) {
-                return [
+        $data = SetFrequency::with('units:id,unit_name', 'detail.product.model:id,name')
+            ->get()
+            ->map(function ($item) {
+                $item->detail = $item->detail->map(fn($detail) => [
                     'model' => $detail->product->model->name,
                     'PID' => $detail->product->PID,
-                ];
-            });
-            return $item;
-        });
-
-        $data = $data->sortBy('unit_id')->values();
+                ]);
+                return $item;
+            })
+            ->sortBy('unit_id')
+            ->values();
         
 
         $details = $unit->map(function ($item) {
             $item->products = SetFrequencyDetail::whereHas('setFrequency', function ($query) use ($item) {
-            $query->where('unit', $item->unit);
-            })->with('product:id,PID,model_id')->get()->map(function ($detail) {
-            return [
-                'PID' => $detail->product->PID,
-                'model' => $detail->product->model->name,
-            ];
+            $query->whereHas('units', function ($unitQuery) use ($item) {
+                $unitQuery->where('unit', $item->unit);
             });
+            })->with('product:id,PID,model_id', 'product.model:id,name')->get()
+            ->groupBy('product.model.name')
+            ->map(function ($group, $modelName) {
+            return [
+                'model' => $modelName,
+                'count' => $group->count(),
+            ];
+            })->values();
+            $item->unit_id = SetFrequency::where('unit', $item->unit)->value('unit_id');
             return $item;
         });
 
