@@ -10,6 +10,7 @@ use App\Http\Controllers\StockInController;
 use App\Http\Controllers\StockOutController;
 use App\Http\Controllers\UserAuthController;
 use App\Http\Controllers\SetFrequencyController;
+use App\Http\Controllers\UnitController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -23,6 +24,7 @@ Route::middleware([
 ])->group(function () {
     Route::get('/dashboard', [DashboardController::class,'dashboard'])->name('dashboard');
 
+    // Products routes
     Route::get('/product/all', [ProductController::class, 'index'])->name('all.product');
     Route::get('/product/create', [ProductController::class, 'create'])->name('create.product');
     Route::get('/product/model/show', [ProductModelController::class, 'index'])->name('model.show');
@@ -33,22 +35,34 @@ Route::middleware([
     Route::post('/product/store', [ProductModelController::class, 'store'])->name('store.model');
     Route::post('/product/check-serial-number', [ProductController::class, 'checkSerialNumber'])->name('check.serial.number');
 
+    // Unit routes
+    Route::get('/unit', [UnitController::class, 'index'])->name('unit.list');
+    Route::get('/unit/create', [UnitController::class, 'create'])->name('unit.create');
+    Route::post('/unit/store', [UnitController::class, 'store'])->name('unit.store');
+    Route::get('/unit/edit/{id}', [UnitController::class, 'edit'])->name('unit.edit');
+    Route::post('/unit/{id}/update-sort-index', [UnitController::class, 'updateSortIndex'])->name('unit.update.sort.index');
+    Route::put('/unit/update/{id}', [UnitController::class, 'update'])->name('unit.update');
+    Route::get('/unit/softDel/{id}', [UnitController::class, 'softDelete'])->name('unit.softDel');
+    Route::get('/unit/restore/{id}', [UnitController::class, 'restore'])->name('unit.restore');
+
+    // StockIn with Product
     Route::get('/product/stock-in/index', [StockInController::class, 'index'])->name('stockin.index');
     Route::get('/product/stock-in', [StockInController::class, 'create'])->name('stockin.create');
     Route::post('/product/stock-in/store', [StockInController::class, 'store'])->name('stockin.store');
     Route::get('/product/stock-in/edit/{id}', [StockInController::class, 'edit'])->name('stockin.edit');
     Route::put('/product/stock-in/update/{id}', [StockInController::class, 'update'])->name('stockin.update');
     
-    // StockIn with Product
     Route::get('/product/stock-in/{id}', [StockInController::class, 'create_product'])->name('stockin.product');
     Route::post('/product/stock-in/store-product', [StockInController::class, 'store_product'])->name('stockin.store.product');
 
+    // StockOut Product
     Route::get('/product/stock-out/index', [StockOutController::class, 'index'])->name('stockout.index');
     Route::get('/product/stock-out', [StockOutController::class, 'create'])->name('stockout.create');
     Route::post('/product/stock-out/store', [StockOutController::class, 'store'])->name('stockout.store');
     Route::get('/product/stock-out/edit/{id}', [StockOutController::class, 'edit'])->name('stockout.edit');
     Route::put('/product/stock-out/update/{id}', [StockOutController::class, 'update'])->name('stockout.update');
 
+    // Borrowing Product
     Route::get('/product/borrow', [BorrowController::class, 'create'])->name('borrow.create');
     Route::post('/product/borrow/store', [BorrowController::class, 'store'])->name('borrow.store');
     Route::get('/product/borrow/index', [BorrowController::class, 'index'])->name('borrow.index');

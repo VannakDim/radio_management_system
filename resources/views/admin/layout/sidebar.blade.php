@@ -36,13 +36,31 @@
 
                 @php
                     $url = Request::segment(1);
-                    $component = ['slider', 'service', 'about', 'team','contact'];
-                    $blog = ['post', 'tag', 'category'];
+                    $unit = ['unit'];
                     $product = ['product', 'model', 'category'];
-                    $home = ['brand'];
                 @endphp
                 
 
+                <li class="kh-battambang has-sub @if (in_array($url, $unit)) expand active @endif">
+                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#unit"
+                        aria-expanded="false" aria-controls="unit">
+                        <i class="fa-solid fa-building"></i>
+                        <span class="nav-text">UNITS</span> <b class="caret"></b>
+                    </a>
+                    <ul class="collapse @if (in_array($url, $unit)) show @endif" id="unit"
+                        data-parent="#sidebar-menu">
+                        <div class="sub-menu">
+
+                            <li class="{{ request()->is('unit*') ? 'active' : '' }}">
+                                <a class="sidenav-item-link" href="{{ route('unit.list') }}">
+                                    <i class="fa-solid fa-caret-right {{ request()->is('unit*') ? 'fa-beat' : '' }}"></i>
+                                    <span class="nav-text">Unit List</span>
+                                </a>
+                            </li>
+
+                        </div>
+                    </ul>
+                </li>
                 <li class="kh-battambang has-sub @if (in_array($url, $product)) expand active @endif">
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#products"
                         aria-expanded="false" aria-controls="products">
@@ -52,14 +70,6 @@
                     <ul class="collapse @if (in_array($url, $product)) show @endif" id="products"
                         data-parent="#sidebar-menu">
                         <div class="sub-menu">
-
-                            {{-- <li class="{{ request()->is('product/all') ? 'active' : '' }}">
-                                <a class="sidenav-item-link" href="{{ route('all.product') }}">
-                                    <i class="fa-solid fa-caret-right {{ request()->is('product/all') ? 'fa-beat' : '' }}"></i>
-                                    <span class="nav-text">បញ្ជីសម្ភារៈ</span>
-
-                                </a>
-                            </li> --}}
 
                             <li class="{{ request()->is('product/model*') ? 'active' : '' }}">
                                 <a class="sidenav-item-link" href="{{ route('model.show') }}">
