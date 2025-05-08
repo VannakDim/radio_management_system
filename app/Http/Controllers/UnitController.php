@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Unit;
+use App\Models\Product;
+use App\Models\SetFrequency;
+
+
 
 class UnitController extends Controller
 {
@@ -11,7 +15,10 @@ class UnitController extends Controller
     {
         // Fetch all units from the database
         $units = Unit::orderBy('sort_index')->get();
-        return view('admin.units.index', compact('units'));
+        $radios = SetFrequency::with('detail.product','units')->get();
+        
+
+        return view('admin.units.index', compact('units', 'radios'));
     }
 
     public function create()

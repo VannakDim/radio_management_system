@@ -19,59 +19,99 @@
                             class="btn btn-primary mb-3 d-flex align-items-center justify-content-center"
                             style="height: 50px">
                             <strong>NEW UNIT</strong></a>
-                        <x-card-table title="UNITS RECORD" badge="info">
+                        <div>
+                            <label class="switch">
+                                <input type="checkbox" id="toggleUnitsRecord" onchange="toggleUnitsRecordVisibility()">
+                                <span class="slider round"></span>
+                            </label>
+                            <span>Show Units Index</span>
+                        </div>
+
+                        <div id="unitsRecord" style="display: none;">
+                            <x-card-table title="UNITS RECORD" badge="info">
+                                <x-slot name="header">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th style="width: 40%">Unit Name</th>
+                                        <th>Sort Index</th>
+                                        <th></th>
+                                    </tr>
+                                </x-slot>
+                                <x-slot name="body">
+                                    @foreach ($units as $unit)
+                                        <tr>
+                                            <td>{{ str_pad($unit['id'], 2, '0', STR_PAD_LEFT) }}</td>
+                                            <td>{{ $unit->unit_name }}</td>
+                                            <td>
+                                                <input type="number" value="{{ $unit->sort_index }}" 
+                                                    class="form-control" 
+                                                    style="width: 80px;" 
+                                                    onchange="updateSortIndex({{ $unit->id }}, this.value)">
+                                            </td>
+                                            
+                                            <td class="text-right">
+                                                <div class="dropdown show d-inline-block widget-dropdown">
+                                                    <a class="dropdown-toggle icon-burger-mini" href="#" role="button"
+                                                        id="dropdown-recent-order5" data-toggle="dropdown" aria-haspopup="true"
+                                                        aria-expanded="false" data-display="dynamic"></a>
+                                                    <ul class="dropdown-menu dropdown-menu-right"
+                                                        aria-labelledby="dropdown-recent-order5" style="width: 120px;">
+                                                        <li class="dropdown-item">
+                                                            <div class="d-flex flex-column">
+                                                                <a href="{{ route('unit.edit', $unit->id) }}"
+                                                                    class="text-dark">
+                                                                    <i class="fas fa-edit mr-2"></i>Edit
+                                                                </a>
+                                                                <form action="{{ route('unit.softDel', $unit->id) }}" method="POST" class="mt-2">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <button type="submit" class="btn btn-link text-dark p-0">
+                                                                        <i class="fas fa-trash mr-2"></i>Delete
+                                                                    </button>
+                                                                </form>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </x-slot>
+                            </x-card-table>
+                        </div>
+
+                        <script>
+                            function toggleUnitsRecordVisibility() {
+                                const unitsRecord = document.getElementById('unitsRecord');
+                                const toggleSwitch = document.getElementById('toggleUnitsRecord');
+                                unitsRecord.style.display = toggleSwitch.checked ? 'block' : 'none';
+                            }
+                        </script>
+
+                        
+                        <x-card-table title="RADIOS OF EACH UNITS" badge="success">
                             <x-slot name="header">
                                 <tr>
                                     <th>ID</th>
-                                    <th style="width: 40%">Unit Name</th>
-                                    <th>Sort Index</th>
-                                    <th></th>
+                                    <th>Unit Name</th>
+                                    <th>Trimester</th>
+                                    <th>Date of Setup</th>
+                                    <th>Details Count</th>
                                 </tr>
                             </x-slot>
                             <x-slot name="body">
-                                @foreach ($units as $unit)
+                                
+                                @foreach ($radios->groupBy('unit_id')->sortBy(fn($groupedRadios, $unitId) => $groupedRadios->first()->units->sort_index) as $unitId => $groupedRadios)
                                     <tr>
-                                        <td>{{ str_pad($unit['id'], 2, '0', STR_PAD_LEFT) }}</td>
-                                        <td>{{ $unit->unit_name }}</td>
-                                        <td>
-                                            <input type="number" value="{{ $unit->sort_index }}" 
-                                                class="form-control" 
-                                                style="width: 80px;" 
-                                                onchange="updateSortIndex({{ $unit->id }}, this.value)">
-                                        </td>
-                                        
-                                        <td class="text-right">
-                                            <div class="dropdown show d-inline-block widget-dropdown">
-                                                <a class="dropdown-toggle icon-burger-mini" href="#" role="button"
-                                                    id="dropdown-recent-order5" data-toggle="dropdown" aria-haspopup="true"
-                                                    aria-expanded="false" data-display="dynamic"></a>
-                                                <ul class="dropdown-menu dropdown-menu-right"
-                                                    aria-labelledby="dropdown-recent-order5" style="width: 120px;">
-                                                    <li class="dropdown-item">
-                                                        <div class="d-flex flex-column">
-                                                            <a href="{{ route('unit.edit', $unit->id) }}"
-                                                                class="text-dark">
-                                                                <i class="fas fa-edit mr-2"></i>Edit
-                                                            </a>
-                                                            <form action="{{ route('unit.softDel', $unit->id) }}" method="POST" class="mt-2">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button type="submit" class="btn btn-link text-dark p-0">
-                                                                    <i class="fas fa-trash mr-2"></i>Delete
-                                                                </button>
-                                                            </form>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </td>
+                                        <td>{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</td>
+                                        <td>{{ $groupedRadios->first()->units->unit_name }}</td>
+                                        <td>{{ $groupedRadios->first()->trimester }}</td>
+                                        <td>{{ $groupedRadios->first()->date_of_setup }}</td>
+                                        <td>{{ $groupedRadios->sum(fn($radio) => count($radio->detail)) }}</td>
                                     </tr>
                                 @endforeach
                             </x-slot>
                         </x-card-table>
-                        <div class="mt-4 text-center">
-                            {{-- {{ $units->links() }} --}}
-                        </div>
                     </div>
                 </div>
             </div>
