@@ -1,9 +1,12 @@
 @extends('admin.layout.admin')
 
 @section('main_body')
-    <div id="imageModal" class="modal" style="display:none; position:fixed; z-index:1999; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.5);">
-        <div class="modal-content" style="margin:auto; padding:20px; border:1px solid #888; width:80%; max-width:700px; background-color:#fff; position:relative;">
-            <span class="close" onclick="closeImageModal()" style="position:absolute; top:10px; right:25px; color:#aaa; font-size:28px; font-weight:bold; cursor:pointer;">&times;</span>
+    <div id="imageModal" class="modal"
+        style="display:none; position:fixed; z-index:1999; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.5);">
+        <div class="modal-content"
+            style="margin:auto; padding:20px; border:1px solid #888; width:80%; max-width:700px; background-color:#fff; position:relative;">
+            <span class="close" onclick="closeImageModal()"
+                style="position:absolute; top:10px; right:25px; color:#aaa; font-size:28px; font-weight:bold; cursor:pointer;">&times;</span>
             <img id="modalImage" src="" alt="Image" style="width:100%; cursor:zoom-in;" onclick="zoomImage(this)">
         </div>
     </div>
@@ -14,11 +17,26 @@
             <div class="container">
                 <div class="row">
                     <div class="col-12">
-                        <!--  Stock Update Table -->
+                        <!--  Set Frequency Update Table -->
                         <a href="{{ route('frequency.create') }}"
                             class="btn btn-primary mb-3 d-flex align-items-center justify-content-center"
                             style="height: 50px">
                             <strong>NEW RECORD</strong></a>
+                        <div class="row">
+                            <div class="col-md-9">
+                            </div>
+                            <div class="col-md-3 float-right">
+                                <div class="form-group">
+                                    <label for="trimesterSelect">ត្រីមាស:</label>
+                                    <select id="trimesterSelect" class="form-control" onchange="changeTrimester(this.value)">
+                                        <option value="">ជ្រើសរើសត្រីមាស </option>
+                                        @foreach ($trimesters as $trimester)
+                                            <option value="{{ $trimester['trimester'] }}">{{ $trimester['trimester'] }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                         <x-card-table title="SET FREQUENCRY RECORD" badge="success">
                             <x-slot name="header">
                                 <tr>
@@ -37,8 +55,10 @@
                                         <td>{{ $record->name }}</td>
                                         <td>{{ $record->unit }}</td>
                                         <td>{{ $record->created_at->format('Y-m-d') }}</td>
-                                        <td><span class="badge badge-secondary">{{ str_pad($record->detail->count(), 2, '0', STR_PAD_LEFT) }}</span></td>
-                                        
+                                        <td><span
+                                                class="badge badge-secondary">{{ str_pad($record->detail->count(), 2, '0', STR_PAD_LEFT) }}</span>
+                                        </td>
+
                                         <td class="text-right">
                                             <div class="dropdown show d-inline-block widget-dropdown">
                                                 <a class="dropdown-toggle icon-burger-mini" href="#" role="button"
@@ -52,20 +72,6 @@
                                                                 class="text-dark">
                                                                 <i class="fas fa-print mr-2"></i>Preview
                                                             </a>
-                                                            {{-- <a href="{{ route('stockin.product', $record->id) }}"
-                                                                class="text-dark mt-2">
-                                                                <i class="fas fa-walkie-talkie mr-2"></i>Detail
-                                                            </a>
-                                                            <a href="{{ route('stockin.edit', $record->id) }}"
-                                                                class="text-dark mt-2">
-                                                                <i class="fas fa-edit mr-2"></i>Edit
-                                                            </a>
-                                                            @if ($record->image)
-                                                                <a href="{{ route('stockin.download', $record->id) }}"
-                                                                    class="text-dark mt-2">
-                                                                    <i class="fas fa-download mr-2"></i>Download
-                                                                </a>
-                                                            @endif --}}
                                                         </div>
                                                     </li>
                                                 </ul>
@@ -80,7 +86,7 @@
                         </div>
 
                         {{-- <p>{{ $radio }}</p> --}}
-                        <x-card-table title="RADIOS SET FREQUENCRY RECORD" badge="success">   
+                        <x-card-table title="RADIOS SET FREQUENCRY RECORD" badge="success">
                             <x-slot name="header">
                                 <tr>
                                     <th>ID</th>
@@ -90,73 +96,29 @@
                                 </tr>
                             </x-slot>
                             <x-slot name="body">
+                                @php
+                                    $totalRadioCount = 0;
+                                @endphp
                                 @foreach ($radio as $record)
                                     @if ($record->accessory == 0 && $record->product_count > 0)
-                                    <tr>
-                                        <td>{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</td>
-                                        <td>{{ $record->brand->brand_name }}</td>
-                                        <td>{{ $record->name }}</td>
-                                        <td>{{ $record->product_count }}</td>
-                                        
-                                    </tr>
+                                        @php
+                                            $totalRadioCount += $record->product_count;
+                                        @endphp
+                                        <tr>
+                                            <td>{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</td>
+                                            <td>{{ $record->brand->brand_name }}</td>
+                                            <td>{{ $record->name }}</td>
+                                            <td>{{ $record->product_count }}</td>
+                                        </tr>
                                     @endif
                                 @endforeach
+                                <tr>
+                                    <td colspan="3" class="text-right"><strong>Total</strong></td>
+                                    <td><strong>{{ $totalRadioCount }}</strong></td>
+                                </tr>
                             </x-slot>
                         </x-card-table>
 
-                        {{-- <x-card-table title="RADIOS SET FREQUENCRY RECORD" badge="success">   
-                            <x-slot name="header">
-                                <div class="float-right mb-2">
-                                    <button class="btn btn-secondary" onclick="printTable()">
-                                        <i class="fas fa-print"></i> Print
-                                    </button>
-                                </div>
-                                <tr>
-                                    <th>ID</th>
-                                    <th style="width: 30%">អង្គភាព</th>
-                                    <th style="width: 30%" class="d-none d-md-table-cell">ចំនួនវិទ្យុ</th>
-                                    <th style="width: 30%">លេខវិទ្យុ</th>
-                                </tr>
-                            </x-slot>
-                            <x-slot name="body">
-                                @php
-                                    $uniqueRecords = $data->groupBy(function ($item) {
-                                        return $item->units->unit_name;
-                                    });
-                                @endphp
-                                @foreach ($uniqueRecords as $unitName => $records)
-                                    <tr>
-                                        <td>{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</td>
-                                        <td>{{ $unitName }}</td>
-                                        <td>
-                                            @php
-                                                $totalCount = $records->reduce(function ($carry, $item) {
-                                                    return $carry + collect(json_decode($item->detail))->count();
-                                                }, 0);
-                                            @endphp
-                                            {{ $totalCount }}
-                                        </td>
-                                        <td>
-                                            @foreach ($records as $record)
-                                                @php
-                                                    $groupedProducts = collect(json_decode($record->detail))->groupBy('model');
-                                                @endphp
-                                                @foreach ($groupedProducts as $model => $products)
-                                                    <strong>{{ $model }} ({{ $products->count() }})</strong><br>
-                                                    @foreach ($products as $product)
-                                                        {{ $product->PID }}<br>
-                                                    @endforeach
-                                                @endforeach
-                                            @endforeach
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </x-slot>
-                        </x-card-table> --}}
-
-                        {{-- {{ $details }} --}}
-
-                        
                         <x-card-table title="DETAILS" badge="info">
                             <x-slot name="header">
                                 <div class="float-right mb-2">
@@ -172,7 +134,13 @@
                                 </tr>
                             </x-slot>
                             <x-slot name="body">
+                                @php
+                                    $totalProductCount = 0;
+                                @endphp
                                 @foreach ($details->sortBy('unit_id') as $item)
+                                    @php
+                                        $totalProductCount += $item->product_count;
+                                    @endphp
                                     <tr>
                                         <td>{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</td>
                                         <td>{{ $item->unit }}</td>
@@ -184,6 +152,11 @@
                                         </td>
                                     </tr>
                                 @endforeach
+                                <tr>
+                                    <td colspan="2" class="text-right"><strong>Total</strong></td>
+                                    <td><strong>{{ $totalProductCount }}</strong></td>
+                                    <td></td>
+                                </tr>
                             </x-slot>
                         </x-card-table>
                     </div>
@@ -197,9 +170,30 @@
             window.open(`/product/set-frequency/print/${id}`, 'ViewWindow',
                 `width=${screen.width},height=${screen.height},top=0,left=0`);
         }
+
         function printTable() {
             window.open(`/product/set-frequency-detail/print`, 'ViewWindow',
                 `width=${screen.width},height=${screen.height},top=0,left=0`);
+        }
+    </script>
+    <script>
+        function changeTrimester(trimester) {
+            if (trimester) {
+            fetch(`{{ route('change.trimester') }}`, {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ trimester: trimester })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Trimester changed:', data);
+                // Optionally, you can reload the page or update the UI here
+            })
+            .catch(error => console.error('Error:', error));
+            }
         }
     </script>
 @endsection

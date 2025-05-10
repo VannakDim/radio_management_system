@@ -1,64 +1,48 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Models\Post;
-use App\Models\Tag;
-use App\Models\Category;
-use App\Models\Comment;
+
 use Illuminate\Http\Request;
+use App\Models\Product;
+use App\Models\ProductModel;
+use App\Models\Unit;
+use App\Models\SetFrequency;
 
 class SearchController extends Controller
 {
+    public function index()
+    {
+        return view('admin.search.index');
+    }
+
     public function search(Request $request)
     {
-        $query = $request->input('q'); // Get the search term
-        $results = [];
+        $query = $request->input('query');
 
-        if ($query) {
-            // Search Posts
-            $posts = Post::where('title', 'LIKE', "%{$query}%")
-                ->orWhere('description', 'LIKE', "%{$query}%")
-                ->orWhere('content', 'LIKE', "%{$query}%")
-                ->get();
+        // Perform search logic here (e.g., querying the database)
+        // Example: $results = Model::where('name', 'LIKE', "%{$query}%")->orWhere('code', 'LIKE', "%{$query}%")->get();
+        // $results = collect();
 
-            // Search Tags
-            $tags = Tag::where('name', 'LIKE', "%{$query}%")->get();
-
-            // Search Comments
-            // $comments = Comment::where('content', 'LIKE', "%{$query}%")->get();
-
-            // Combine Results
-            $results = [
-                'posts' => $posts,
-                'tags' => $tags,
-                // 'comments' => $comments,
-            ];
-            // dd($results);
-            return view('frontend.blog_search', compact('results', 'query'));
-        }
-        return redirect()->back();
-
-    }
-
-    public function filter_by_tag($tag)
-    {
-        $tags = Tag::where('name', $tag)->first();
-        if($tags){
-            $posts = $tags->posts;
-            $tags = Tag::all();
-            return view('frontend.blog',compact('posts','tags'));
-        }
-        return redirect()->back();
-    }
-
-    public function filter_by_category($category)
-    {
-        $categories = Category::where('name', $category)->first();
-        if($categories){
-            $posts = $categories->posts;
-            $categories = Category::all();
-            return view('frontend.blog',compact('posts','categories'));
-        }
-        return redirect()->back();
+        $productResults = Product::where('PID', '=', "{$query}")->with('model')->get();
+        $productModelResults = ProductModel::where('name', 'LIKE', "%{$query}%")->get();
+        $unitResults = SetFrequency::with('units')
+        ->whereHas('units', function ($queryBuilder) use ($query) {
+            $queryBuilder->where('unit_name', 'LIKE', "%{$query}%");
+        })->get();
+        
+        $setFrequencyResults = SetFrequency::where('name', 'LIKE', "%{$query}%")->with('detail.product')->get();
+        $productSetFrequency = SetFrequency::with('detail.product')
+            ->whereHas('detail.product', function ($queryBuilder) use ($query) {
+                $queryBuilder->where('PID', 'LIKE', "%{$query}%");
+            })->first();
+        
+        return view('admin.search.results', [
+            'query' => $query,
+            'products' => $productResults,
+            'product_models' => $productModelResults,
+            'units' => $unitResults,
+            'set_frequencies' => $setFrequencyResults,
+            'product_set_frequency' => $productSetFrequency,
+        ]);
     }
 }

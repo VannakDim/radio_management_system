@@ -30,19 +30,19 @@
                                             </div>
 
                                             <div class="form-group">
-                                                <label for="unit">Unit:</label>
-                                                <input type="text" name="unit" class="form-control" id="unit"
-                                                    placeholder="អង្គភាព" required>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label for="unit_id">Select Unit:</label>
+                                                <label for="unit_id">ជ្រើសរើសអង្គភាព:</label>
                                                 <select name="unit_id" class="form-control" id="unit_id" required>
                                                     <option value="" disabled selected>Select Unit</option>
                                                     @foreach ($units as $unit)
                                                         <option value="{{ $unit->id }}">{{ $unit->unit_name }}</option>
                                                     @endforeach
                                                 </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="unit">Note Unit:</label>
+                                                <input type="text" name="unit" class="form-control" id="unit"
+                                                    placeholder="កំណត់ចំណាំបន្ថែម(អង្គភាព)" required>
                                             </div>
 
                                             <div class="form-group">

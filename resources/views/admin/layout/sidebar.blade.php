@@ -41,6 +41,13 @@
                 @endphp
                 
 
+                <li class="kh-battambang has-sub {{ request()->is('admin/search*') ? 'active' : '' }}">
+                    <a class="sidenav-item-link" href="{{ route('search.index') }}">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <span class="nav-text">Search</span>
+                    </a>
+                </li>
+
                 <li class="kh-battambang has-sub @if (in_array($url, $unit)) expand active @endif">
                     <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#unit"
                         aria-expanded="false" aria-controls="unit">

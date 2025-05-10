@@ -23,13 +23,14 @@ class SetFrequencyController extends Controller
         return $trimester;
     }
 
-    public function index()
+    public function index(Request $request)
     {
+        $lastTrimester = SetFrequency::select('trimester')->distinct()->orderBy('trimester', 'desc')->first()->trimester ?? null;
         $set_frequency = SetFrequency::with('user')->orderBy('id', 'desc')->paginate(5);
-        $radio = ProductModel::with('brand')->get()->map(function ($model) {
+        $radio = ProductModel::with('brand')->get()->map(function ($model) use ($lastTrimester) {
             $model->product_count = Product::where('model_id', $model->id)
-            ->whereHas('setFrequency.setFrequency', function ($query) {
-                $query->where('trimester', '2025-T2');
+            ->whereHas('setFrequency.setFrequency', function ($query) use ($lastTrimester) {
+                $query->where('trimester', $request->trimester ?? $lastTrimester);
             })
             ->count();
             return $model;
@@ -45,7 +46,6 @@ class SetFrequencyController extends Controller
             return $item;
             });
 
-        
         $unit = $unit->sortBy('unit_id')->values();
 
         $data = SetFrequency::with('units:id,unit_name', 'detail.product.model:id,name')
@@ -78,8 +78,77 @@ class SetFrequencyController extends Controller
             return $item;
         });
 
-        
-        return view('admin.product.set_frequency.index', compact('set_frequency', 'radio', 'unit', 'data', 'details'));
+        $trimesters = SetFrequency::select('trimester')->distinct()->get();
+
+        return view('admin.product.set_frequency.index', compact('set_frequency', 'trimesters', 'radio', 'unit', 'data', 'details'));
+    }
+
+    public function changeTrimester(Request $request)
+    {
+        $lastTrimester = SetFrequency::select('trimester')->distinct()->orderBy('trimester', 'desc')->first()->trimester ?? null;
+
+        $set_frequency = SetFrequency::with('user')->orderBy('id', 'desc')->paginate(5);
+
+        $radio = ProductModel::with('brand')->get()->map(function ($model) use ($request, $lastTrimester) {
+            $model->product_count = Product::where('model_id', $model->id)
+                ->whereHas('setFrequency.setFrequency', function ($query) use ($request, $lastTrimester) {
+                    $query->where('trimester', $request->trimester ?? $lastTrimester);
+                })
+                ->count();
+            return $model;
+        })->sortByDesc('product_count')->values();
+
+        $unit = SetFrequency::select('unit')
+            ->distinct()
+            ->get()
+            ->map(function ($item) {
+                $item->product_count = SetFrequencyDetail::whereHas('setFrequency', function ($query) use ($item) {
+                    $query->where('unit', $item->unit);
+                })->count();
+                return $item;
+            });
+
+        $unit = $unit->sortBy('unit_id')->values();
+
+        $data = SetFrequency::with('units:id,unit_name', 'detail.product.model:id,name')
+            ->get()
+            ->map(function ($item) {
+                $item->detail = $item->detail->map(fn($detail) => [
+                    'model' => $detail->product->model->name,
+                    'PID' => $detail->product->PID,
+                ]);
+                return $item;
+            })
+            ->sortBy('unit_id')
+            ->values();
+
+        $details = $unit->map(function ($item) {
+            $item->products = SetFrequencyDetail::whereHas('setFrequency', function ($query) use ($item) {
+                $query->whereHas('units', function ($unitQuery) use ($item) {
+                    $unitQuery->where('unit', $item->unit);
+                });
+            })->with('product:id,PID,model_id', 'product.model:id,name')->get()
+            ->groupBy('product.model.name')
+            ->map(function ($group, $modelName) {
+                return [
+                    'model' => $modelName,
+                    'count' => $group->count(),
+                ];
+            })->values();
+            $item->unit_id = SetFrequency::where('unit', $item->unit)->value('unit_id');
+            return $item;
+        });
+
+        $trimesters = SetFrequency::select('trimester')->distinct()->get();
+
+        return response()->json([
+            'set_frequency' => $set_frequency,
+            'trimesters' => $trimesters,
+            'radio' => $radio,
+            'unit' => $unit,
+            'data' => $data,
+            'details' => $details,
+        ]);
     }
 
     public function create()
@@ -151,54 +220,4 @@ class SetFrequencyController extends Controller
         return view('admin.product.set_frequency.edit', compact('set_frequency', 'models', 'availableProducts'));
     }
 
-    // public function update(Request $request, $id)
-    // {
-    //     $validator = Validator::make($request->all(), [
-    //         'name' => 'required',
-    //         'unit' => 'required',
-    //         'purpose' => 'required',
-    //         'trimester' => 'required',
-    //         'setup_date' => 'required',
-    //     ]);
-
-    //     if ($validator->fails()) {
-    //         return response()->json(['errors' => $validator->errors()], 400);
-    //     }
-
-    //     $set_frequency = SetFrequency::find($id);
-    //     $set_frequency->user_id = Auth::user()->id;
-    //     $set_frequency->name = $request->name;
-    //     $set_frequency->unit = $request->unit;
-    //     $set_frequency->purpose = $request->purpose;
-    //     $set_frequency->date_of_setup = $request->setup_date;
-    //     $set_frequency->trimester = $request->trimester;
-
-    //     // Decode the items JSON
-    //     $items = json_decode($request->input('items'), true);
-    //     if (empty($items)) {
-    //         return response()->json(['message' => 'Please add items'], 400);
-    //     }
-
-    //     // Clear existing details
-    //     SetFrequencyDetail::where('set_frequency_id', $id)->delete();
-
-    //     foreach ($items as $item) {
-    //         $existingProduct = Product::where('PID', $item['serial_number'])->first();
-    //         if (!$existingProduct) {
-    //             $existingProduct = Product::create([
-    //                 'PID' => $item['serial_number'],
-    //                 'model_id' => $item['model_id'],
-    //             ]);
-    //         }
-    //         SetFrequencyDetail::create([
-    //             'set_frequency_id' => $set_frequency->id,
-    //             'product_id' => $existingProduct->id,
-    //         ]);
-    //     }
-
-    //     return response()->json(['message' => 'Record updated successfully']);
-    // }
-    
-
-    
 }

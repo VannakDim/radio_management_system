@@ -11,12 +11,14 @@
                 <button type="button" name="search" id="search-btn" class="btn btn-flat">
                     <i class="mdi mdi-magnify"></i>
                 </button>
+                <form action="{{ route('admin.search') }}" method="GET">
                 <input type="text" name="query" id="search-input" class="form-control"
-                    placeholder="'Search', 'chart' etc." autofocus autocomplete="off" />
+                    placeholder="'Search', 'name', 'units', 'PID' etc." autofocus autocomplete="off" value="{{ request('query') }}" />
+                </form>
             </div>
-            <div id="search-results-container">
+            {{-- <div id="search-results-container">
                 <ul id="search-results"></ul>
-            </div>
+            </div> --}}
         </div>
 
         <div class="navbar-right ">

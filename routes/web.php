@@ -6,6 +6,7 @@ use App\Http\Controllers\ExportToPdf;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductModelController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\StockInController;
 use App\Http\Controllers\StockOutController;
 use App\Http\Controllers\UserAuthController;
@@ -75,7 +76,12 @@ Route::middleware([
     Route::get('/product/set-frequency', [SetFrequencyController::class, 'index'])->name('frequency.index');
     Route::get('/product/set-frequency/create', [SetFrequencyController::class, 'create'])->name('frequency.create');
     Route::post('/product/set-frequency/store', [SetFrequencyController::class, 'store'])->name('frequency.store');
-    
+    Route::post('/product/set-frequency/change-trimester', [SetFrequencyController::class, 'changeTrimester'])->name('change.trimester');
+
+    //Search feature
+    Route::get('/search/index', [SearchController::class, 'index'])->name('search.index');
+    Route::get('/admin/search', [SearchController::class, 'search'])->name('admin.search');
+
     //Print feature
     Route::get('/product/stock-in/show/{id}', [ExportToPdf::class, 'previewStockIn'])->name('stockin.preview');
     Route::get('/product/stock-out/show/{id}', [ExportToPdf::class, 'exportStockOutPdf'])->name('stockout.show');
