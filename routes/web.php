@@ -79,7 +79,7 @@ Route::middleware([
     Route::post('/product/set-frequency/change-trimester', [SetFrequencyController::class, 'changeTrimester'])->name('change.trimester');
 
     //Search feature
-    Route::get('/search/index', [SearchController::class, 'index'])->name('search.index');
+    Route::get('/admin/search/index', [SearchController::class, 'index'])->name('search.index');
     Route::get('/admin/search', [SearchController::class, 'search'])->name('admin.search');
 
     //Print feature
