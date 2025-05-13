@@ -12,6 +12,33 @@
                                 <h4>Search Results</h4>
                             </div>
                             <div class="card-body">
+
+                                {{-- {{ $brands }} --}}
+
+                                @if($brands->isNotEmpty())
+                                    <div class="mt-4">
+                                        <h5><strong>Brands</strong></h5>
+                                        <ul class="list-group">
+                                            @foreach($brands as $brand)
+                                                <li class="list-group-item">
+                                                    <strong>Model Name:</strong> {{ $brand->name }}<br>
+                                                    @if($brand->image)
+                                                        <img src="{{ asset($brand->image) }}" alt="Brand Logo" style="max-width: 100px; max-height: 100px;">
+                                                    @endif
+                                                    <br>
+                                                    <strong>Frequency:</strong> {{ ucfirst($brand->frequency) }}<br>
+                                                    @if($brand->type)
+                                                        <strong>Type:</strong> {{ $brand->type }}<br>
+                                                    @endif
+                                                    @if($brand->brand_country)
+                                                        <strong>Country:</strong> {{ $brand->brand_country }}<br>
+                                                    @endif
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
+
                                 {{-- {{ $products }} --}}
                                 @if($products->isNotEmpty())
                                     <div class="mt-4">

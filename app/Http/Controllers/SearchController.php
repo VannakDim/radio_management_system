@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\ProductBrand;
 use App\Models\ProductModel;
 use App\Models\Unit;
 use App\Models\SetFrequency;
@@ -25,6 +26,10 @@ class SearchController extends Controller
 
         $productResults = Product::where('PID', '=', "{$query}")->with('model')->get();
         $productModelResults = ProductModel::where('name', 'LIKE', "%{$query}%")->get();
+        $brandResults = ProductModel::with('brand')
+            ->whereHas('brand', function ($queryBuilder) use ($query) {
+                $queryBuilder->where('brand_name', 'LIKE', "%{$query}%");
+            })->get();
         $unitResults = SetFrequency::with('units')
         ->whereHas('units', function ($queryBuilder) use ($query) {
             $queryBuilder->where('unit_name', 'LIKE', "%{$query}%");
@@ -39,6 +44,7 @@ class SearchController extends Controller
         return view('admin.search.results', [
             'query' => $query,
             'products' => $productResults,
+            'brands' => $brandResults,
             'product_models' => $productModelResults,
             'units' => $unitResults,
             'set_frequencies' => $setFrequencyResults,
