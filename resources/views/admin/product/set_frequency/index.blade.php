@@ -78,7 +78,7 @@
                             </x-slot>
                         </x-card-table>
                         <div class="mt-4 text-center mb-4">
-                            {{ $set_frequency->links('vendor.pagination.custom') }}
+                            {{ $set_frequency->links() }}
                         </div>
 
                         {{-- <p>{{ $radio }}</p> --}}
