@@ -1,16 +1,6 @@
 @extends('admin.layout.admin')
 
 @section('main_body')
-    <div id="imageModal" class="modal"
-        style="display:none; position:fixed; z-index:1999; left:0; top:0; width:100%; height:100%; overflow:auto; background-color:rgba(0,0,0,0.5);">
-        <div class="modal-content"
-            style="margin:auto; padding:20px; border:1px solid #888; width:80%; max-width:700px; background-color:#fff; position:relative;">
-            <span class="close" onclick="closeImageModal()"
-                style="position:absolute; top:10px; right:25px; color:#aaa; font-size:28px; font-weight:bold; cursor:pointer;">&times;</span>
-            <img id="modalImage" src="" alt="Image" style="width:100%; cursor:zoom-in;" onclick="zoomImage(this)">
-        </div>
-    </div>
-
     <!-- Top Statistics -->
     <div class="py-12">
         <div class="mx-auto">
@@ -22,21 +12,7 @@
                             class="btn btn-primary mb-3 d-flex align-items-center justify-content-center"
                             style="height: 50px">
                             <strong>NEW RECORD</strong></a>
-                        <div class="row">
-                            <div class="col-md-9">
-                            </div>
-                            <div class="col-md-3 float-right">
-                                <div class="form-group">
-                                    <label for="trimesterSelect">ត្រីមាស:</label>
-                                    <select id="trimesterSelect" class="form-control" onchange="changeTrimester(this.value)">
-                                        <option value="">ជ្រើសរើសត្រីមាស </option>
-                                        @foreach ($trimesters as $trimester)
-                                            <option value="{{ $trimester['trimester'] }}">{{ $trimester['trimester'] }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
+
                         <x-card-table title="SET FREQUENCRY RECORD" badge="success">
                             <x-slot name="header">
                                 <tr>
@@ -45,6 +21,7 @@
                                     <th style="width: 30%" class="d-none d-md-table-cell">អង្គភាព</th>
                                     <th style="width: 20%" class="d-none d-md-table-cell">កាលបរិច្ឆេទ</th>
                                     <th style="width: 30%" class="d-none d-md-table-cell">ចំនួនវិទ្យុ</th>
+                                    <th></th>
                                     <th></th>
                                 </tr>
                             </x-slot>
@@ -57,6 +34,25 @@
                                         <td>{{ $record->created_at->format('Y-m-d') }}</td>
                                         <td><span
                                                 class="badge badge-secondary">{{ str_pad($record->detail->count(), 2, '0', STR_PAD_LEFT) }}</span>
+                                        </td>
+                                        <td>
+                                            @if (!empty($record->image))
+                                                <button type="button" class="btn btn-info mt-1"
+                                                    onclick="window.open('{{ asset('storage/' . $record->image) }}', '_blank')">
+                                                    <i class="fas fa-image"></i>
+                                                </button>
+                                            @else
+                                                <form action="{{ route('setfrequency.upload', $record->id) }}"
+                                                    method="POST" enctype="multipart/form-data" style="display:inline;">
+                                                    @csrf
+                                                    <input type="file" name="file" id="fileInput{{ $record->id }}"
+                                                        style="display:none;" onchange="this.form.submit()">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        onclick="document.getElementById('fileInput{{ $record->id }}').click();">
+                                                        <i class="fas fa-upload"></i>
+                                                    </button>
+                                                </form>
+                                            @endif
                                         </td>
 
                                         <td class="text-right">
@@ -113,8 +109,9 @@
                                     @endif
                                 @endforeach
                                 <tr>
-                                    <td colspan="3" class="text-right"><strong>Total</strong></td>
-                                    <td><strong>{{ $totalRadioCount }}</strong></td>
+                                    <td colspan="3" class="text-right text-danger strong"><strong>សរុប</strong></td>
+                                    <td><strong class="badge badge-danger" style="font-size: 1rem;">{{ $totalRadioCount }}
+                                            គ្រឿង</strong></td>
                                 </tr>
                             </x-slot>
                         </x-card-table>
@@ -153,8 +150,9 @@
                                     </tr>
                                 @endforeach
                                 <tr>
-                                    <td colspan="2" class="text-right"><strong>Total</strong></td>
-                                    <td><strong>{{ $totalProductCount }}</strong></td>
+                                    <td colspan="2" class="text-right text-danger"><strong>សរុប</strong></td>
+                                    <td><strong class="badge badge-danger"
+                                            style="font-size: 1rem;">{{ $totalProductCount }} គ្រឿង</strong></td>
                                     <td></td>
                                 </tr>
                             </x-slot>
@@ -174,26 +172,6 @@
         function printTable() {
             window.open(`/product/set-frequency-detail/print`, 'ViewWindow',
                 `width=${screen.width},height=${screen.height},top=0,left=0`);
-        }
-    </script>
-    <script>
-        function changeTrimester(trimester) {
-            if (trimester) {
-            fetch(`{{ route('change.trimester') }}`, {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({ trimester: trimester })
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Trimester changed:', data);
-                // Optionally, you can reload the page or update the UI here
-            })
-            .catch(error => console.error('Error:', error));
-            }
         }
     </script>
 @endsection

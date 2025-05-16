@@ -220,4 +220,29 @@ class SetFrequencyController extends Controller
         return view('admin.product.set_frequency.edit', compact('set_frequency', 'models', 'availableProducts'));
     }
 
+    public function uploadImage(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        if ($request->hasFile('file')) {
+            $image = $request->file('file');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $imagePath = $image->storeAs('uploads/set_frequency_images', $imageName, 'public');
+
+            $setFrequency = SetFrequency::findOrFail($id);
+            $setFrequency->image = $imagePath;
+            $setFrequency->save();
+
+            return back()->with('success', 'Image uploaded and record updated successfully');
+        }
+
+        return back()->with('error', 'No image uploaded');
+    }
+
 }

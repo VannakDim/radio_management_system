@@ -77,6 +77,8 @@ Route::middleware([
     Route::get('/product/set-frequency/create', [SetFrequencyController::class, 'create'])->name('frequency.create');
     Route::post('/product/set-frequency/store', [SetFrequencyController::class, 'store'])->name('frequency.store');
     Route::post('/product/set-frequency/change-trimester', [SetFrequencyController::class, 'changeTrimester'])->name('change.trimester');
+    // Image Upload
+    Route::post('/product/set-image/upload/{id}', [SetFrequencyController::class, 'uploadImage'])->name('setfrequency.upload');
 
     //Search feature
     Route::get('/admin/search/index', [SearchController::class, 'index'])->name('search.index');
