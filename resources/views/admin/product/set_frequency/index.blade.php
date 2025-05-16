@@ -38,7 +38,7 @@
                                         <td>
                                             @if (!empty($record->image))
                                                 <button type="button" class="btn btn-info mt-1"
-                                                    onclick="window.open('{{ asset('storage/' . $record->image) }}', '_blank')">
+                                                    onclick="window.open('{{ asset('storage/' . $record->image) }}', 'ImagePopup', 'width=' + screen.width + ',height=' + screen.height + ',top=0,left=0')">
                                                     <i class="fas fa-image"></i>
                                                 </button>
                                             @else
