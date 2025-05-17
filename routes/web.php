@@ -27,6 +27,9 @@ Route::middleware([
 
     // Admin-only routes
     Route::group(['middleware' => [CheckRole::class . ':admin']], function () {
+        
+        Route::put('/product/stock-in/update/{id}', [StockInController::class, 'update'])->name('stockin.update');
+
         Route::put('/product/stock-out/update/{id}', [StockOutController::class, 'update'])->name('stockout.update');
         Route::get('/product/softDel/{id}', [ProductModelController::class, 'softDelete']);
         Route::put('/product/borrow/update/{id}', [BorrowController::class, 'update'])->name('borrow.update');
@@ -36,6 +39,8 @@ Route::middleware([
         Route::get('/admin/search', [SearchController::class, 'search'])->name('admin.search');
 
         // Update record of set frequency
+        Route::get('/product/set-frequency/print/{id}', [ExportToPdf::class, 'printSetFrequency'])->name('setfrequency.print');
+        Route::get('/product/set-frequency-detail/print', [ExportToPdf::class, 'printSetFrequencyReport'])->name('setfrequency.print.report');
         Route::post('/product/set-frequency/store', [SetFrequencyController::class, 'store'])->name('frequency.store');
         // Image Upload
         Route::post('/product/set-image/upload/{id}', [SetFrequencyController::class, 'uploadImage'])->name('setfrequency.upload');
@@ -71,7 +76,6 @@ Route::middleware([
     Route::get('/product/stock-in', [StockInController::class, 'create'])->name('stockin.create');
     Route::post('/product/stock-in/store', [StockInController::class, 'store'])->name('stockin.store');
     Route::get('/product/stock-in/edit/{id}', [StockInController::class, 'edit'])->name('stockin.edit');
-    Route::put('/product/stock-in/update/{id}', [StockInController::class, 'update'])->name('stockin.update');
 
     Route::get('/product/stock-in/{id}', [StockInController::class, 'create_product'])->name('stockin.product');
     Route::post('/product/stock-in/store-product', [StockInController::class, 'store_product'])->name('stockin.store.product');
@@ -101,8 +105,7 @@ Route::middleware([
     Route::get('/product/stock-out/show/{id}', [ExportToPdf::class, 'exportStockOutPdf'])->name('stockout.show');
     Route::get('/product/borrow/show/{id}', [ExportToPdf::class, 'exportBorrow'])->name('borrow.show');
     Route::get('/product/return/show/{id}', [ExportToPdf::class, 'printReturn'])->name('return.print');
-    Route::get('/product/set-frequency/print/{id}', [ExportToPdf::class, 'printSetFrequency'])->name('setfrequency.print');
-    Route::get('/product/set-frequency-detail/print', [ExportToPdf::class, 'printSetFrequencyReport'])->name('setfrequency.print.report');
+    
 
 
     // Paginattion data
