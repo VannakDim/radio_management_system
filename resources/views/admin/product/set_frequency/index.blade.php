@@ -24,7 +24,7 @@
                                     <th style="width: 20%" class="d-none d-md-table-cell">កាលបរិច្ឆេទ</th>
                                     <th style="width: 30%" class="d-none d-sm-table-cell">ចំនួនវិទ្យុ</th>
                                     <th></th>
-                                    <th></th>
+                                    <th class="d-none d-md-table-cell"></th>
                                 </tr>
                             </x-slot>
                             <x-slot name="body">
@@ -57,7 +57,7 @@
                                             @endif
                                         </td>
 
-                                        <td class="text-right">
+                                        <td class="text-right d-none d-md-table-cell">
                                             <div class="dropdown show d-inline-block widget-dropdown">
                                                 <a class="dropdown-toggle icon-burger-mini" href="#" role="button"
                                                     id="dropdown-recent-order5" data-toggle="dropdown" aria-haspopup="true"
