@@ -13,7 +13,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th style="width: 30%">Model</th>
-                                    <th style="width: 30%" class="d-none d-md-table-cell">Brand</th>
+                                    <th style="width: 30%">Brand</th>
                                     <th style="width: 20%" class="d-none d-md-table-cell">
                                         <label class="badge badge-primary">ALL</label>
                                         <label class="badge badge-danger">OUT</label>
@@ -35,12 +35,11 @@
                                             <span style="font-size: 0.98rem !important;" class="badge badge-danger">{{ str_pad($stock['stock_out'], 3, '0', STR_PAD_LEFT) }}</span>
                                             <span style="font-size: 0.98rem !important;" class="badge badge-success">{{ str_pad($stock['available_stock'], 3, '#', STR_PAD_LEFT) }}</span>
                                         </td>
-                                        <td>
+                                        <td class="d-none d-md-table-cell">
                                             @if ($stock['borrow'] > 0)
                                                 <span style="font-size: 0.98rem !important;" class="badge badge-warning">{{ $stock['borrow'] }}</span>
                                             @endif
                                         </td>
-                                        <td></td>
                                     </tr>
                                 @endforeach
                             </x-slot>
