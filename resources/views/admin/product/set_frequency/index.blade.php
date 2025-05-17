@@ -12,7 +12,9 @@
                             class="btn btn-primary mb-3 d-flex align-items-center justify-content-center"
                             style="height: 50px">
                             <strong>NEW RECORD</strong></a>
-
+                        <div class="mt-4 text-center mb-4">
+                            {{ $set_frequency->links('vendor.pagination.custom') }}
+                        </div>
                         <x-card-table title="SET FREQUENCRY RECORD" badge="success">
                             <x-slot name="header">
                                 <tr>
@@ -77,9 +79,7 @@
                                 @endforeach
                             </x-slot>
                         </x-card-table>
-                        <div class="mt-4 text-center mb-4">
-                            {{ $set_frequency->links('vendor.pagination.custom') }}
-                        </div>
+
 
                         {{-- <p>{{ $radio }}</p> --}}
                         <x-card-table title="RADIOS SET FREQUENCRY RECORD" badge="success">
