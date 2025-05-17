@@ -167,8 +167,8 @@
                                                     <th style="width: 50px;">No</th>
                                                     <th>PID</th>
                                                     <th>Model</th>
-                                                    <th>Brand</th>
-                                                    <th>Created date</th>
+                                                    <th class="d-none d-md-table-cell">Brand</th>
+                                                    <th class="d-none d-md-table-cell">Created date</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -177,8 +177,8 @@
                                                         <td>{{ $loop->iteration }}</td>
                                                         <td>{{ $frequency->PID }}</td>
                                                         <td>{{ $frequency->model->name }}</td>
-                                                        <td>{{ $frequency->model->brand->brand_name }}</td>
-                                                        <td>{{ $frequency->created_at }}</td>
+                                                        <td class="d-none d-md-table-cell">{{ $frequency->model->brand->brand_name }}</td>
+                                                        <td class="d-none d-md-table-cell">{{ $frequency->created_at }}</td>
                                                     </tr>
                                                 @endforeach
                                             </tbody>
