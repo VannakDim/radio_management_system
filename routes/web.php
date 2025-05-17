@@ -13,6 +13,7 @@ use App\Http\Controllers\UserAuthController;
 use App\Http\Controllers\SetFrequencyController;
 use App\Http\Controllers\UnitController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\CheckRole;
 
 
 
@@ -23,7 +24,27 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', [DashboardController::class,'dashboard'])->name('dashboard');
+
+    // Admin-only routes
+    Route::group(['middleware' => [CheckRole::class . ':admin']], function () {
+        Route::put('/product/stock-out/update/{id}', [StockOutController::class, 'update'])->name('stockout.update');
+        Route::get('/product/softDel/{id}', [ProductModelController::class, 'softDelete']);
+        Route::put('/product/borrow/update/{id}', [BorrowController::class, 'update'])->name('borrow.update');
+        
+        //Search feature
+        Route::get('/admin/search/index', [SearchController::class, 'index'])->name('search.index');
+        Route::get('/admin/search', [SearchController::class, 'search'])->name('admin.search');
+
+        // Update record of set frequency
+        Route::post('/product/set-frequency/store', [SetFrequencyController::class, 'store'])->name('frequency.store');
+        // Image Upload
+        Route::post('/product/set-image/upload/{id}', [SetFrequencyController::class, 'uploadImage'])->name('setfrequency.upload');
+
+
+    });
+    
+    // User authentication routes
+    Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
     // Products routes
     Route::get('/product/all', [ProductController::class, 'index'])->name('all.product');
@@ -31,7 +52,6 @@ Route::middleware([
     Route::get('/product/model/show', [ProductModelController::class, 'index'])->name('model.show');
     Route::get('/product/model/edit/{id}', [ProductModelController::class, 'edit'])->name('model.edit');
     Route::post('/product/model/update/{id}', [ProductModelController::class, 'update'])->name('model.update');
-    Route::get('/product/softDel/{id}', [ProductModelController::class, 'softDelete']);
     Route::get('/product/model', [ProductModelController::class, 'create'])->name('product.model.create');
     Route::post('/product/store', [ProductModelController::class, 'store'])->name('store.model');
     Route::post('/product/check-serial-number', [ProductController::class, 'checkSerialNumber'])->name('check.serial.number');
@@ -52,7 +72,7 @@ Route::middleware([
     Route::post('/product/stock-in/store', [StockInController::class, 'store'])->name('stockin.store');
     Route::get('/product/stock-in/edit/{id}', [StockInController::class, 'edit'])->name('stockin.edit');
     Route::put('/product/stock-in/update/{id}', [StockInController::class, 'update'])->name('stockin.update');
-    
+
     Route::get('/product/stock-in/{id}', [StockInController::class, 'create_product'])->name('stockin.product');
     Route::post('/product/stock-in/store-product', [StockInController::class, 'store_product'])->name('stockin.store.product');
 
@@ -61,28 +81,20 @@ Route::middleware([
     Route::get('/product/stock-out', [StockOutController::class, 'create'])->name('stockout.create');
     Route::post('/product/stock-out/store', [StockOutController::class, 'store'])->name('stockout.store');
     Route::get('/product/stock-out/edit/{id}', [StockOutController::class, 'edit'])->name('stockout.edit');
-    Route::put('/product/stock-out/update/{id}', [StockOutController::class, 'update'])->name('stockout.update');
 
     // Borrowing Product
     Route::get('/product/borrow', [BorrowController::class, 'create'])->name('borrow.create');
     Route::post('/product/borrow/store', [BorrowController::class, 'store'])->name('borrow.store');
     Route::get('/product/borrow/index', [BorrowController::class, 'index'])->name('borrow.index');
     Route::get('/product/borrow/edit/{id}', [BorrowController::class, 'edit'])->name('borrow.edit');
-    Route::put('/product/borrow/update/{id}', [BorrowController::class, 'update'])->name('borrow.update');
     Route::get('/product/borrow/retrun/{id}', [BorrowController::class, 'return_index'])->name('return.index');
     Route::put('/product/borrow/return/{id}', [BorrowController::class, 'return'])->name('borrow.return');
 
     //Set Frequency
     Route::get('/product/set-frequency', [SetFrequencyController::class, 'index'])->name('frequency.index');
     Route::get('/product/set-frequency/create', [SetFrequencyController::class, 'create'])->name('frequency.create');
-    Route::post('/product/set-frequency/store', [SetFrequencyController::class, 'store'])->name('frequency.store');
     Route::post('/product/set-frequency/change-trimester', [SetFrequencyController::class, 'changeTrimester'])->name('change.trimester');
-    // Image Upload
-    Route::post('/product/set-image/upload/{id}', [SetFrequencyController::class, 'uploadImage'])->name('setfrequency.upload');
-
-    //Search feature
-    Route::get('/admin/search/index', [SearchController::class, 'index'])->name('search.index');
-    Route::get('/admin/search', [SearchController::class, 'search'])->name('admin.search');
+    
 
     //Print feature
     Route::get('/product/stock-in/show/{id}', [ExportToPdf::class, 'previewStockIn'])->name('stockin.preview');
@@ -96,12 +108,11 @@ Route::middleware([
     // Paginattion data
     Route::get('/product/stock-out/data', [StockOutController::class, 'paginateData'])->name('stockout.paginate');
     Route::get('/product/borrow/data', [BorrowController::class, 'paginateData'])->name('borrow.paginate');
-    
+
     // Download feature
     Route::get('/product/stock-in/download/{id}', [StockInController::class, 'download'])->name('stockin.download');
     Route::get('/product/borrow/download/{id}', [BorrowController::class, 'download'])->name('borrow.download');
     Route::get('/product/stock-out/download/{id}', [StockOutController::class, 'download'])->name('stockout.download');
 
     Route::get('/logout', [UserAuthController::class, 'logout'])->name('user.logout');
-
 });
