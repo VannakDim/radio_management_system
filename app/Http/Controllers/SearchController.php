@@ -26,6 +26,9 @@ class SearchController extends Controller
 
         $productResults = Product::where('PID', '=', "{$query}")->with('model')->get();
         $productModelResults = ProductModel::where('name', 'LIKE', "%{$query}%")->get();
+        $productByModelResults = Product::whereHas('model', function ($q) use ($query) {
+            $q->where('name', 'LIKE', "%{$query}%");
+        })->with('model')->get();
         $brandResults = ProductModel::with('brand')
             ->whereHas('brand', function ($queryBuilder) use ($query) {
                 $queryBuilder->where('brand_name', 'LIKE', "%{$query}%");
@@ -49,6 +52,7 @@ class SearchController extends Controller
             'units' => $unitResults,
             'set_frequencies' => $setFrequencyResults,
             'product_set_frequency' => $productSetFrequency,
+            'product_by_model' => $productByModelResults,
         ]);
     }
 }

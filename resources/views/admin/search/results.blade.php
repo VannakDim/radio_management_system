@@ -13,7 +13,7 @@
                             </div>
                             <div class="card-body">
 
-                                {{-- {{ $brands }} --}}
+                                {{-- {{ $product_by_model }} --}}
 
                                 @if($brands->isNotEmpty())
                                     <div class="mt-4">
@@ -154,6 +154,35 @@
                                                 </li>
                                             @endforeach
                                         </ul>
+                                    </div>
+                                @endif
+
+                                {{-- Results for Product With Model --}}
+                                @if($product_by_model->isNotEmpty())
+                                    <div class="mt-4">
+                                        <h5><strong>Product List:</strong></h5>
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width: 50px;">No</th>
+                                                    <th>PID</th>
+                                                    <th>Model</th>
+                                                    <th>Brand</th>
+                                                    <th>Created date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach($product_by_model as $frequency)
+                                                    <tr>
+                                                        <td>{{ $loop->iteration }}</td>
+                                                        <td>{{ $frequency->PID }}</td>
+                                                        <td>{{ $frequency->model->name }}</td>
+                                                        <td>{{ $frequency->model->brand->brand_name }}</td>
+                                                        <td>{{ $frequency->created_at }}</td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
                                     </div>
                                 @endif
 
