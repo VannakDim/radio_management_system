@@ -74,6 +74,7 @@
                                     </div>
                                 @endif
 
+                                {{-- Result of Product Models --}}
                                 @if($product_models->isNotEmpty())
                                     <div class="mt-4">
                                         <h5><strong>Product Models</strong></h5>
@@ -190,6 +191,9 @@
                                         <ul class="list-group">
                                             @foreach($set_frequencies as $set_frequency)
                                                 <li class="list-group-item">
+                                                    @if($set_frequency->image)
+                                                        <img src="{{ asset($set_frequency->image) }}" alt="" style="max-width: 100px; max-height: 100px;">
+                                                    @endif
                                                     <strong>Name:</strong> {{ $set_frequency->name }}<br>
                                                     <strong>Unit:</strong> {{ $set_frequency->unit }}<br>
                                                     <strong>Purpose:</strong> {{ $set_frequency->purpose }}<br>
