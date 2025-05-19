@@ -287,7 +287,45 @@
                                     <div class="mt-4">
                                         <h5><strong>History of Set Frequency</strong></h5>
                                         <ul class="list-group">
-                                            <li class="list-group-item">
+                                            <li class="list-group-item position-relative" style="min-height: 100px;">
+                                                @if($product_set_frequency->image)
+                                                    <div style="position: absolute; top: 10px; right: 10px;">
+                                                        <i class="fa fa-image"
+                                                           style="font-size: 2rem; color: #007bff; cursor: pointer; float: right;"
+                                                           onclick="showSetFrequencyImage('{{ asset('storage/' . $product_set_frequency->image) }}')"
+                                                           title="View Image"></i>
+                                                    </div>
+                                                    <div id="setFrequencyImageModal" class="modal" tabindex="-1" role="dialog" style="display:none;">
+                                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title">Record Image</h5>
+                                                                    <button type="button" class="close" onclick="closeSetFrequencyImage()" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body text-center">
+                                                                    <img id="setFrequencyImageModalImg" src="" alt="Set Frequency Image" style="max-width:100%; max-height:600px;">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <script>
+                                                        function showSetFrequencyImage(src) {
+                                                            document.getElementById('setFrequencyImageModalImg').src = src;
+                                                            document.getElementById('setFrequencyImageModal').style.display = 'block';
+                                                        }
+                                                        function closeSetFrequencyImage() {
+                                                            document.getElementById('setFrequencyImageModal').style.display = 'none';
+                                                        }
+                                                        document.addEventListener('click', function(event) {
+                                                            var modal = document.getElementById('setFrequencyImageModal');
+                                                            if (modal && event.target === modal) {
+                                                                closeSetFrequencyImage();
+                                                            }
+                                                        });
+                                                    </script>
+                                                @endif
                                                 <strong>Name:</strong> {{ $product_set_frequency->name }}<br>
                                                 <strong>Unit:</strong> {{ $product_set_frequency->unit }}<br>
                                                 <strong>Purpose:</strong> {{ $product_set_frequency->purpose }}<br>
@@ -301,7 +339,7 @@
                                                         @foreach($product_set_frequency->detail as $detail)
                                                             <li>
                                                                 @if($detail->product->PID == $query)
-                                                                <strong>PID:</strong><span class="badge-danger"> {{ $detail->product->PID }}</span>
+                                                                    <strong>PID:</strong><span class="badge-danger"> {{ $detail->product->PID }}</span>
                                                                 @else
                                                                     <strong>PID:</strong> {{ $detail->product->PID }}
                                                                 @endif
