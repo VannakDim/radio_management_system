@@ -24,11 +24,11 @@
 
         <div class="navbar-right ">
             <ul class="nav navbar-nav">
-                <li>
+                {{-- <li>
                     <a href="{{route('home')}}" class="px-3" target="_blank" rel="noopener noreferrer">
                         <i class="fa-solid fa-earth-americas" style="font-size: 1.5rem; color:rgba(138, 144, 157, 0.7);"></i>
                     </a>
-                </li>
+                </li> --}}
                 <li class="dropdown notifications-menu">
                     <button class="dropdown-toggle" data-toggle="dropdown">
                         <i class="mdi mdi-bell-outline"></i>
