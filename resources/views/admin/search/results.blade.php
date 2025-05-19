@@ -193,8 +193,46 @@
                                             @foreach($set_frequencies as $set_frequency)
                                                 <li class="list-group-item position-relative" style="min-height: 100px;">
                                                     @if($set_frequency->image)
-                                                        <img src="{{ asset('storage/' . $set_frequency->image) }}" alt="Set Frequency Image"
-                                                             style="height: 100%; max-height: 200px; width: auto; float: right; object-fit: contain; margin-left: 15px; border: 1px solid #ccc; border-radius: 5px;">
+                                                        <div class="d-block d-md-none mb-2">
+                                                            <button type="button" class="btn btn-primary btn-sm" onclick="showSetFrequencyImage('{{ asset('storage/' . $set_frequency->image) }}')">
+                                                                <i class="fas fa-image"></i>
+                                                            </button>
+                                                        </div>
+                                                        <div class="d-none d-md-block" style="position: absolute; top: 10px; right: 10px;">
+                                                            <img src="{{ asset('storage/' . $set_frequency->image) }}" alt="Set Frequency Image"
+                                                                 style="height: 100%; max-height: 200px; width: auto; object-fit: contain; margin-left: 15px; border: 1px solid #ccc; border-radius: 5px;">
+                                                        </div>
+                                                        <div id="setFrequencyImageModal" class="modal" tabindex="-1" role="dialog" style="display:none;">
+                                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title">Set Frequency Image</h5>
+                                                                        <button type="button" class="close" onclick="closeSetFrequencyImage()" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="modal-body text-center">
+                                                                        <img id="setFrequencyImageModalImg" src="" alt="Set Frequency Image" style="max-width:100%; max-height:400px;">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <script>
+                                                            function showSetFrequencyImage(src) {
+                                                                document.getElementById('setFrequencyImageModalImg').src = src;
+                                                                document.getElementById('setFrequencyImageModal').style.display = 'block';
+                                                            }
+                                                            function closeSetFrequencyImage() {
+                                                                document.getElementById('setFrequencyImageModal').style.display = 'none';
+                                                            }
+                                                            // Optional: close modal when clicking outside
+                                                            document.addEventListener('click', function(event) {
+                                                                var modal = document.getElementById('setFrequencyImageModal');
+                                                                if (modal && event.target === modal) {
+                                                                    closeSetFrequencyImage();
+                                                                }
+                                                            });
+                                                        </script>
                                                     @endif
                                                     <strong>Name:</strong> {{ $set_frequency->name }}<br>
                                                     <strong>Unit:</strong> {{ $set_frequency->unit }}<br>
