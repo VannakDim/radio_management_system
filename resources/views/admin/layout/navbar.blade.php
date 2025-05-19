@@ -6,19 +6,20 @@
             <span class="sr-only">Toggle navigation</span>
         </button>
         <!-- search form -->
-        <div class="search-form d-none d-lg-inline-block">
+        <div class="search-form">
+            <!-- Show only the button on small screens, show full form on lg+ -->
             <div class="input-group">
-                <button type="button" name="search" id="search-btn" class="btn btn-flat">
-                    <i class="mdi mdi-magnify"></i>
+            <button type="button" name="search" id="search-btn" class="btn btn-flat d-inline-block d-lg-none" onclick="window.location.href='{{ route('search.index') }}'">
+                <i class="mdi mdi-magnify"></i>
+            </button>
+            <form action="{{ route('admin.search') }}" method="GET" class="d-none d-lg-flex w-100">
+                <button type="button" name="search" id="search-btn-lg" class="btn btn-flat">
+                <i class="mdi mdi-magnify"></i>
                 </button>
-                <form action="{{ route('admin.search') }}" method="GET">
                 <input type="text" name="query" id="search-input" class="form-control"
-                    placeholder="'Search', 'name', 'units', 'PID' etc." autofocus autocomplete="off" value="{{ request('query') }}" />
-                </form>
+                placeholder="'Search', 'name', 'units', 'PID' etc." autofocus autocomplete="off" value="{{ request('query') }}" />
+            </form>
             </div>
-            {{-- <div id="search-results-container">
-                <ul id="search-results"></ul>
-            </div> --}}
         </div>
 
         <div class="navbar-right ">

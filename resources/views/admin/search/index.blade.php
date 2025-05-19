@@ -15,7 +15,7 @@
                                     <div class="input-group mb-3">
                                         <input type="text" name="query" class="form-control"
                                             placeholder="Search by unit, name or radio ID" aria-label="Search query"
-                                            aria-describedby="button-addon2" value="{{ request('query') }}">
+                                            aria-describedby="button-addon2" value="{{ request('query') }}" autofocus>
                                         <button class="btn btn-outline-secondary" type="submit"
                                             id="button-addon2">Search</button>
                                     </div>
