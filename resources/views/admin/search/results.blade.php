@@ -185,14 +185,16 @@
                                 
 
                                 {{-- Results for Set Frequencies: --}}
+                                {{-- {{ $set_frequencies}} --}}
                                 @if($set_frequencies->isNotEmpty())
                                     <div class="mt-4">
                                         <h5><strong>Set Frequencies</strong></h5>
                                         <ul class="list-group">
                                             @foreach($set_frequencies as $set_frequency)
-                                                <li class="list-group-item">
+                                                <li class="list-group-item position-relative" style="min-height: 100px;">
                                                     @if($set_frequency->image)
-                                                        <img src="{{ asset($set_frequency->image) }}" alt="" style="max-width: 100px; max-height: 100px;">
+                                                        <img src="{{ asset('storage/' . $set_frequency->image) }}" alt="Set Frequency Image"
+                                                             style="height: 100%; max-height: 200px; width: auto; float: right; object-fit: contain; margin-left: 15px; border: 1px solid #ccc; border-radius: 5px;">
                                                     @endif
                                                     <strong>Name:</strong> {{ $set_frequency->name }}<br>
                                                     <strong>Unit:</strong> {{ $set_frequency->unit }}<br>
@@ -204,7 +206,8 @@
                                                         <ul class="mt-2">
                                                             @foreach($set_frequency->detail as $detail)
                                                                 <li>
-                                                                    <strong>PID:</strong> {{ $detail->product->PID }}<span class="mx-3 badge badge-danger">{{$detail->product->model->name}}</span><br>
+                                                                    <strong>PID:</strong> {{ $detail->product->PID }}
+                                                                    <span class="mx-3 badge badge-danger">{{ $detail->product->model->name }}</span><br>
                                                                 </li>
                                                             @endforeach
                                                         </ul>
