@@ -212,7 +212,7 @@
                                                                         </button>
                                                                     </div>
                                                                     <div class="modal-body text-center">
-                                                                        <img id="setFrequencyImageModalImg" src="" alt="Set Frequency Image" style="max-width:100%; max-height:400px;">
+                                                                        <img id="setFrequencyImageModalImg" src="" alt="Set Frequency Image" style="max-width:100%; max-height:600px;">
                                                                     </div>
                                                                 </div>
                                                             </div>
