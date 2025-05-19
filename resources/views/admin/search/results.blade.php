@@ -193,14 +193,10 @@
                                             @foreach($set_frequencies as $set_frequency)
                                                 <li class="list-group-item position-relative" style="min-height: 100px;">
                                                     @if($set_frequency->image)
-                                                        <div class="d-block d-md-none mb-2" style="position: absolute; top: 10px; right: 10px;">
-                                                            <button type="button" class="btn btn-primary btn-lg" style="padding: 0.75rem 1.25rem; font-size: 1.5rem;" onclick="showSetFrequencyImage('{{ asset('storage/' . $set_frequency->image) }}')">
-                                                                <i class="fas fa-image"></i>
-                                                            </button>
-                                                        </div>
-                                                        <div class="d-none d-md-block" style="position: absolute; top: 10px; right: 10px;">
+                                                        <div style="position: absolute; top: 10px; right: 10px;">
                                                             <img src="{{ asset('storage/' . $set_frequency->image) }}" alt="Record Image"
-                                                                 style="height: 100%; max-height: 200px; width: auto; object-fit: contain; margin-left: 15px; border: 1px solid #ccc; border-radius: 5px;">
+                                                                 style="height: 100%; max-height: 200px; width: auto; object-fit: contain; margin-left: 15px; border: 1px solid #ccc; border-radius: 5px; cursor: pointer;"
+                                                                 onclick="showSetFrequencyImage('{{ asset('storage/' . $set_frequency->image) }}')">
                                                         </div>
                                                         <div id="setFrequencyImageModal" class="modal" tabindex="-1" role="dialog" style="display:none;">
                                                             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -238,7 +234,7 @@
                                                     <strong>Unit:</strong> {{ $set_frequency->unit }}<br>
                                                     <strong>Purpose:</strong> {{ $set_frequency->purpose }}<br>
                                                     <strong>Trimester:</strong> {{ $set_frequency->trimester }}<br>
-                                                    <strong>Date of Setup:</strong> {{ $set_frequency->created_at }}<br>
+                                                    <strong>Date of Setup:</strong> {{ $set_frequency->created_at->timezone('Asia/Phnom_Penh')->format('Y-m-d H:i:s') }}<br>
                                                     <strong>Product Count:</strong> {{ $set_frequency->detail->count() }}<br>
                                                     @if($set_frequency->detail->isNotEmpty())
                                                         <ul class="mt-2">
