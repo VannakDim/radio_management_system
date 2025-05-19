@@ -224,9 +224,9 @@
                 rows += `<tr>
                             <td>${value.id}</td>
                             <td>${value.receiver}</td>
-                            <td>${value.user.name}</td>
+                            <td class="d-none d-md-table-cell">${value.user.name}</td>
                             <td>${moment(value.created_at).fromNow()}</td>
-                            <td>${value.note}</td>
+                            <td class="d-none d-md-table-cell">${value.note}</td>
                             <td class="text-right">
                               <div class="dropdown show d-inline-block widget-dropdown">
                                 <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdown-recent-order5" data-toggle="dropdown" aria-haspopup="true"
@@ -248,26 +248,39 @@
         }
 
         function updatePagination(selector, response) {
-            if (selector === '#stockoutPagination') {
-                view = "stock-out";
-            } else {
-                view = "borrow";
-            }
+            let view = (selector === '#stockoutPagination') ? "stock-out" : "borrow";
+            // Responsive pagination: show only prev/next and page info on small screens
+            let isMobile = window.innerWidth < 768;
             if (response.last_page > 1) {
-                let pagination =
-                    '<nav aria-label="Page navigation example"><ul class="pagination justify-content-center">';
-                pagination +=
-                    `<li class="page-item ${response.current_page === 1 ? 'disabled' : ''}">
-                                <a href="#" class="page-link" data-view="${view}" data-page="${response.current_page - 1}" style="height: 38px;">\<</a></li>`;
-                for (let i = 1; i <= response.last_page; i++) {
-                    pagination +=
-                        `<li class="page-item ${response.current_page === i ? 'active' : ''}">
-                                    <a href="#" class="page-link" data-view="${view}" data-page="${i}" style="height: 38px;">${i}</a></li>`;
+                let pagination = '';
+                if (isMobile) {
+                    // Previous button
+                    pagination += `<li class="page-item ${response.current_page === 1 ? 'disabled' : ''}">
+                        <a href="#" class="page-link" data-view="${view}" data-page="${response.current_page - 1}" style="height: 38px;">&lt;</a>
+                    </li>`;
+                    // Page info
+                    pagination += `<li class="page-item disabled">
+                        <span class="page-link" style="height: 38px;">${response.current_page} / ${response.last_page}</span>
+                    </li>`;
+                    // Next button
+                    pagination += `<li class="page-item ${response.current_page === response.last_page ? 'disabled' : ''}">
+                        <a href="#" class="page-link" data-view="${view}" data-page="${response.current_page + 1}" style="height: 38px;">&gt;</a>
+                    </li>`;
+                } else {
+                    // Previous button
+                    pagination += `<li class="page-item ${response.current_page === 1 ? 'disabled' : ''}">
+                        <a href="#" class="page-link" data-view="${view}" data-page="${response.current_page - 1}" style="height: 38px;">&lt;</a></li>`;
+
+                    // Page numbers
+                    for (let i = 1; i <= response.last_page; i++) {
+                        pagination += `<li class="page-item ${response.current_page === i ? 'active' : ''}">
+                            <a href="#" class="page-link" data-view="${view}" data-page="${i}" style="height: 38px;">${i}</a></li>`;
+                    }
+
+                    // Next button
+                    pagination += `<li class="page-item ${response.current_page === response.last_page ? 'disabled' : ''}">
+                        <a href="#" class="page-link" data-view="${view}" data-page="${response.current_page + 1}" style="height: 38px;">&gt;</a></li>`;
                 }
-                pagination +=
-                    `<li class="page-item ${response.current_page === response.last_page ? 'disabled' : ''}">
-                                <a href="#" class="page-link" data-view="${view}" data-page="${response.current_page + 1}" style="height: 38px;">\></a></li>`;
-                pagination += '</ul></nav>';
                 $(selector).find('.pagination').html(pagination);
             } else {
                 $(selector).find('.pagination').html(`<span class="mr-2">Records found: ${response.total}</span>`);
@@ -281,10 +294,10 @@
             let view = $(this).data('view');
             if (view === 'stock-out') {
                 dateRangeDisplay(page, 'stockout');
-                // console.log('Stock Out'+page);
+                console.log('Stock Out'+page);
             } else {
                 dateRangeDisplay(page, 'borrow');
-                // console.log('Borrow'+page);
+                console.log('Borrow'+page);
             }
         });
 
