@@ -193,8 +193,8 @@
                                             @foreach($set_frequencies as $set_frequency)
                                                 <li class="list-group-item position-relative" style="min-height: 100px;">
                                                     @if($set_frequency->image)
-                                                        <div class="d-block d-md-none mb-2">
-                                                            <button type="button" class="btn btn-primary btn-sm" onclick="showSetFrequencyImage('{{ asset('storage/' . $set_frequency->image) }}')">
+                                                        <div class="d-block d-md-none mb-2" style="position: absolute; top: 10px; right: 10px;">
+                                                            <button type="button" class="btn btn-primary btn-lg" style="padding: 0.75rem 1.25rem; font-size: 1.5rem;" onclick="showSetFrequencyImage('{{ asset('storage/' . $set_frequency->image) }}')">
                                                                 <i class="fas fa-image"></i>
                                                             </button>
                                                         </div>
