@@ -8,6 +8,7 @@ use App\Models\ProductBrand;
 use App\Models\ProductModel;
 use App\Models\Unit;
 use App\Models\SetFrequency;
+use App\Models\StockOut;
 
 class SearchController extends Controller
 {
@@ -19,6 +20,10 @@ class SearchController extends Controller
     public function search(Request $request)
     {
         $query = $request->input('query');
+
+        if (is_null($query)) {
+            return redirect()->back()->with('alert', 'Input your keyword to search');
+        }
 
         // Perform search logic here (e.g., querying the database)
         // Example: $results = Model::where('name', 'LIKE', "%{$query}%")->orWhere('code', 'LIKE', "%{$query}%")->get();
@@ -37,8 +42,26 @@ class SearchController extends Controller
         ->whereHas('units', function ($queryBuilder) use ($query) {
             $queryBuilder->where('unit_name', 'LIKE', "%{$query}%");
         })->get();
+
+        $stockOutResults = StockOut::with('products','user')
+                    ->where('receiver', 'LIKE', "%{$query}%")
+                    ->orWhere('type', 'LIKE', "%{$query}%")
+                    ->orWhere('note', 'LIKE', "%{$query}%")
+            ->whereHas('products.product', function ($queryBuilder) use ($query) {
+                $queryBuilder->where(function ($q) use ($query) {
+                    $q->where('PID', 'LIKE', "%{$query}%");
+                });
+            })
+            ->orWhereHas('user', function ($queryBuilder) use ($query) {
+                $queryBuilder->where('name', 'LIKE', "%{$query}%");
+            })
+            ->get();
         
-        $setFrequencyResults = SetFrequency::where('name', 'LIKE', "%{$query}%")->with('detail.product')->get();
+        $setFrequencyResults = SetFrequency::where('name', 'LIKE', "%{$query}%")
+            ->orWhere('purpose', 'LIKE', "%{$query}%")
+            ->orWhere('trimester', 'LIKE', "%{$query}%")
+            ->orWhere('unit', 'LIKE', "%{$query}%")
+        ->with('detail.product')->get();
         $productSetFrequency = SetFrequency::with('detail.product')
             ->whereHas('detail.product', function ($queryBuilder) use ($query) {
                 $queryBuilder->where('PID', 'LIKE', "%{$query}%");
@@ -51,6 +74,7 @@ class SearchController extends Controller
             'product_models' => $productModelResults,
             'units' => $unitResults,
             'set_frequencies' => $setFrequencyResults,
+            'stock_outs' => $stockOutResults,
             'product_set_frequency' => $productSetFrequency,
             'product_by_model' => $productByModelResults,
         ]);

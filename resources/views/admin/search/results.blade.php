@@ -10,10 +10,18 @@
                         <div class="card">
                             <div class="card-header">
                                 <h4>Search Results</h4>
+                                @if(session('alert'))
+                                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                        {{ session('alert') }}
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                @endif
                             </div>
                             <div class="card-body">
 
-                                {{-- {{ $product_by_model }} --}}
+                                {{-- {{ $stock_outs }} --}}
 
                                 @if($brands->isNotEmpty())
                                     <div class="mt-4">
@@ -122,6 +130,52 @@
                                                             @endforeach
                                                         </tbody>
                                                     </table>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
+
+                                {{-- Result of Product Stock-Outs --}}
+                                @if($stock_outs->isNotEmpty())
+                                    <div class="mt-4">
+                                        <h5><strong>Product Stock-Outs</strong></h5>
+                                        <ul class="list-group">
+                                            @foreach($stock_outs as $stock_out)
+                                                <li class="list-group-item">
+                                                    <div class="d-flex justify-content-between align-items-center">
+                                                        <div>
+                                                            <strong>អ្នកប្រគល់:</strong> {{ $stock_out->user->name }}<br>
+                                                            <strong>អ្នកទទួល:</strong> {{ $stock_out->receiver }}<br>
+                                                            <strong>គោលបំណង:</strong> {{ $stock_out->type }}<br>
+                                                            <strong>Status:</strong> 
+                                                            <span class="badge badge-{{ $stock_out->status == 'pending' ? 'warning' : 'success' }}">
+                                                                {{ ucfirst($stock_out->status) }}
+                                                            </span><br>
+                                                            <strong>Created At:</strong> {{ $stock_out->created_at->timezone('Asia/Phnom_Penh')->format('Y-m-d H:i:s') }}<br>
+                                                            @if($stock_out->note)
+                                                                <strong>Note:</strong> {{ $stock_out->note }}<br>
+                                                            @endif
+                                                        </div>
+                                                        @if($stock_out->image)
+                                                            <img src="{{ asset($stock_out->image) }}" alt="Stock Out Image" style="max-width: 120px; max-height: 120px;">
+                                                        @endif
+                                                    </div>
+                                                    @if($stock_out->products && count($stock_out->products))
+                                                        <div class="mt-2">
+                                                            <strong>Products:</strong>
+                                                            <ul>
+                                                                @foreach($stock_out->products as $product)
+                                                                    <li>
+                                                                        <strong>Product ID:</strong> {{ $product->product->PID }}<br>
+                                                                        @if($product->note)
+                                                                            <br><strong>Note:</strong> {{ $product->note }}
+                                                                        @endif
+                                                                    </li>
+                                                                @endforeach
+                                                            </ul>
+                                                        </div>
+                                                    @endif
                                                 </li>
                                             @endforeach
                                         </ul>
