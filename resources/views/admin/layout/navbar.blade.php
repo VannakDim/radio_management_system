@@ -29,7 +29,7 @@
                         <i class="fa-solid fa-earth-americas" style="font-size: 1.5rem; color:rgba(138, 144, 157, 0.7);"></i>
                     </a>
                 </li> --}}
-                <li class="dropdown notifications-menu">
+                {{-- <li class="dropdown notifications-menu">
                     <button class="dropdown-toggle" data-toggle="dropdown">
                         <i class="mdi mdi-bell-outline"></i>
                     </button>
@@ -74,52 +74,54 @@
                             <a class="text-center" href="#"> View All </a>
                         </li>
                     </ul>
-                </li>
+                </li> --}}
                 <!-- User Account -->
                 
                 <li class="dropdown">
-
-                    <button class="flex items-center px-4 py-3 dropdown-toggle nav-link" data-toggle="dropdown">
-                        @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
+                    @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
+                        <a href="#" class="flex items-center px-4 py-3 nav-link" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true" style="border: none; background: transparent;">
                             <div class="shrink-0 me-3">
                                 <img class="size-10 rounded-full object-cover"
                                     src="{{ asset(Auth::user()->profile_photo_url) }}"
                                     alt="{{ Auth::user()->name }}" />
                             </div>
-                        @endif
+                        </a>
+                    @endif
 
-                    </button>
-
-                    <ul class="dropdown-menu dropdown-menu-right" style="width: 250px">
+                    <ul class="dropdown-menu dropdown-menu-right dropdown-menu-end mt-2"
+                        style="width: 250px; right: 0; left: auto; min-width: 220px;">
                         <!-- User image -->
-                        <li class="dropdown-header">
-                            <img src="{{ Auth::user()->profile_photo_url }}" class="img-circle"
-                                alt="User Image" />
-                            <div class="d-inline-block">
-                                {{ Auth::user()->name }} <small
-                                    class="pt-1">{{ Auth::user()->email }}</small>
+                        <li class="dropdown-header text-center d-flex flex-column align-items-center">
+                            <img src="{{ Auth::user()->profile_photo_url }}" class="img-circle mb-2"
+                                alt="User Image" style="width:60px; height:60px; object-fit:cover; display:block; margin:auto;" />
+                            <div class="d-inline-block text-center">
+                                {{ Auth::user()->name }} <br>
+                                <small class="pt-1">{{ Auth::user()->email }}</small>
                             </div>
                         </li>
-
+                        <li><hr class="dropdown-divider"></li>
                         <li>
-                            <a href="{{ route('profile.show') }}"
-                                :active="request() - > routeIs('profile.show')">
+                            <a href="{{ route('profile.show') }}" class="dropdown-item">
                                 <i class="mdi mdi-account"></i> My Profile
                             </a>
                         </li>
-                        <li>
-                            <a href="email-inbox.html">
+                        {{-- <li>
+                            <a href="email-inbox.html" class="dropdown-item">
                                 <i class="mdi mdi-email"></i> Message
                             </a>
                         </li>
                         <li>
-                            <a href="#"> <i class="mdi mdi-diamond-stone"></i> Projects </a>
+                            <a href="#" class="dropdown-item">
+                                <i class="mdi mdi-diamond-stone"></i> Projects
+                            </a>
                         </li>
                         <li>
-                            <a href="#"> <i class="mdi mdi-settings"></i> Account Setting </a>
-                        </li>
-
-                        <li class="dropdown-footer">
+                            <a href="#" class="dropdown-item">
+                                <i class="mdi mdi-settings"></i> Account Setting
+                            </a>
+                        </li> --}}
+                        <li><hr class="dropdown-divider"></li>
+                        <li class="dropdown-footer text-center">
                             <form method="POST" action="{{ route('logout') }}" x-data>
                                 @csrf
                                 <x-dropdown-link href="{{ route('logout') }}"
@@ -130,6 +132,25 @@
                         </li>
                     </ul>
                 </li>
+                <style>
+                /* Ensure dropdown aligns right on all screens */
+                @media (max-width: 991.98px) {
+                    .navbar .dropdown-menu.dropdown-menu-end,
+                    .navbar .dropdown-menu.dropdown-menu-right {
+                        right: 0 !important;
+                        left: auto !important;
+                        min-width: 220px;
+                    }
+                }
+                @media (max-width: 575.98px) {
+                    .navbar .dropdown-menu.dropdown-menu-end,
+                    .navbar .dropdown-menu.dropdown-menu-right {
+                        right: 10px !important;
+                        left: auto !important;
+                        min-width: 200px;
+                    }
+                }
+                </style>
 
                 {{-- </li> --}}
             </ul>
