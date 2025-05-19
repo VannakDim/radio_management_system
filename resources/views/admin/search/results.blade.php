@@ -199,7 +199,7 @@
                                                             </button>
                                                         </div>
                                                         <div class="d-none d-md-block" style="position: absolute; top: 10px; right: 10px;">
-                                                            <img src="{{ asset('storage/' . $set_frequency->image) }}" alt="Set Frequency Image"
+                                                            <img src="{{ asset('storage/' . $set_frequency->image) }}" alt="Record Image"
                                                                  style="height: 100%; max-height: 200px; width: auto; object-fit: contain; margin-left: 15px; border: 1px solid #ccc; border-radius: 5px;">
                                                         </div>
                                                         <div id="setFrequencyImageModal" class="modal" tabindex="-1" role="dialog" style="display:none;">
