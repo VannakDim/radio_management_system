@@ -206,7 +206,7 @@
                                                             <div class="modal-dialog modal-dialog-centered" role="document">
                                                                 <div class="modal-content">
                                                                     <div class="modal-header">
-                                                                        <h5 class="modal-title">Set Frequency Image</h5>
+                                                                        <h5 class="modal-title">Record Image</h5>
                                                                         <button type="button" class="close" onclick="closeSetFrequencyImage()" aria-label="Close">
                                                                             <span aria-hidden="true">&times;</span>
                                                                         </button>
