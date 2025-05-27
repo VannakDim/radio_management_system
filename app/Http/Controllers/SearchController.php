@@ -29,6 +29,8 @@ class SearchController extends Controller
         // Example: $results = Model::where('name', 'LIKE', "%{$query}%")->orWhere('code', 'LIKE', "%{$query}%")->get();
         // $results = collect();
 
+
+        // All Set Frequency and Product Models
         $productResults = Product::where('PID', '=', "{$query}")->with('model')->get();
         $productModelResults = ProductModel::where('name', 'LIKE', "%{$query}%")->get();
         $productByModelResults = Product::whereHas('model', function ($q) use ($query) {
@@ -43,14 +45,12 @@ class SearchController extends Controller
             $queryBuilder->where('unit_name', 'LIKE', "%{$query}%");
         })->get();
 
-        $stockOutResults = StockOut::with('products','user')
+        $stockOutResults = StockOut::with('products.product','user')
                     ->where('receiver', 'LIKE', "%{$query}%")
                     ->orWhere('type', 'LIKE', "%{$query}%")
                     ->orWhere('note', 'LIKE', "%{$query}%")
-            ->whereHas('products.product', function ($queryBuilder) use ($query) {
-                $queryBuilder->where(function ($q) use ($query) {
-                    $q->where('PID', 'LIKE', "%{$query}%");
-                });
+            ->orWhereHas('products.product', function ($queryBuilder) use ($query) {
+                $queryBuilder->where('PID', 'LIKE', "%{$query}%");
             })
             ->orWhereHas('user', function ($queryBuilder) use ($query) {
                 $queryBuilder->where('name', 'LIKE', "%{$query}%");
