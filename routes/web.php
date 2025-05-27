@@ -30,23 +30,24 @@ Route::middleware([
         
         Route::put('/product/stock-in/update/{id}', [StockInController::class, 'update'])->name('stockin.update');
 
-        Route::put('/product/stock-out/update/{id}', [StockOutController::class, 'update'])->name('stockout.update');
         Route::get('/product/softDel/{id}', [ProductModelController::class, 'softDelete']);
         Route::put('/product/borrow/update/{id}', [BorrowController::class, 'update'])->name('borrow.update');
         
         //Search feature
         Route::get('/admin/search/index', [SearchController::class, 'index'])->name('search.index');
         Route::get('/admin/search', [SearchController::class, 'search'])->name('admin.search');
-
+        
         // Update record of set frequency
         Route::get('/product/set-frequency/print/{id}', [ExportToPdf::class, 'printSetFrequency'])->name('setfrequency.print');
         Route::get('/product/set-frequency-detail/print', [ExportToPdf::class, 'printSetFrequencyReport'])->name('setfrequency.print.report');
         Route::post('/product/set-frequency/store', [SetFrequencyController::class, 'store'])->name('frequency.store');
         // Image Upload
         Route::post('/product/set-image/upload/{id}', [SetFrequencyController::class, 'uploadImage'])->name('setfrequency.upload');
-
-
+        
+        
     });
+    
+    Route::put('/product/stock-out/update/{id}', [StockOutController::class, 'update'])->name('stockout.update');
     
     // User authentication routes
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
