@@ -149,17 +149,45 @@
                                                             <strong>អ្នកប្រគល់:</strong> {{ $stock_out->user->name }}<br>
                                                             <strong>អ្នកទទួល:</strong> {{ $stock_out->receiver }}<br>
                                                             <strong>គោលបំណង:</strong> {{ $stock_out->type }}<br>
-                                                            <strong>Status:</strong> 
-                                                            <span class="badge badge-{{ $stock_out->status == 'pending' ? 'warning' : 'success' }}">
-                                                                {{ ucfirst($stock_out->status) }}
-                                                            </span><br>
                                                             <strong>Created At:</strong> {{ $stock_out->created_at->timezone('Asia/Phnom_Penh')->format('Y-m-d H:i:s') }}<br>
                                                             @if($stock_out->note)
                                                                 <strong>Note:</strong> {{ $stock_out->note }}<br>
                                                             @endif
                                                         </div>
                                                         @if($stock_out->image)
-                                                            <img src="{{ asset($stock_out->image) }}" alt="Stock Out Image" style="max-width: 120px; max-height: 120px;">
+                                                            <img src="{{ asset($stock_out->image) }}" alt="Stock Out Image" style="max-width: 120px; max-height: 120px; cursor:pointer;"
+                                                                 onclick="showStockOutImageModal('{{ asset($stock_out->image) }}')">
+                                                            <div id="stockOutImageModal" class="modal" tabindex="-1" role="dialog" style="display:none; background: rgba(0,0,0,0.5); box-shadow: 0 0 30px 10px rgba(0,0,0,0.5);">
+                                                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                                                    <div class="modal-content" style="box-shadow: 0 8px 40px 0 rgba(0,0,0,0.5);">
+                                                                        <div class="modal-header">
+                                                                            <h5 class="modal-title">Stock Out Image</h5>
+                                                                            <button type="button" class="close" onclick="closeStockOutImageModal()" aria-label="Close">
+                                                                                <span aria-hidden="true">&times;</span>
+                                                                            </button>
+                                                                        </div>
+                                                                        <div class="modal-body text-center">
+                                                                            <img id="stockOutImageModalImg" src="" alt="Stock Out Image" style="max-width:100%; max-height:600px;">
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <script>
+                                                                function showStockOutImageModal(src) {
+                                                                    document.getElementById('stockOutImageModalImg').src = src;
+                                                                    document.getElementById('stockOutImageModal').style.display = 'block';
+                                                                }
+                                                                function closeStockOutImageModal() {
+                                                                    document.getElementById('stockOutImageModal').style.display = 'none';
+                                                                }
+                                                                // Optional: close modal when clicking outside
+                                                                document.addEventListener('click', function(event) {
+                                                                    var modal = document.getElementById('stockOutImageModal');
+                                                                    if (modal && event.target === modal) {
+                                                                        closeStockOutImageModal();
+                                                                    }
+                                                                });
+                                                            </script>
                                                         @endif
                                                     </div>
                                                     @if($stock_out->products && count($stock_out->products))
@@ -168,7 +196,11 @@
                                                             <ul>
                                                                 @foreach($stock_out->products as $product)
                                                                     <li>
-                                                                        <strong>Product ID:</strong> {{ $product->product->PID }}<br>
+                                                                        @if($product->product->PID == $query)
+                                                                            <strong>PID:</strong> <span class="badge badge-danger">{{ $product->product->PID }}</span><br>
+                                                                        @else
+                                                                            <strong>PID:</strong> {{ $product->product->PID }}<br>
+                                                                        @endif
                                                                         @if($product->note)
                                                                             <br><strong>Note:</strong> {{ $product->note }}
                                                                         @endif
