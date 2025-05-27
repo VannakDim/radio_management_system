@@ -197,7 +197,7 @@
                                                                 @foreach($stock_out->products as $product)
                                                                     <li>
                                                                         @if($product->product->PID == $query)
-                                                                            <strong>PID:</strong> <span class="badge badge-danger">{{ $product->product->PID }}</span><br>
+                                                                            <strong>PID:</strong> <span style="text-decoration: underline; text-decoration-color: red; text-decoration-thickness: 2px;">{{ $product->product->PID }}</span><br>
                                                                         @else
                                                                             <strong>PID:</strong> {{ $product->product->PID }}<br>
                                                                         @endif
