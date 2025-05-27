@@ -39,11 +39,22 @@
                                         <td>{{ $stock->type }}</td>
                                         <td>{{ $stock->created_at->format('Y-m-d') }}</td>
                                         <td>
-                                            @if ($stock->image)
-                                                <a href="#"
-                                                    onclick="openImageModal('{{ asset($stock->image) }}'); return false;">
-                                                    <span class="badge badge-success">Image</span>
-                                                </a>
+                                            @if (!empty($stock->image))
+                                                <button type="button" class="btn btn-info mt-1"
+                                                    onclick="window.open('{{ asset( $stock->image) }}', 'ImagePopup', 'width=' + screen.width + ',height=' + screen.height + ',top=0,left=0')">
+                                                    <i class="fas fa-image"></i>
+                                                </button>
+                                            @else
+                                                <form action="{{ route('stockout.upload', $stock->id) }}"
+                                                    method="POST" enctype="multipart/form-data" style="display:inline;">
+                                                    @csrf
+                                                    <input type="file" name="file" id="fileInput{{ $stock->id }}"
+                                                        style="display:none;" onchange="this.form.submit()">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        onclick="document.getElementById('fileInput{{ $stock->id }}').click();">
+                                                        <i class="fas fa-upload"></i>
+                                                    </button>
+                                                </form>
                                             @endif
                                         </td>
                                         <td class="text-right">
