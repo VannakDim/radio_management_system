@@ -9,6 +9,7 @@ use App\Models\StockOutDetail;
 use App\Models\StockOutProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
@@ -172,6 +173,32 @@ class StockOutController extends Controller
         }
 
         return response()->json(['message' => 'Successful!', 'id' => $stock_out->id]);
+    }
+
+    public function uploadImage(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        if ($request->hasFile('file')) {
+            $image = $request->file('file');
+            $name_gen = 'stock_out_'. hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
+            $image->storeAs('image/product/stock_out/', $name_gen, 'public');
+            $imagePath = 'storage/image/product/stock_out/' . $name_gen;
+
+            $setFrequency = StockOut::findOrFail($id);
+            $setFrequency->image = $imagePath;
+            $setFrequency->save();
+
+            return back()->with('success', 'Image uploaded and record updated successfully');
+        }
+
+        return back()->with('error', 'No image uploaded');
     }
 
     public function download($id)

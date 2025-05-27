@@ -86,6 +86,8 @@ Route::middleware([
     Route::get('/product/stock-out', [StockOutController::class, 'create'])->name('stockout.create');
     Route::post('/product/stock-out/store', [StockOutController::class, 'store'])->name('stockout.store');
     Route::get('/product/stock-out/edit/{id}', [StockOutController::class, 'edit'])->name('stockout.edit');
+    // Image Upload
+    Route::post('/stockout/set-image/upload/{id}', [StockOutController::class, 'uploadImage'])->name('stockout.upload');
 
     // Borrowing Product
     Route::get('/product/borrow', [BorrowController::class, 'create'])->name('borrow.create');
