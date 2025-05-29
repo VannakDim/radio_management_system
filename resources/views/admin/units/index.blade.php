@@ -136,16 +136,18 @@
                                                     const pids = JSON.parse(pidsJson);
                                                     const pidsList = document.getElementById('pidsList');
                                                     pidsList.innerHTML = '';
+                                                    // Sort by model name
+                                                    pids.sort((a, b) => a.model.localeCompare(b.model));
                                                     pids.forEach((pid, index) => {
                                                         const row = document.createElement('tr');
                                                         const idCell = document.createElement('td');
                                                         const pidCell = document.createElement('td');
                                                         const modelCell = document.createElement('td');
-                                                
+
                                                         idCell.textContent = String(index + 1).padStart(2, '0');
                                                         pidCell.textContent = pid.PID;
                                                         modelCell.textContent = pid.model;
-                                                
+
                                                         row.appendChild(idCell);
                                                         row.appendChild(pidCell);
                                                         row.appendChild(modelCell);
