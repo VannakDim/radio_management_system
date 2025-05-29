@@ -6,6 +6,53 @@
         <div class="py-12">
             <div class="mx-auto">
                 <div class="row">
+                    <div class="col-12 mb-4">
+                        <div id="stockCarousel" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner">
+                                @foreach ($data as $index => $stock)
+                                    @php
+                                        $hasData = 
+                                            (!is_null($stock['stock_in']) && $stock['stock_in'] > 0) ||
+                                            (!is_null($stock['stock_out']) && $stock['stock_out'] > 0) ||
+                                            (!is_null($stock['available_stock']) && $stock['available_stock'] > 0);
+                                    @endphp
+                                    @if ($hasData)
+                                        <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
+                                            <div class="card text-center shadow-sm">
+                                                <div class="card-body">
+                                                    <div class="card-img-contain mb-3" style="background-image: url({{ asset($stock['image']) }}); height: 120px; background-size: contain; background-repeat: no-repeat; background-position: center;"></div>
+                                                    <h5 class="card-title mb-2">{{ $stock['model_name'] }}</h5>
+                                                    <h6 class="card-subtitle mb-2 text-muted">{{ $stock['brand_name'] }}</h6>
+                                                    <div class="mb-2">
+                                                        @if (!is_null($stock['stock_in']) && $stock['stock_in'] > 0)
+                                                            <span class="badge badge-primary">IN: {{ $stock['stock_in'] }}</span>
+                                                        @endif
+                                                        @if (!is_null($stock['stock_out']) && $stock['stock_out'] > 0)
+                                                            <span class="badge badge-danger">OUT: {{ $stock['stock_out'] }}</span>
+                                                        @endif
+                                                        @if (!is_null($stock['available_stock']) && $stock['available_stock'] > 0)
+                                                            <span class="badge badge-success">FREE: {{ $stock['available_stock'] }}</span>
+                                                        @endif
+                                                    </div>
+                                                    @if (!empty($stock['borrow']))
+                                                        <span class="badge badge-warning">Borrowed: {{ $stock['borrow'] }}</span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                @endforeach
+                            </div>
+                            <a class="carousel-control-prev" href="#stockCarousel" role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#stockCarousel" role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+                    </div>
                     <div class="col-12">
                         <!--  Stock Update Table -->
                         <x-card-table title="STOCK OVERVIEW" badge="success">
