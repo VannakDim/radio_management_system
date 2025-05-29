@@ -25,22 +25,27 @@
                             </x-slot>
                             <x-slot name="body">
                                 @foreach ($data as $stock)
-                                    <tr>
-                                        <td>{{ str_pad($stock['id'], 2, '0', STR_PAD_LEFT) }}</td>
-                                        <td><a class="text-dark mr-2" href="">{{ $stock['model_name'] }}</a>
-                                        </td>
-                                        <td>{{ $stock['brand_name'] }}</td>
-                                        <td>
-                                            <span style="font-size: 0.98rem !important;" class="badge badge-primary">{{ str_pad($stock['stock_in'], 3, '0', STR_PAD_LEFT) }}</span>
-                                            <span style="font-size: 0.98rem !important;" class="badge badge-danger">{{ str_pad($stock['stock_out'], 3, '0', STR_PAD_LEFT) }}</span>
-                                            <span style="font-size: 0.98rem !important;" class="badge badge-success">{{ str_pad($stock['available_stock'], 3, '#', STR_PAD_LEFT) }}</span>
-                                        </td>
-                                        <td class="d-none d-md-table-cell">
-                                            @if ($stock['borrow'] > 0)
-                                                <span style="font-size: 0.98rem !important;" class="badge badge-warning">{{ $stock['borrow'] }}</span>
-                                            @endif
-                                        </td>
-                                    </tr>
+                                    @if (
+                                        !is_null($stock['stock_in']) && $stock['stock_in'] > 0 ||
+                                        !is_null($stock['stock_out']) && $stock['stock_out'] > 0 ||
+                                        !is_null($stock['available_stock']) && $stock['available_stock'] > 0
+                                    )
+                                        <tr>
+                                            <td>{{ str_pad($stock['id'], 2, '0', STR_PAD_LEFT) }}</td>
+                                            <td><a class="text-dark mr-2" href="">{{ $stock['model_name'] }}</a></td>
+                                            <td>{{ $stock['brand_name'] }}</td>
+                                            <td>
+                                                <span style="font-size: 0.98rem !important;" class="badge badge-primary">{{ str_pad($stock['stock_in'], 3, '0', STR_PAD_LEFT) }}</span>
+                                                <span style="font-size: 0.98rem !important;" class="badge badge-danger">{{ str_pad($stock['stock_out'], 3, '0', STR_PAD_LEFT) }}</span>
+                                                <span style="font-size: 0.98rem !important;" class="badge badge-success">{{ str_pad($stock['available_stock'], 3, '#', STR_PAD_LEFT) }}</span>
+                                            </td>
+                                            <td class="d-none d-md-table-cell">
+                                                @if ($stock['borrow'] > 0)
+                                                    <span style="font-size: 0.98rem !important;" class="badge badge-warning">{{ $stock['borrow'] }}</span>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endif
                                 @endforeach
                             </x-slot>
                         </x-card-table>
@@ -48,11 +53,11 @@
                         <!-- Stock Out Report -->
                         <div class="card card-table-border-none" id="recent-orders">
                             <div class="card-header justify-content-between">
-                                <h2 class="badge badge-warning text-white">STOCK-OUT REPORT</h2>
-                                <div class="date-range-report" id="filterStockOut"><span></span></div>
+                                <h2  title="ជ្រើសរើសកាលបរិច្ឆេទដើម្បីមើលរបាយការណ៍" class="badge badge-warning text-white">STOCK-OUT REPORT</h2>
+                                <div class="date-range-report" id="filterStockOut" title="ជ្រើសរើសកាលបរិច្ឆេទដើម្បីមើលរបាយការណ៍"><span></span></div>
 
                             </div>
-                            <div class="card-body pt-0 pb-5">
+                            <div class="card-body pt-0 pb-5"  title="ជ្រើសរើសកាលបរិច្ឆេទដើម្បីមើលរបាយការណ៍">
                                 <table class="table card-table table-responsive table-responsive-large table-striped"
                                     style="width:100%">
                                     <thead>
