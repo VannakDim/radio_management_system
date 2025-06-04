@@ -187,7 +187,7 @@
                                         <span class="ladda-label">Update!</span>
                                         <span class="ladda-spinner"></span>
                                     </button>
-                                    <a href="{{ route('stockout.index') }}" class="btn btn-secondary float-right"
+                                    <a href="{{ url()->previous() }}" class="btn btn-secondary float-right"
                                         style="margin-right: 6px">Back</a>
 
                                 </form>
