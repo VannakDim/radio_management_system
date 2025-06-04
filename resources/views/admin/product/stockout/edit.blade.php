@@ -348,8 +348,7 @@
                     // Hide loading indicator
                     $('#loading').hide();
                     alert(response.message);
-                    window.location.href =
-                        '{{ route('stockout.index') }}'; // Redirect to the "index" route
+                    window.location.href = document.referrer || '{{ route('stockout.index') }}'; // Redirect back or to index
                 },
                 error: function(xhr) {
                     // Hide loading indicator
