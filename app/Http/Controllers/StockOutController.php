@@ -68,6 +68,9 @@ class StockOutController extends Controller
         $stock_out->receiver = $request->receiver;
         $stock_out->type = $request->type;
         $stock_out->note = $request->note;
+        if ($request->filled('created_at')) {
+            $stock_out->created_at = $request->input('created_at');
+        }
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $name_gen = 'stock_out_'. hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();

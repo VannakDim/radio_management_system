@@ -43,6 +43,22 @@
                                                     value="{{ $stockout->type }}">
                                             </div>
 
+                                            <div class="form-group">
+                                                <label for="created_at">Created At:</label>
+                                                <input type="text" name="created_at" class="form-control" id="created_at"
+                                                    value="{{ $stockout->created_at ? $stockout->created_at->format('Y-m-d') : '' }}"
+                                                    placeholder="YYYY-MM-DD" autocomplete="off">
+                                            </div>
+
+                                            @push('scripts')
+                                            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.8/jquery.inputmask.min.js"></script>
+                                            <script>
+                                                $(function() {
+                                                    $('#created_at').inputmask('9999-99-99', { placeholder: 'YYYY-MM-DD' });
+                                                });
+                                            </script>
+                                            @endpush
+
                                             <label for="model">Product detail:</label>
                                             <div class="row">
                                                 <div class="col-md-7">
