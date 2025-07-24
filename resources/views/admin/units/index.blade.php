@@ -171,6 +171,13 @@
                                         </td>
                                     </tr>
                                 @endforeach
+                                <tr style="background-color: #e9ecef; font-weight: bold;">
+                                    <td colspan="2" class="text-right">Total Radios</td>
+                                    <td>
+                                        {{ $radios->sum(fn($radio) => count($radio->detail)) }}
+                                    </td>
+                                    <td></td>
+                                </tr>
                             </x-slot>
                         </x-card-table>
                     </div>
