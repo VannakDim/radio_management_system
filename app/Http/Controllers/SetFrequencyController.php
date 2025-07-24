@@ -26,7 +26,11 @@ class SetFrequencyController extends Controller
     public function index(Request $request)
     {
         $lastTrimester = SetFrequency::select('trimester')->distinct()->orderBy('trimester', 'desc')->first()->trimester ?? null;
-        $set_frequency = SetFrequency::with('user')->orderBy('id', 'desc')->paginate(5);
+        // $trimester = $request->trimester ?? $lastTrimester;
+        $set_frequency = SetFrequency::with('user')
+            ->where('trimester', $lastTrimester)
+            ->orderBy('id', 'desc')
+            ->paginate(5);
         $radio = ProductModel::with('brand')->get()->map(function ($model) use ($lastTrimester) {
             $model->product_count = Product::where('model_id', $model->id)
             ->whereHas('setFrequency.setFrequency', function ($query) use ($lastTrimester) {
