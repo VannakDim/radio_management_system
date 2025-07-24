@@ -13,9 +13,13 @@ class UnitController extends Controller
 {
     public function index()
     {
+        // Get the last trimester from SetFrequency
+        $lastTrimester = SetFrequency::select('trimester')->distinct()->orderBy('trimester', 'desc')->first()->trimester ?? null;
         // Fetch all units from the database
         $units = Unit::orderBy('sort_index')->get();
-        $radios = SetFrequency::with('detail.product','units')->get();
+        $radios = SetFrequency::with('detail.product', 'units')
+            ->where('trimester', $lastTrimester)
+            ->get();
         
 
         return view('admin.units.index', compact('units', 'radios'));
