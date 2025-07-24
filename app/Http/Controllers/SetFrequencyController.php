@@ -49,13 +49,14 @@ class SetFrequencyController extends Controller
         $unit = $unit->sortBy('unit_id')->values();
 
         $data = SetFrequency::with('units:id,unit_name', 'detail.product.model:id,name')
+            ->where('trimester', $lastTrimester)
             ->get()
             ->map(function ($item) {
-                $item->detail = $item->detail->map(fn($detail) => [
-                    'model' => $detail->product->model->name,
-                    'PID' => $detail->product->PID,
-                ]);
-                return $item;
+            $item->detail = $item->detail->map(fn($detail) => [
+                'model' => $detail->product->model->name,
+                'PID' => $detail->product->PID,
+            ]);
+            return $item;
             })
             ->sortBy('unit_id')
             ->values();
