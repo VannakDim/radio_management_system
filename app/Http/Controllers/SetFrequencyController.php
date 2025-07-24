@@ -62,11 +62,11 @@ class SetFrequencyController extends Controller
             ->values();
         
 
-        $details = $unit->map(function ($item) {
-            $item->products = SetFrequencyDetail::whereHas('setFrequency', function ($query) use ($item) {
+        $details = $unit->map(function ($item) use ($lastTrimester) {
+            $item->products = SetFrequencyDetail::whereHas('setFrequency', function ($query) use ($item, $lastTrimester) {
             $query->whereHas('units', function ($unitQuery) use ($item) {
                 $unitQuery->where('unit', $item->unit);
-            });
+            })->where('trimester', $lastTrimester);
             })->with('product:id,PID,model_id', 'product.model:id,name')->get()
             ->groupBy('product.model.name')
             ->map(function ($group, $modelName) {
