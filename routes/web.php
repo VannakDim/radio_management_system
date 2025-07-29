@@ -38,9 +38,8 @@ Route::middleware([
         Route::get('/admin/search', [SearchController::class, 'search'])->name('admin.search');
         
         // Update record of set frequency
-        Route::get('/product/set-frequency/print/{id}', [ExportToPdf::class, 'printSetFrequency'])->name('setfrequency.print');
         Route::get('/product/set-frequency-detail/print', [ExportToPdf::class, 'printSetFrequencyReport'])->name('setfrequency.print.report');
-        Route::post('/product/set-frequency/store', [SetFrequencyController::class, 'store'])->name('frequency.store');
+        
         // Image Upload
         Route::post('/product/set-image/upload/{id}', [SetFrequencyController::class, 'uploadImage'])->name('setfrequency.upload');
         
@@ -100,6 +99,8 @@ Route::middleware([
     //Set Frequency
     Route::get('/product/set-frequency', [SetFrequencyController::class, 'index'])->name('frequency.index');
     Route::get('/product/set-frequency/create', [SetFrequencyController::class, 'create'])->name('frequency.create');
+    Route::get('/product/set-frequency/print/{id}', [ExportToPdf::class, 'printSetFrequency'])->name('setfrequency.print');
+    Route::post('/product/set-frequency/store', [SetFrequencyController::class, 'store'])->name('frequency.store');
     Route::post('/product/set-frequency/change-trimester', [SetFrequencyController::class, 'changeTrimester'])->name('change.trimester');
     
 
