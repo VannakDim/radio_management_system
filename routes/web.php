@@ -4,6 +4,7 @@ use App\Http\Controllers\BorrowController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExportToPdf;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProductModelController;
 use App\Http\Controllers\SearchController;
@@ -14,8 +15,7 @@ use App\Http\Controllers\SetFrequencyController;
 use App\Http\Controllers\UnitController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\CheckRole;
-
-
+use App\Models\Owner;
 
 Route::get('/', [HomeController::class, 'home'])->name('home');
 
@@ -42,6 +42,14 @@ Route::middleware([
         
         // Image Upload
         Route::post('/product/set-image/upload/{id}', [SetFrequencyController::class, 'uploadImage'])->name('setfrequency.upload');
+
+        // Owner routes
+        Route::get('/owners', [OwnerController::class, 'index'])->name('owners.index');
+        Route::get('/owners/create', [OwnerController::class, 'create'])->name('owners.create');
+        Route::post('/owners/store', [OwnerController::class, 'store'])->name('owners.store');
+        // Route::get('/owners/edit/{id}', [SetFrequencyController::class, 'edit'])->name('owners.edit');
+        // Route::put('/owners/update/{id}', [SetFrequencyController::class, 'update'])->name('owners.update');
+        // Route::get('/owners/index', [SetFrequencyController::class, 'index'])->name('owners.index');
         
         
     });

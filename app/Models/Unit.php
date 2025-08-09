@@ -15,4 +15,9 @@ class Unit extends Model
         return $this->hasMany(SetFrequency::class);
     }
 
+    public function Owner()
+    {
+        return $this->hasMany(Owner::class, 'unit_id', 'id');
+    }
+
 }

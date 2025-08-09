@@ -45,7 +45,8 @@ class SetFrequencyController extends Controller
             ->get()
             ->map(function ($item) {
             $item->product_count = SetFrequencyDetail::whereHas('setFrequency', function ($query) use ($item) {
-                $query->where('unit', $item->unit);
+                $query->where('unit', $item->unit)
+                    ->where('trimester', $item->trimester ?? SetFrequency::select('trimester')->distinct()->orderBy('trimester', 'desc')->first()->trimester);
             })->count();
             return $item;
             });

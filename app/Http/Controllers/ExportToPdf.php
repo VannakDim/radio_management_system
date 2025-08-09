@@ -53,34 +53,14 @@ class ExportToPdf extends Controller
     }
 
     public function printSetFrequencyReport(){
-        // $unit = SetFrequency::select('unit')
-        //     ->distinct()
-        //     ->get()
-        //     ->map(function ($item) {
-        //     $item->product_count = SetFrequencyDetail::whereHas('setFrequency', function ($query) use ($item) {
-        //         $query->where('unit', $item->unit);
-        //     })->count();
-        //     return $item;
-        //     });
-
-        // $details = $unit->map(function ($item) {
-        //     $item->products = SetFrequencyDetail::whereHas('setFrequency', function ($query) use ($item) {
-        //     $query->where('unit', $item->unit);
-        //     })->with('product:id,PID,model_id')->get()->map(function ($detail) {
-        //     return [
-        //         'PID' => $detail->product->PID,
-        //         'model' => $detail->product->model->name,
-        //     ];
-        //     });
-        //     return $item;
-        // });
 
         $unit = SetFrequency::select('unit')
             ->distinct()
             ->get()
             ->map(function ($item) {
             $item->product_count = SetFrequencyDetail::whereHas('setFrequency', function ($query) use ($item) {
-                $query->where('unit', $item->unit);
+                $query->where('unit', $item->unit)
+                    ->where('trimester', $item->trimester ?? SetFrequency::select('trimester')->distinct()->orderBy('trimester', 'desc')->first()->trimester);
             })->count();
             return $item;
             });
@@ -89,7 +69,7 @@ class ExportToPdf extends Controller
             $item->products = SetFrequencyDetail::whereHas('setFrequency', function ($query) use ($item) {
             $query->whereHas('units', function ($unitQuery) use ($item) {
                 $unitQuery->where('unit', $item->unit);
-            });
+            })->where('trimester', $item->trimester ?? SetFrequency::select('trimester')->distinct()->orderBy('trimester', 'desc')->first()->trimester);
             })->with('product:id,PID,model_id', 'product.model:id,name')->get()
             ->groupBy('product.model.name')
             ->map(function ($group, $modelName) {

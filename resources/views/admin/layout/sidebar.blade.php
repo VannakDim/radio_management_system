@@ -38,6 +38,7 @@
                     $url = Request::segment(1);
                     $unit = ['unit'];
                     $product = ['product', 'model', 'category'];
+                    $owners = ['owners'];
                 @endphp
                 
 
@@ -112,6 +113,33 @@
                                     <span class="nav-text">បញ្ចូល/ប្តូប្រេកង់</span>
                                 </a>
                             </li>
+                        </div>
+                    </ul>
+                </li>
+
+                <li class="kh-battambang has-sub @if (in_array($url, $owners)) expand active @endif">
+                    <a class="sidenav-item-link" href="javascript:void(0)" data-toggle="collapse" data-target="#owners"
+                        aria-expanded="false" aria-controls="owners">
+                        <i class="fa-solid fa-user"></i>
+                        <span class="nav-text">ម្ចាស់កម្មសិទ្ធ</span> <b class="caret"></b>
+                    </a>
+                    <ul class="collapse @if (in_array($url, $owners)) show @endif" id="owners"
+                        data-parent="#sidebar-menu">
+                        <div class="sub-menu">
+
+                            <li class="{{ request()->is('owners') ? 'active' : '' }}">
+                                <a class="sidenav-item-link" href="{{ route('owners.index') }}">
+                                    <i class="fa-solid fa-caret-right {{ request()->is('owners') ? 'fa-beat' : '' }}"></i>
+                                    <span class="nav-text">បញ្ជីម្ចាស់កម្មសិទ្ធ</span>
+                                </a>
+                            </li>
+                            <li class="{{ request()->is('owners/create') ? 'active' : '' }}">
+                                <a class="sidenav-item-link" href="{{ route('owners.create') }}">
+                                    <i class="fa-solid fa-caret-right {{ request()->is('owners/create') ? 'fa-beat' : '' }}"></i>
+                                    <span class="nav-text">កំណត់ម្ចាស់កម្មសិទ្ធ</span>
+                                </a>
+                            </li>
+
                         </div>
                     </ul>
                 </li>

@@ -26,4 +26,11 @@ class Product extends Model
     {
         return $this->hasMany(SetFrequencyDetail::class);
     }
+
+    public function owners()
+    {
+        return $this->belongsToMany(Owner::class, 'owner_product', 'product_id', 'owner_id')
+            ->withPivot('serial_number')
+            ->withTimestamps();
+    }
 }

@@ -20,8 +20,6 @@ class UnitController extends Controller
         $radios = SetFrequency::with('detail.product', 'units')
             ->where('trimester', $lastTrimester)
             ->get();
-        
-
         return view('admin.units.index', compact('units', 'radios'));
     }
 
