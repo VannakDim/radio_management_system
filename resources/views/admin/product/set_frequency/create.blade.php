@@ -55,23 +55,33 @@
                                                 <label for="trimester">Trimester:</label>
                                                 <select name="trimester" class="form-control" id="trimester" required>
                                                     <option value="" disabled selected>Select Trimester</option>
-                                                    <option value="1" {{ old('trimester', $trimester ?? '') == 1 ? 'selected' : '' }}>ត្រីមាស ១</option>
-                                                    <option value="2" {{ old('trimester', $trimester ?? '') == 2 ? 'selected' : '' }}>ត្រីមាស ២</option>
-                                                    <option value="3" {{ old('trimester', $trimester ?? '') == 3 ? 'selected' : '' }}>ត្រីមាស ៣</option>
-                                                    <option value="4" {{ old('trimester', $trimester ?? '') == 4 ? 'selected' : '' }}>ត្រីមាស ៤</option>
+                                                    <option value="1"
+                                                        {{ old('trimester', $trimester ?? '') == 1 ? 'selected' : '' }}>
+                                                        ត្រីមាស ១</option>
+                                                    <option value="2"
+                                                        {{ old('trimester', $trimester ?? '') == 2 ? 'selected' : '' }}>
+                                                        ត្រីមាស ២</option>
+                                                    <option value="3"
+                                                        {{ old('trimester', $trimester ?? '') == 3 ? 'selected' : '' }}>
+                                                        ត្រីមាស ៣</option>
+                                                    <option value="4"
+                                                        {{ old('trimester', $trimester ?? '') == 4 ? 'selected' : '' }}>
+                                                        ត្រីមាស ៤</option>
                                                 </select>
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="setup_date">Date of Setup:</label>
-                                                <input type="date" name="setup_date" class="form-control" id="setup_date" value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" required>
+                                                <input type="date" name="setup_date" class="form-control" id="setup_date"
+                                                    value="{{ \Carbon\Carbon::now()->format('Y-m-d') }}" required>
                                             </div>
 
                                             <label for="model">Product detail:</label>
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group">
-                                                        <select name="models" id="model" class="form-control">
+                                                        <select name="models" id="model" class="form-control" disabled>
+                                                            <option value="" disabled selected>Auto select</option>
                                                             @foreach ($models as $model)
                                                                 @if ($model->accessory == 0)
                                                                     <option value="{{ $model->id }}">
@@ -87,11 +97,11 @@
                                                         <input type="text" class="form-control mr-2" id="serial_number"
                                                             placeholder="Serial number" list="availableProducts"
                                                             value="">
-                                                            <datalist id="availableProducts">
-                                                                @foreach ($availableProducts as $product)
-                                                                    <option value="{{ $product->PID }}"></option>
-                                                                @endforeach
-                                                            </datalist>
+                                                        <datalist id="availableProducts">
+                                                            @foreach ($availableProducts as $product)
+                                                                <option value="{{ $product->PID }}"></option>
+                                                            @endforeach
+                                                        </datalist>
                                                         <button type="button" class="btn btn-primary"
                                                             onclick="addItem(event)"><i class="fas fa-plus"></i></button>
                                                     </div>
@@ -147,10 +157,9 @@
 @endsection
 
 @section('script')
-    
     <script>
         $(document).ready(function() {
-            
+
             $('#name').focus();
         });
 
@@ -190,7 +199,8 @@
                     $('#loading').hide();
 
                     // alert(response.message);
-                    alert(response.message)
+                    alert(response.message);
+                    location.reload(); // Reload the page to see the new record
                 },
                 error: function(xhr, status, error) {
                     // Hide loading indicator
@@ -226,23 +236,44 @@
                 .text;
             const serial_number = document.getElementById('serial_number').value;
 
-            if (!modelId || !serial_number) {
-                alert('Please fill the product and serial number.');
+            // Check if modelId and serial_number are not empty
+            if (!serial_number) {
+                alert('Please fill the serial number.');
+                document.getElementById('serial_number').focus();
                 return;
             }
 
-            // Check if the serial number already exists
+            // Check if the serial number already exists in the items array
             if (items.some(item => item.serial_number === serial_number)) {
                 alert('This serial number already exists.');
                 return;
             }
 
-            // Add item to the array
-            items.push({
-                model_id: modelId,
-                model_text: modelText,
-                serial_number: serial_number,
-            });
+            // Find product by PID
+            const product = @json($availableProducts).find(p => p.PID === serial_number);
+
+            if (!product) {
+                if (!modelId) {
+                    document.getElementById('model').removeAttribute('disabled');
+                    alert('លេខវិទ្យុនេះមិនមានក្នុងប្រព័ន្ធទេ។ សូមជ្រើសរើសម៉ូដែលវិទ្យុដើម្បីបញ្ចូលក្នុងប្រព័ន្ធ!');
+                    document.getElementById('model').focus();
+                    return;
+                } else {
+                    items.push({
+                        model_id: modelId,
+                        model_text: modelText,
+                        serial_number: serial_number,
+                    });
+                }
+            } else {
+                // Add item to the array
+                items.push({
+                    product_id: product.id,
+                    model_id: modelId,
+                    model_text: product.model_name,
+                    serial_number: serial_number,
+                });
+            }
 
             // Update the table
             updateTable();
@@ -282,5 +313,4 @@
             updateTable();
         }
     </script>
-
 @endsection

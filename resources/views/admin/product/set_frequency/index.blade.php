@@ -116,6 +116,7 @@
                             </x-slot>
                         </x-card-table>
 
+                        {{-- {{ $details }} --}}
                         <x-card-table title="DETAILS" badge="info">
                             <x-slot name="header">
                                 <div class="float-right mb-2">
