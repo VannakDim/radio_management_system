@@ -47,7 +47,7 @@ Route::middleware([
     });
 
     // All other routes for 'user' role
-    Route::group(['middleware' => [CheckRole::class . ':user,admin']], function () {
+    Route::group(['middleware' => [CheckRole::class . ':admin,user']], function () {
         Route::put('/product/stock-out/update/{id}', [StockOutController::class, 'update'])->name('stockout.update');
         // User authentication routes
         Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
