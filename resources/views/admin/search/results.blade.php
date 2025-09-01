@@ -21,7 +21,37 @@
                             </div>
                             <div class="card-body">
 
-                                {{-- {{ $stock_outs }} --}}
+                                {{-- {{ $owners }} --}}
+                                @if($owners->isNotEmpty())
+                                    <div class="mt-4">
+                                        <h5><strong>Owners</strong></h5>
+                                        <ul class="list-group">
+                                            @foreach($owners as $owner)
+                                                <li class="list-group-item">
+                                                    <strong>Name:</strong> {{ $owner->name }}<br>
+                                                    @if($owner->phone)
+                                                        <strong>Phone:</strong> {{ $owner->phone }}<br>
+                                                    @endif
+                                                    @if($owner->address)
+                                                        <strong>Address:</strong> {{ $owner->address }}<br>
+                                                    @endif
+                                                    @if($owner->ownProducts && count($owner->ownProducts))
+                                                        <div class="mt-2">
+                                                            <strong>Owned Products:</strong>
+                                                            <ul>
+                                                                @foreach($owner->ownProducts as $ownProduct)
+                                                                    <li>
+                                                                        <strong>PID:</strong> {{ $ownProduct->product->PID }}<br>
+                                                                    </li>
+                                                                @endforeach
+                                                            </ul>
+                                                        </div>
+                                                    @endif
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
 
                                 @if($brands->isNotEmpty())
                                     <div class="mt-4">

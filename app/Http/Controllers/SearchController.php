@@ -9,6 +9,7 @@ use App\Models\ProductModel;
 use App\Models\Unit;
 use App\Models\SetFrequency;
 use App\Models\StockOut;
+use App\Models\Owner;
 
 class SearchController extends Controller
 {
@@ -29,6 +30,13 @@ class SearchController extends Controller
         // Example: $results = Model::where('name', 'LIKE', "%{$query}%")->orWhere('code', 'LIKE', "%{$query}%")->get();
         // $results = collect();
 
+        $ownerResults = Owner::with('ownProducts.product')
+            ->where('name', 'LIKE', "%{$query}%")
+            ->orWhere('phone', 'LIKE', "%{$query}%")
+            ->orWhereHas('ownProducts.product', function ($q) use ($query) {
+                $q->where('PID', 'LIKE', "%{$query}%");
+            })
+            ->get();
 
         // All Set Frequency and Product Models
         $productResults = Product::where('PID', '=', "{$query}")->with('model')->get();
@@ -68,6 +76,7 @@ class SearchController extends Controller
             })->first();
         
         return view('admin.search.results', [
+            'owners'=> $ownerResults,
             'query' => $query,
             'products' => $productResults,
             'brands' => $brandResults,
