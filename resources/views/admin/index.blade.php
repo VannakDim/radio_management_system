@@ -67,7 +67,7 @@
                                         <label class="badge badge-success">FREE</label>
                                     </th>
                                     <th style="width: 30%" class="d-none d-md-table-cell">Borrowed</th>
-                                    <th></th>
+                                    {{-- <th></th> --}}
                                 </tr>
                             </x-slot>
                             <x-slot name="body">
@@ -278,9 +278,7 @@
                             <td>${value.receiver}</td>
                             <td class="d-none d-md-table-cell">${value.user.name}</td>
                             <td>${moment(value.created_at).fromNow()}</td>
-                            <td class="d-none d-md-table-cell">
-                                ${value.note !== null && value.note !== '' ? value.note : ''}
-                            </td>
+                            <td class="d-none d-md-table-cell">${value.note !== null ? value.note : ''}</td>
                             <td class="text-right">
                               <div class="dropdown show d-inline-block widget-dropdown">
                                 <a class="dropdown-toggle icon-burger-mini" href="#" role="button" id="dropdown-recent-order5" data-toggle="dropdown" aria-haspopup="true"
