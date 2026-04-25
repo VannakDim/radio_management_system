@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Borrow;
+use App\Models\ProductModel;
 use Illuminate\Http\Request;
 use App\Models\StockOut;
 use App\Models\StockIn;
@@ -52,8 +53,24 @@ class ExportToPdf extends Controller
         return view('admin.formpdf.set_frequency', compact('set_frequency', 'set_frequency_details'));
     }
 
+    public function printSetFrequencyReportModel(){
+
+        $lastTrimester = SetFrequency::select('trimester')->distinct()->orderBy('trimester', 'desc')->first()->trimester ?? null;
+        $Label = SetFrequency::latest()->first()->purpose ?? 'ត្រីមាស...ឆ្នាំ....';
+        $radios = ProductModel::with('brand')->get()->map(function ($model) use ($lastTrimester) {
+            $model->product_count = SetFrequencyDetail::whereHas('product', function ($query) use ($model) {
+            $query->where('model_id', $model->id);
+            })->whereHas('setFrequency', function ($query) use ($lastTrimester) {
+            $query->where('trimester', $lastTrimester);
+            })->count();
+            return $model;
+        })->sortByDesc('product_count')->values();
+
+        return view('admin.formpdf.set_frequency_model_report', compact('radios','Label'));
+    }
     public function printSetFrequencyReport(){
 
+        $Label = SetFrequency::latest()->first()->purpose ?? 'ត្រីមាស...ឆ្នាំ....';
         $unit = SetFrequency::select('unit')
             ->distinct()
             ->get()
@@ -82,7 +99,7 @@ class ExportToPdf extends Controller
             return $item;
         });
 
-        return view('admin.formpdf.set_frequency_detail_report', compact('unit', 'details'));
+        return view('admin.formpdf.set_frequency_detail_report', compact('unit', 'details', 'Label'));
     }
 
 }

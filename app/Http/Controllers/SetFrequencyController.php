@@ -31,14 +31,16 @@ class SetFrequencyController extends Controller
             ->where('trimester', $lastTrimester)
             ->orderBy('id', 'desc')
             ->paginate(5);
-        $radio = ProductModel::with('brand')->get()->map(function ($model) use ($lastTrimester) {
-            $model->product_count = Product::where('model_id', $model->id)
-            ->whereHas('setFrequency.setFrequency', function ($query) use ($lastTrimester) {
-                $query->where('trimester', $request->trimester ?? $lastTrimester);
-            })
-            ->count();
+
+        $radios = ProductModel::with('brand')->get()->map(function ($model) use ($lastTrimester) {
+            $model->product_count = SetFrequencyDetail::whereHas('product', function ($query) use ($model) {
+            $query->where('model_id', $model->id);
+            })->whereHas('setFrequency', function ($query) use ($lastTrimester) {
+            $query->where('trimester', $lastTrimester);
+            })->count();
             return $model;
         })->sortByDesc('product_count')->values();
+
 
         $unit = SetFrequency::select('unit')
             ->distinct()
@@ -86,7 +88,7 @@ class SetFrequencyController extends Controller
 
         $trimesters = SetFrequency::select('trimester')->distinct()->get();
 
-        return view('admin.product.set_frequency.index', compact('set_frequency', 'trimesters', 'radio', 'unit', 'data', 'details'));
+        return view('admin.product.set_frequency.index', compact('set_frequency', 'trimesters', 'radios', 'unit', 'data', 'details'));
     }
 
     public function changeTrimester(Request $request)

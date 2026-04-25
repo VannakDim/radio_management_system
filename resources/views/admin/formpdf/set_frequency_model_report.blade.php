@@ -9,39 +9,38 @@
             <img src="{{asset('/image/leterhead/head.png')}}" alt="" style="width: 100%; height: auto;">
         </div>
         <h5 class="battambang text-center mb-3">តារាងរបាយការណ៍ផ្លាស់ប្តូប្រេកង់វិទ្យុទាក់ទង ប្រចាំ{{ $Label }}</h5>
-        {{-- <h6 class="battambang text-center mb-5">( អង្គភាព: {{ $set_frequency->unit }})</h6> --}}
         
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th class="text-center" width=20>ល.រ</th>
-                    <th style="width: 30%">អង្គភាព</th>
-                    <th style="width: 20%">ចំនួនវិទ្យុ</th>
-                    <th style="width: 40%">ចំនួនតាមម៉ូដែល</th>
-                    {{-- <th>ផ្សេងៗ</th> --}}
+                    <th>ID</th>
+                    <th style="width: 30%">Brand name</th>
+                    <th style="width: 30%">Model</th>
+                    <th style="width: 30%" class="d-none d-md-table-cell">ចំនួនវិទ្យុ</th>
                 </tr>
             </thead>
             <tbody>
-                {{-- {{ $details }} --}}
+                {{-- {{ $radios }} --}}
                 @php
-                    $sortedDetails = $details->sortBy('unit_id');
+                    $totalRadioCount = 0;
                 @endphp
-                @foreach ($sortedDetails as $record)
-                    <tr>
-                        <td class="text-center">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</td>
-                        <td>{{ $record->unit }}</td>
-                        <td>{{ $record->product_count }}</td>
-                        <td>
-                            @foreach (collect($record->products)->groupBy('model') as $model => $products)
-                                <strong>{{ $model }} ({{ $products->sum('count') }})</strong><br>
-                            @endforeach
-                        </td>
-                    </tr>
+                @foreach ($radios as $record)
+                    @if ($record->accessory == 0 && $record->product_count > 0)
+                        @php
+                            $totalRadioCount += $record->product_count;
+                        @endphp
+                        <tr>
+                            <td>{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</td>
+                            <td>{{ $record->brand->brand_name }}</td>
+                            <td>{{ $record->name }}</td>
+                            <td>{{ $record->product_count }}</td>
+                        </tr>
+                    @endif
                 @endforeach
                 <tr>
-                    <td class="text-center" colspan="2"><strong>សរុប</strong></td>
-                    <td colspan="2"><strong>{{ $sortedDetails->sum('product_count') }} គ្រឿង</strong></td>
-                    
+                    <td colspan="3" class="text-right text-danger strong"><strong>សរុប</strong></td>
+                    <td><strong class="badge badge-danger" style="font-size: 1rem;">{{ $totalRadioCount }}
+                            គ្រឿង</strong></td>
                 </tr>
             </tbody>
         </table>

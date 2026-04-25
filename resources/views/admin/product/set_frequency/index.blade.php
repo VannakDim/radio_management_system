@@ -81,9 +81,15 @@
                         </x-card-table>
 
 
-                        {{-- <p>{{ $radio }}</p> --}}
+                        {{-- <p>{{ $radios }}</p> --}}
                         <x-card-table title="RADIOS SET FREQUENCRY RECORD" badge="success">
+                        
                             <x-slot name="header">
+                                <div class="float-right mb-2">
+                                    <button class="btn btn-secondary" onclick="printModelTable()">
+                                        <i class="fas fa-print"></i> Print
+                                    </button>
+                                </div>
                                 <tr>
                                     <th>ID</th>
                                     <th style="width: 30%">Brand name</th>
@@ -95,7 +101,7 @@
                                 @php
                                     $totalRadioCount = 0;
                                 @endphp
-                                @foreach ($radio as $record)
+                                @foreach ($radios as $record)
                                     @if ($record->accessory == 0 && $record->product_count > 0)
                                         @php
                                             $totalRadioCount += $record->product_count;
@@ -167,6 +173,11 @@
     <script>
         function openPreview(id) {
             window.open(`/product/set-frequency/print/${id}`, 'ViewWindow',
+                `width=${screen.width},height=${screen.height},top=0,left=0`);
+        }
+
+        function printModelTable() {
+            window.open(`/product/set-frequency-model/print`, 'ViewWindow',
                 `width=${screen.width},height=${screen.height},top=0,left=0`);
         }
 

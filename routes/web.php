@@ -34,6 +34,7 @@ Route::middleware([
         Route::get('/admin/search/index', [SearchController::class, 'index'])->name('search.index');
         Route::get('/admin/search', [SearchController::class, 'search'])->name('admin.search');
         // Update record of set frequency
+        Route::get('/product/set-frequency-model/print', [ExportToPdf::class, 'printSetFrequencyReportModel'])->name('setfrequency.print.report.model');
         Route::get('/product/set-frequency-detail/print', [ExportToPdf::class, 'printSetFrequencyReport'])->name('setfrequency.print.report');
         // Image Upload
         Route::post('/product/set-image/upload/{id}', [SetFrequencyController::class, 'uploadImage'])->name('setfrequency.upload');
