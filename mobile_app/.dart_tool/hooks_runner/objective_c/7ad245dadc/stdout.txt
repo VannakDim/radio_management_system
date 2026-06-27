@@ -1,0 +1,50 @@
+Running `(cd /Users/t2/.pub-cache/hosted/pub.dev/objective_c-9.4.1/; TMPDIR=/var/folders/gt/g2k7yf7n67j_8ksp1f8jq1k00000gn/T/ PATH=/Users/t2/.antigravity-ide/antigravity-ide/bin:/Users/t2/Library/Application Support/Herd/bin/:/Users/t2/.antigravity-ide/antigravity-ide/bin:/Users/t2/Library/Application Support/Herd/bin/:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/local/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/bin:/var/run/com.apple.security.cryptexd/codex.system/bootstrap/usr/appleinternal/bin:/pkg/env/global/bin:/Library/Apple/usr/bin:/Users/t2/dev/flutter/bin:/Users/t2/dev/flutter/bin:/Users/t2/dev/flutter/bin HOME=/Users/t2 /Users/t2/dev/flutter/bin/cache/dart-sdk/bin/dart --packages=/Users/t2/Herd/stock/mobile_app/.dart_tool/package_config.json /Users/t2/Herd/stock/mobile_app/.dart_tool/hooks_runner/objective_c/7ad245dadc/hook.dill --config=/Users/t2/Herd/stock/mobile_app/.dart_tool/hooks_runner/objective_c/7ad245dadc/input.json )`.
+INFO: 2026-06-27 15:01:44.649448: Using compiler /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang from BuildInput.cCompiler.cc.
+
+INFO: 2026-06-27 15:01:44.653114: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk -target arm64-apple-darwin -mmacos-version-min=13 -c /Users/t2/.pub-cache/hosted/pub.dev/objective_c-9.4.1/src/include/dart_api_dl.c -fpic -gline-tables-only -I src -o /Users/t2/Herd/stock/mobile_app/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/include/dart_api_dl.c.o
+
+INFO: 2026-06-27 15:01:44.654180: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk -target arm64-apple-darwin -mmacos-version-min=13 -c /Users/t2/.pub-cache/hosted/pub.dev/objective_c-9.4.1/src/objective_c.c -fpic -gline-tables-only -I src -o /Users/t2/Herd/stock/mobile_app/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/objective_c.c.o
+
+INFO: 2026-06-27 15:01:44.654344: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk -target arm64-apple-darwin -mmacos-version-min=13 -x objective-c -fobjc-arc -c /Users/t2/.pub-cache/hosted/pub.dev/objective_c-9.4.1/src/input_stream_adapter.m -fpic -gline-tables-only -I src -o /Users/t2/Herd/stock/mobile_app/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/input_stream_adapter.m.o
+
+INFO: 2026-06-27 15:01:44.654451: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk -target arm64-apple-darwin -mmacos-version-min=13 -x objective-c -fobjc-arc -c /Users/t2/.pub-cache/hosted/pub.dev/objective_c-9.4.1/src/objective_c.m -fpic -gline-tables-only -I src -o /Users/t2/Herd/stock/mobile_app/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/objective_c.m.o
+
+INFO: 2026-06-27 15:01:44.654551: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk -target arm64-apple-darwin -mmacos-version-min=13 -x objective-c -fobjc-arc -c /Users/t2/.pub-cache/hosted/pub.dev/objective_c-9.4.1/src/observer.m -fpic -gline-tables-only -I src -o /Users/t2/Herd/stock/mobile_app/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/observer.m.o
+INFO: 2026-06-27 15:01:44.654641: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk -target arm64-apple-darwin -mmacos-version-min=13 -x objective-c -fobjc-arc -c /Users/t2/.pub-cache/hosted/pub.dev/objective_c-9.4.1/src/ns_number.m -fpic -gline-tables-only -I src -o /Users/t2/Herd/stock/mobile_app/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/ns_number.m.o
+INFO: 2026-06-27 15:01:44.654733: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk -target arm64-apple-darwin -mmacos-version-min=13 -x objective-c -fobjc-arc -c /Users/t2/.pub-cache/hosted/pub.dev/objective_c-9.4.1/src/protocol.m -fpic -gline-tables-only -I src -o /Users/t2/Herd/stock/mobile_app/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/protocol.m.o
+
+INFO: 2026-06-27 15:01:44.931943: 
+INFO: 2026-06-27 15:01:44.931955: 
+INFO: 2026-06-27 15:01:44.931967: Generated /Users/t2/Herd/stock/mobile_app/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/observer.m.o
+
+o
+
+INFO: 2026-06-27 15:01:44.932355: 
+INFO: 2026-06-27 15:01:44.932369: 
+INFO: 2026-06-27 15:01:44.932378: Generated /Users/t2/Herd/stock/mobile_app/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/include/dart_api_dl.c.o
+INFO: 2026-06-27 15:01:44.932452: 
+INFO: 2026-06-27 15:01:44.932462: 
+INFO: 2026-06-27 15:01:44.932481: Generated /Users/t2/Herd/stock/mobile_app/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/protocol.m.o
+
+INFO: 2026-06-27 15:01:45.230898: 
+INFO: 2026-06-27 15:01:45.230961: 
+INFO: 2026-06-27 15:01:45.230973: Generated /Users/t2/Herd/stock/mobile_app/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/ns_number.m.o
+
+INFO: 2026-06-27 15:01:45.240436: 
+INFO: 2026-06-27 15:01:45.240471: 
+INFO: 2026-06-27 15:01:45.240483: Generated /Users/t2/Herd/stock/mobile_app/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/objective_c.m.o
+
+INFO: 2026-06-27 15:01:45.241566: 
+INFO: 2026-06-27 15:01:45.241591: 
+INFO: 2026-06-27 15:01:45.241602: Generated /Users/t2/Herd/stock/mobile_app/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/input_stream_adapter.m.o
+
+INFO: 2026-06-27 15:01:45.258052: 
+INFO: 2026-06-27 15:01:45.258073: 
+INFO: 2026-06-27 15:01:45.258086: Generated /Users/t2/Herd/stock/mobile_app/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/objective_c_bindings_generated.m.o
+
+INFO: 2026-06-27 15:01:45.258398: Running: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -shared -Wl,-encryptable -undefined dynamic_lookup -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.5.sdk -target arm64-apple-darwin -mmacos-version-min=13 /Users/t2/Herd/stock/mobile_app/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/include/dart_api_dl.c.o /Users/t2/Herd/stock/mobile_app/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/objective_c.c.o /Users/t2/Herd/stock/mobile_app/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/input_stream_adapter.m.o /Users/t2/Herd/stock/mobile_app/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/objective_c.m.o /Users/t2/Herd/stock/mobile_app/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/observer.m.o /Users/t2/Herd/stock/mobile_app/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/ns_number.m.o /Users/t2/Herd/stock/mobile_app/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/protocol.m.o /Users/t2/Herd/stock/mobile_app/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/obj/src/objective_c_bindings_generated.m.o -o /Users/t2/Herd/stock/mobile_app/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/objective_c.dylib
+
+INFO: 2026-06-27 15:01:45.432646: 
+INFO: 2026-06-27 15:01:45.432697: 
+INFO: 2026-06-27 15:01:45.432709: Generated /Users/t2/Herd/stock/mobile_app/.dart_tool/hooks_runner/shared/objective_c/build/7ad245dadc/objective_c.dylib
+
