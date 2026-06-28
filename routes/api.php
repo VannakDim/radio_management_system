@@ -35,9 +35,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/stock-ins', [StockApiController::class, 'storeStockIn']);
     Route::post('/stock-ins/assign', [StockApiController::class, 'assignStockInProducts']);
     Route::put('/stock-ins/{id}', [StockApiController::class, 'updateStockIn']);
+    Route::post('/stock-ins/{id}/update', [StockApiController::class, 'updateStockIn']);
     Route::get('/stock-outs', [StockApiController::class, 'getStockOuts']);
     Route::post('/stock-outs', [StockApiController::class, 'storeStockOut']);
     Route::put('/stock-outs/{id}', [StockApiController::class, 'updateStockOut']);
+    Route::post('/stock-outs/{id}/update', [StockApiController::class, 'updateStockOut']);
 
     // Borrow & Return
     Route::get('/borrows', [BorrowApiController::class, 'getBorrows']);
