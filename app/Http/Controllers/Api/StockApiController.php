@@ -261,4 +261,96 @@ class StockApiController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Update a Stock In record (header fields only, owner only).
+     */
+    public function updateStockIn(Request $request, $id)
+    {
+        $stockIn = StockIn::find($id);
+
+        if (!$stockIn) {
+            return response()->json(['success' => false, 'message' => 'Stock In not found'], 404);
+        }
+
+        if ($stockIn->user_id !== Auth::id()) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized. You can only edit your own records.'], 403);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'invoice_no' => 'nullable|string',
+            'supplier'   => 'nullable|string',
+            'note'       => 'nullable|string',
+            'image'      => 'nullable|image|max:4096',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
+        }
+
+        $stockIn->invoice_no = $request->input('invoice_no', $stockIn->invoice_no);
+        $stockIn->supplier   = $request->input('supplier', $stockIn->supplier);
+        $stockIn->note       = $request->input('note', $stockIn->note);
+
+        if ($request->hasFile('image')) {
+            $image    = $request->file('image');
+            $name_gen = 'stock_in_' . hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
+            $image->storeAs('image/product/stock_in/', $name_gen, 'public');
+            $stockIn->image = 'storage/image/product/stock_in/' . $name_gen;
+        }
+
+        $stockIn->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Stock In updated successfully',
+            'data'    => $stockIn->load('detail.product'),
+        ]);
+    }
+
+    /**
+     * Update a Stock Out record (header fields only, owner only).
+     */
+    public function updateStockOut(Request $request, $id)
+    {
+        $stockOut = StockOut::find($id);
+
+        if (!$stockOut) {
+            return response()->json(['success' => false, 'message' => 'Stock Out not found'], 404);
+        }
+
+        if ($stockOut->user_id !== Auth::id()) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized. You can only edit your own records.'], 403);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'receiver' => 'nullable|string',
+            'type'     => 'nullable|string',
+            'note'     => 'nullable|string',
+            'image'    => 'nullable|image|max:4096',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'errors' => $validator->errors()], 422);
+        }
+
+        $stockOut->receiver = $request->input('receiver', $stockOut->receiver);
+        $stockOut->type     = $request->input('type', $stockOut->type);
+        $stockOut->note     = $request->input('note', $stockOut->note);
+
+        if ($request->hasFile('image')) {
+            $image    = $request->file('image');
+            $name_gen = 'stock_out_' . hexdec(uniqid()) . '.' . $image->getClientOriginalExtension();
+            $image->storeAs('image/product/stock_out/', $name_gen, 'public');
+            $stockOut->image = 'storage/image/product/stock_out/' . $name_gen;
+        }
+
+        $stockOut->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Stock Out updated successfully',
+            'data'    => $stockOut->load('products.product.model', 'stockOutDetails.product'),
+        ]);
+    }
 }

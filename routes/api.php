@@ -17,6 +17,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Auth & Profile
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
+    Route::post('/me/update-photo', [AuthController::class, 'updateProfilePhoto']);
 
     // Dashboard Statistics
     Route::get('/dashboard', [DashboardApiController::class, 'getSummary']);
@@ -33,8 +34,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/stock-ins', [StockApiController::class, 'getStockIns']);
     Route::post('/stock-ins', [StockApiController::class, 'storeStockIn']);
     Route::post('/stock-ins/assign', [StockApiController::class, 'assignStockInProducts']);
+    Route::put('/stock-ins/{id}', [StockApiController::class, 'updateStockIn']);
     Route::get('/stock-outs', [StockApiController::class, 'getStockOuts']);
     Route::post('/stock-outs', [StockApiController::class, 'storeStockOut']);
+    Route::put('/stock-outs/{id}', [StockApiController::class, 'updateStockOut']);
 
     // Borrow & Return
     Route::get('/borrows', [BorrowApiController::class, 'getBorrows']);
