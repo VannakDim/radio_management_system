@@ -12,11 +12,21 @@ _ide_helper_models.php
 /storage/app/backup
 /storage/cache_keys.json
 node_modules
-*storage
-*.storage
-*.storage/*
-storage*
-*/storage
-public/image
-public/storage
-/mobile_app
+
+# Ignore Laravel temporary storage
+/storage/framework/cache/data/*
+/storage/framework/sessions/*
+/storage/framework/testing/*
+/storage/framework/views/*
+/storage/logs/*
+
+# Ignore Flutter build artifacts and cache
+/mobile_app/.dart_tool/
+/mobile_app/build/
+/mobile_app/.flutter-plugins
+/mobile_app/.flutter-plugins-dependencies
+/mobile_app/generated_plugin_registrant.node
+
+# Allow public images and uploads
+!/storage/app/public/
+!/storage/app/public/**
