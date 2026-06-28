@@ -193,9 +193,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           });
                         },
                       ),
-                      const Text(
-                        'ចងចាំគណនី / Remember Me',
-                        style: TextStyle(fontSize: 14),
+                      const Expanded(
+                        child: Text(
+                          'ចងចាំគណនី / Remember Me',
+                          style: TextStyle(fontSize: 14),
+                        ),
                       ),
                     ],
                   ),
