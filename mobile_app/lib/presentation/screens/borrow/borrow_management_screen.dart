@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/network/api_client.dart';
 import 'borrow_detail_screen.dart';
 import 'add_borrow_screen.dart';
+import '../../widgets/profile_dropdown_action.dart';
 
 class BorrowManagementScreen extends StatefulWidget {
   const BorrowManagementScreen({super.key});
@@ -69,6 +70,7 @@ class _BorrowManagementScreenState extends State<BorrowManagementScreen> {
             icon: const Icon(Icons.refresh),
             onPressed: _fetchBorrowData,
           ),
+          const ProfileDropdownAction(),
         ],
       ),
       body: _isLoading

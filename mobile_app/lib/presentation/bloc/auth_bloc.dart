@@ -10,6 +10,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AppStarted>(_onAppStarted);
     on<LoginRequested>(_onLoginRequested);
     on<LogoutRequested>(_onLogoutRequested);
+    on<UserUpdated>(_onUserUpdated);
   }
 
   Future<void> _onAppStarted(AppStarted event, Emitter<AuthState> emit) async {
@@ -46,5 +47,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(AuthLoading());
     await authRepository.logout();
     emit(Unauthenticated());
+  }
+
+  Future<void> _onUserUpdated(UserUpdated event, Emitter<AuthState> emit) async {
+    await authRepository.updateCachedUser(event.user);
+    emit(Authenticated(event.user));
   }
 }

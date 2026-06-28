@@ -6,6 +6,7 @@ import '../../../core/network/api_client.dart';
 import '../../../core/constants/constants.dart';
 import '../utils/image_editor_screen.dart';
 import 'add_frequency_screen.dart';
+import '../../widgets/profile_dropdown_action.dart';
 
 class FrequencyListScreen extends StatefulWidget {
   const FrequencyListScreen({super.key});
@@ -411,6 +412,7 @@ class _FrequencyListScreenState extends State<FrequencyListScreen> with SingleTi
             icon: const Icon(Icons.refresh),
             onPressed: () => _fetchFrequencyData(trimester: '$_selectedYear-$_selectedTrimester'),
           ),
+          const ProfileDropdownAction(),
         ],
         bottom: TabBar(
           controller: _tabController,
@@ -694,6 +696,8 @@ class _FrequencyListScreenState extends State<FrequencyListScreen> with SingleTi
       final XFile? image = await picker.pickImage(
         source: ImageSource.gallery,
         imageQuality: 80,
+        maxWidth: 1200,
+        maxHeight: 1200,
       );
       if (image != null) {
         final XFile? edited = await Navigator.push<XFile>(

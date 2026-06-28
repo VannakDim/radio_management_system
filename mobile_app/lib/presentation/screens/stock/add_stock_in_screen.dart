@@ -97,6 +97,8 @@ class _AddStockInScreenState extends State<AddStockInScreen> {
       final XFile? image = await _picker.pickImage(
         source: ImageSource.gallery,
         imageQuality: 80,
+        maxWidth: 1200,
+        maxHeight: 1200,
       );
       if (image != null && mounted) {
         final XFile? edited = await Navigator.push<XFile>(

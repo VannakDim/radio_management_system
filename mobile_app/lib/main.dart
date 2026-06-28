@@ -91,7 +91,6 @@ class _MainNavigationWrapperState extends State<MainNavigationWrapper> {
     SerialLookupScreen(),
     BorrowManagementScreen(),
     FrequencyListScreen(),
-    ProfileScreen(),
   ];
 
   @override
@@ -133,10 +132,6 @@ class _MainNavigationWrapperState extends State<MainNavigationWrapper> {
           BottomNavigationBarItem(
             icon: Icon(Icons.settings_input_antenna),
             label: 'ប្រេកង់ / Freq',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'គណនី / Profile',
           ),
         ],
       ),

@@ -19,10 +19,9 @@ class _AddStockOutScreenState extends State<AddStockOutScreen> {
   final _formKey = GlobalKey<FormState>();
 
   final _receiverController = TextEditingController();
+  final _purposeController = TextEditingController();
   final _noteController = TextEditingController();
 
-  String _stockOutType = 'Radio'; // Default type: Radio (serialized) or Accessory (qty)
-  
   XFile? _selectedImage;
   final ImagePicker _picker = ImagePicker();
 
@@ -30,7 +29,7 @@ class _AddStockOutScreenState extends State<AddStockOutScreen> {
   bool _isLoadingModels = true;
   String? _modelsError;
 
-  // Selected radio items: { "model_id": int, "serial_number": string }
+  // Selected radio items: { "model_id": int, "serial_number": string, "controller": TextEditingController }
   final List<Map<String, dynamic>> _radioItems = [];
 
   // Selected accessory items: { "model_id": int, "quantity": int, "note": string }
@@ -42,13 +41,17 @@ class _AddStockOutScreenState extends State<AddStockOutScreen> {
   void initState() {
     super.initState();
     _fetchModels();
-    _addItemLine(); // Add one initial line
+    _addRadioItemLine(); // Add one initial radio line
   }
 
   @override
   void dispose() {
     _receiverController.dispose();
+    _purposeController.dispose();
     _noteController.dispose();
+    for (var item in _radioItems) {
+      item['controller']?.dispose();
+    }
     super.dispose();
   }
 
@@ -74,36 +77,36 @@ class _AddStockOutScreenState extends State<AddStockOutScreen> {
     }
   }
 
-  void _addItemLine() {
+  void _addRadioItemLine() {
     setState(() {
-      if (_stockOutType == 'Radio') {
-        _radioItems.add({
-          'model_id': null,
-          'serial_number': '',
-          'controller': TextEditingController(),
-        });
-      } else {
-        _accessoryItems.add({
-          'model_id': null,
-          'quantity': 1,
-          'note': '',
-        });
-      }
+      _radioItems.add({
+        'model_id': null,
+        'serial_number': '',
+        'controller': TextEditingController(),
+      });
     });
   }
 
-  void _removeItemLine(int index) {
+  void _removeRadioItemLine(int index) {
     setState(() {
-      if (_stockOutType == 'Radio') {
-        if (_radioItems.length > 1) {
-          _radioItems[index]['controller']?.dispose();
-          _radioItems.removeAt(index);
-        }
-      } else {
-        if (_accessoryItems.length > 1) {
-          _accessoryItems.removeAt(index);
-        }
-      }
+      _radioItems[index]['controller']?.dispose();
+      _radioItems.removeAt(index);
+    });
+  }
+
+  void _addAccessoryItemLine() {
+    setState(() {
+      _accessoryItems.add({
+        'model_id': null,
+        'quantity': 1,
+        'note': '',
+      });
+    });
+  }
+
+  void _removeAccessoryItemLine(int index) {
+    setState(() {
+      _accessoryItems.removeAt(index);
     });
   }
 
@@ -112,6 +115,8 @@ class _AddStockOutScreenState extends State<AddStockOutScreen> {
       final XFile? image = await _picker.pickImage(
         source: ImageSource.gallery,
         imageQuality: 80,
+        maxWidth: 1200,
+        maxHeight: 1200,
       );
       if (image != null && mounted) {
         final XFile? edited = await Navigator.push<XFile>(
@@ -183,24 +188,30 @@ class _AddStockOutScreenState extends State<AddStockOutScreen> {
   Future<void> _submitForm() async {
     if (!_formKey.currentState!.validate()) return;
 
-    // Validation check
-    if (_stockOutType == 'Radio') {
-      for (var item in _radioItems) {
-        if (item['model_id'] == null || item['serial_number'].toString().trim().isEmpty) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('សូមជ្រើសរើសម៉ូដែល និងវាយលេខស៊េរីវិទ្យុទាក់ទង / Please select model and enter S/N')),
-          );
-          return;
-        }
+    if (_radioItems.isEmpty && _accessoryItems.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('សូមជ្រើសរើសយ៉ាងហោចណាស់ វិទ្យុទាក់ទង ឬគ្រឿងបន្លាស់មួយ / Please select at least one Radio or Accessory')),
+      );
+      return;
+    }
+
+    // Validation check for radios
+    for (var item in _radioItems) {
+      if (item['model_id'] == null || item['serial_number'].toString().trim().isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('សូមជ្រើសរើសម៉ូដែល និងវាយលេខស៊េរីវិទ្យុទាក់ទង / Please select model and enter S/N')),
+        );
+        return;
       }
-    } else {
-      for (var item in _accessoryItems) {
-        if (item['model_id'] == null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('សូមជ្រើសរើសម៉ូដែលគ្រឿងបន្លាស់ / Please select accessory model')),
-          );
-          return;
-        }
+    }
+
+    // Validation check for accessories
+    for (var item in _accessoryItems) {
+      if (item['model_id'] == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('សូមជ្រើសរើសម៉ូដែលគ្រឿងបន្លាស់ / Please select accessory model')),
+        );
+        return;
       }
     }
 
@@ -211,25 +222,25 @@ class _AddStockOutScreenState extends State<AddStockOutScreen> {
     try {
       Map<String, dynamic> payload = {
         'receiver': _receiverController.text,
-        'type': _stockOutType,
+        'type': _purposeController.text,
         'note': _noteController.text,
       };
 
-      if (_stockOutType == 'Radio') {
-        payload['items'] = [];
+      if (_radioItems.isNotEmpty) {
         for (int i = 0; i < _radioItems.length; i++) {
           payload['items[$i][model_id]'] = _radioItems[i]['model_id'];
           payload['items[$i][serial_number]'] = _radioItems[i]['serial_number'];
         }
       } else {
-        payload['accessories'] = [];
+        payload['items'] = []; // Keep Laravel validation happy
+      }
+
+      if (_accessoryItems.isNotEmpty) {
         for (int i = 0; i < _accessoryItems.length; i++) {
           payload['accessories[$i][model_id]'] = _accessoryItems[i]['model_id'];
           payload['accessories[$i][quantity]'] = _accessoryItems[i]['quantity'];
           payload['accessories[$i][note]'] = _accessoryItems[i]['note'];
         }
-        // Laravel controller needs 'items' array even if accessory to pass validation
-        payload['items'] = []; // empty
       }
 
       if (_selectedImage != null) {
@@ -280,11 +291,8 @@ class _AddStockOutScreenState extends State<AddStockOutScreen> {
   Widget build(BuildContext context) {
     final primaryColor = Colors.blue.shade800;
     
-    // Filter models based on selection type
-    final filteredModels = _models.where((m) {
-      final isAccessory = m['accessory'] == true || m['accessory'] == 1 || m['accessory'] == '1';
-      return _stockOutType == 'Radio' ? !isAccessory : isAccessory;
-    }).toList();
+    final radioModels = _models.where((m) => m['accessory'] != true && m['accessory'] != 1 && m['accessory'] != '1').toList();
+    final accessoryModels = _models.where((m) => m['accessory'] == true || m['accessory'] == 1 || m['accessory'] == '1').toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -303,7 +311,7 @@ class _AddStockOutScreenState extends State<AddStockOutScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Receiver & Type Card
+                        // Receiver Card
                         Card(
                           elevation: 1,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -320,7 +328,7 @@ class _AddStockOutScreenState extends State<AddStockOutScreen> {
                                 TextFormField(
                                   controller: _receiverController,
                                   decoration: const InputDecoration(
-                                    labelText: 'អ្នកទទួល / Receiver',
+                                    labelText: 'អ្នកទទួល / Receiver *',
                                     border: OutlineInputBorder(),
                                     prefixIcon: Icon(Icons.person),
                                   ),
@@ -332,39 +340,19 @@ class _AddStockOutScreenState extends State<AddStockOutScreen> {
                                   },
                                 ),
                                 const SizedBox(height: 16),
-                                // Type Radio toggle
-                                Row(
-                                  children: [
-                                    const Text('ប្រភេទឧបករណ៍ / Type:'),
-                                    const SizedBox(width: 20),
-                                    Radio<String>(
-                                      value: 'Radio',
-                                      groupValue: _stockOutType,
-                                      onChanged: (val) {
-                                        setState(() {
-                                          _stockOutType = val!;
-                                          _radioItems.clear();
-                                          _accessoryItems.clear();
-                                          _addItemLine();
-                                        });
-                                      },
-                                    ),
-                                    const Text('វិទ្យុ (Radio)'),
-                                    const SizedBox(width: 10),
-                                    Radio<String>(
-                                      value: 'Accessory',
-                                      groupValue: _stockOutType,
-                                      onChanged: (val) {
-                                        setState(() {
-                                          _stockOutType = val!;
-                                          _radioItems.clear();
-                                          _accessoryItems.clear();
-                                          _addItemLine();
-                                        });
-                                      },
-                                    ),
-                                    const Text('គ្រឿងបន្លាស់'),
-                                  ],
+                                TextFormField(
+                                  controller: _purposeController,
+                                  decoration: const InputDecoration(
+                                    labelText: 'គោលបំណង / Purpose *',
+                                    border: OutlineInputBorder(),
+                                    prefixIcon: Icon(Icons.info_outline),
+                                  ),
+                                  validator: (value) {
+                                    if (value == null || value.trim().isEmpty) {
+                                      return 'សូមបញ្ចូលគោលបំណង / Please enter purpose';
+                                    }
+                                    return null;
+                                  },
                                 ),
                               ],
                             ),
@@ -405,175 +393,186 @@ class _AddStockOutScreenState extends State<AddStockOutScreen> {
                                   ),
                           ),
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 25),
 
-                        // List Section Title
+                        // Radios List Section
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              _stockOutType == 'Radio'
-                                  ? 'បញ្ជីវិទ្យុនាំចេញ / Radios to Stock Out'
-                                  : 'បញ្ជីគ្រឿងបន្លាស់ / Accessories to Stock Out',
-                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                            const Text(
+                              'វិទ្យុទាក់ទងនាំចេញ / Radios to Stock Out',
+                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blue),
                             ),
                             TextButton.icon(
-                              onPressed: _addItemLine,
+                              onPressed: _addRadioItemLine,
                               icon: const Icon(Icons.add),
-                              label: const Text('Add Row'),
+                              label: const Text('Add Radio'),
                             ),
                           ],
                         ),
                         const SizedBox(height: 8),
-
-                        // Radio Items List
-                        if (_stockOutType == 'Radio')
-                          ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: _radioItems.length,
-                            itemBuilder: (context, index) {
-                              final item = _radioItems[index];
-                              return Card(
-                                margin: const EdgeInsets.only(bottom: 12),
-                                color: Colors.grey.shade50,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  side: BorderSide(color: Colors.grey.shade200),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(12.0),
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: DropdownButtonFormField<int>(
-                                              value: item['model_id'],
-                                              decoration: const InputDecoration(labelText: 'ម៉ូដែល / Model'),
-                                              items: filteredModels.map((m) {
-                                                return DropdownMenuItem<int>(
-                                                  value: m['id'],
-                                                  child: Text(m['name'] ?? ''),
-                                                );
-                                              }).toList(),
-                                              onChanged: (val) {
-                                                setState(() {
-                                                  item['model_id'] = val;
-                                                });
-                                              },
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: _radioItems.length,
+                          itemBuilder: (context, index) {
+                            final item = _radioItems[index];
+                            return Card(
+                              margin: const EdgeInsets.only(bottom: 12),
+                              color: Colors.blue.shade50.withOpacity(0.3),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                side: BorderSide(color: Colors.blue.shade100),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: DropdownButtonFormField<int>(
+                                            value: item['model_id'],
+                                            decoration: const InputDecoration(labelText: 'ម៉ូដែល / Model'),
+                                            items: radioModels.map((m) {
+                                              return DropdownMenuItem<int>(
+                                                value: m['id'],
+                                                child: Text(m['name'] ?? ''),
+                                              );
+                                            }).toList(),
+                                            onChanged: (val) {
+                                              setState(() {
+                                                item['model_id'] = val;
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                        IconButton(
+                                          icon: const Icon(Icons.delete, color: Colors.red),
+                                          onPressed: () => _removeRadioItemLine(index),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: TextFormField(
+                                            controller: item['controller'],
+                                            decoration: const InputDecoration(
+                                              labelText: 'លេខសម្គាល់ឧបករណ៍ / S/N (PID)',
+                                              prefixIcon: Icon(Icons.qr_code_scanner),
                                             ),
+                                            onChanged: (val) {
+                                              item['serial_number'] = val;
+                                            },
                                           ),
-                                          IconButton(
-                                            icon: const Icon(Icons.delete, color: Colors.red),
-                                            onPressed: () => _removeItemLine(index),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 8),
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: TextFormField(
-                                              controller: item['controller'],
-                                              decoration: const InputDecoration(
-                                                labelText: 'លេខសម្គាល់ឧបករណ៍ / S/N (PID)',
-                                                prefixIcon: Icon(Icons.qr_code_scanner),
-                                              ),
-                                              onChanged: (val) {
-                                                item['serial_number'] = val;
-                                              },
-                                            ),
-                                          ),
-                                          IconButton(
-                                            icon: const Icon(Icons.camera_alt, color: Colors.blue),
-                                            onPressed: () => _startScanning(index),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
+                                        ),
+                                        IconButton(
+                                          icon: const Icon(Icons.camera_alt, color: Colors.blue),
+                                          onPressed: () => _startScanning(index),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
-                              );
-                            },
-                          )
-                        else
-                          // Accessory Items List
-                          ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: _accessoryItems.length,
-                            itemBuilder: (context, index) {
-                              final item = _accessoryItems[index];
-                              return Card(
-                                margin: const EdgeInsets.only(bottom: 12),
-                                color: Colors.grey.shade50,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                  side: BorderSide(color: Colors.grey.shade200),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(12.0),
-                                  child: Column(
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: DropdownButtonFormField<int>(
-                                              value: item['model_id'],
-                                              decoration: const InputDecoration(labelText: 'គ្រឿងបន្លាស់ / Accessory'),
-                                              items: filteredModels.map((m) {
-                                                return DropdownMenuItem<int>(
-                                                  value: m['id'],
-                                                  child: Text(m['name'] ?? ''),
-                                                );
-                                              }).toList(),
-                                              onChanged: (val) {
-                                                setState(() {
-                                                  item['model_id'] = val;
-                                                });
-                                              },
-                                            ),
-                                          ),
-                                          const SizedBox(width: 12),
-                                          SizedBox(
-                                            width: 80,
-                                            child: TextFormField(
-                                              initialValue: '${item['quantity']}',
-                                              keyboardType: TextInputType.number,
-                                              decoration: const InputDecoration(labelText: 'ចំនួន / Qty'),
-                                              validator: (val) {
-                                                if (val == null || int.tryParse(val) == null || int.parse(val) <= 0) {
-                                                  return 'Invalid';
-                                                }
-                                                return null;
-                                              },
-                                              onChanged: (val) {
-                                                item['quantity'] = int.tryParse(val) ?? 1;
-                                              },
-                                            ),
-                                          ),
-                                          IconButton(
-                                            icon: const Icon(Icons.delete, color: Colors.red),
-                                            onPressed: () => _removeItemLine(index),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 8),
-                                      TextFormField(
-                                        initialValue: item['note'],
-                                        decoration: const InputDecoration(labelText: 'កំណត់ចំណាំគ្រឿងបន្លាស់ / Note'),
-                                        onChanged: (val) {
-                                          item['note'] = val;
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
+                              ),
+                            );
+                          },
+                        ),
                         const SizedBox(height: 20),
+
+                        // Accessories List Section
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              'គ្រឿងបន្លាស់នាំចេញ / Accessories',
+                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.orange),
+                            ),
+                            TextButton.icon(
+                              onPressed: _addAccessoryItemLine,
+                              icon: const Icon(Icons.add),
+                              label: const Text('Add Accessory'),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: _accessoryItems.length,
+                          itemBuilder: (context, index) {
+                            final item = _accessoryItems[index];
+                            return Card(
+                              margin: const EdgeInsets.only(bottom: 12),
+                              color: Colors.orange.shade50.withOpacity(0.3),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                                side: BorderSide(color: Colors.orange.shade100),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: DropdownButtonFormField<int>(
+                                            value: item['model_id'],
+                                            decoration: const InputDecoration(labelText: 'គ្រឿងបន្លាស់ / Accessory'),
+                                            items: accessoryModels.map((m) {
+                                              return DropdownMenuItem<int>(
+                                                value: m['id'],
+                                                child: Text(m['name'] ?? ''),
+                                              );
+                                            }).toList(),
+                                            onChanged: (val) {
+                                              setState(() {
+                                                item['model_id'] = val;
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                        const SizedBox(width: 12),
+                                        SizedBox(
+                                          width: 80,
+                                          child: TextFormField(
+                                            initialValue: '${item['quantity']}',
+                                            keyboardType: TextInputType.number,
+                                            decoration: const InputDecoration(labelText: 'ចំនួន / Qty'),
+                                            validator: (val) {
+                                              if (val == null || int.tryParse(val) == null || int.parse(val) <= 0) {
+                                                return 'Invalid';
+                                              }
+                                              return null;
+                                            },
+                                            onChanged: (val) {
+                                              item['quantity'] = int.tryParse(val) ?? 1;
+                                            },
+                                          ),
+                                        ),
+                                        IconButton(
+                                          icon: const Icon(Icons.delete, color: Colors.red),
+                                          onPressed: () => _removeAccessoryItemLine(index),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 8),
+                                    TextFormField(
+                                      initialValue: item['note'],
+                                      decoration: const InputDecoration(labelText: 'កំណត់ចំណាំគ្រឿងបន្លាស់ / Note'),
+                                      onChanged: (val) {
+                                        item['note'] = val;
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 25),
 
                         // Note
                         TextFormField(

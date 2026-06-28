@@ -5,6 +5,7 @@ import '../../../core/constants/constants.dart';
 import '../../../core/network/api_client.dart';
 import '../../bloc/auth_bloc.dart';
 import '../../bloc/auth_event.dart';
+import '../../widgets/profile_dropdown_action.dart';
 import 'model_detail_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -77,12 +78,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             icon: const Icon(Icons.refresh),
             onPressed: _fetchDashboardData,
           ),
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () {
-              context.read<AuthBloc>().add(LogoutRequested());
-            },
-          ),
+          const ProfileDropdownAction(),
         ],
       ),
       body: _isLoading

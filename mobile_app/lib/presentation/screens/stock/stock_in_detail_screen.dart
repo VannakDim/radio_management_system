@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import '../../../core/constants/constants.dart';
+import 'edit_stock_in_screen.dart';
 
 class StockInDetailScreen extends StatelessWidget {
   final Map<String, dynamic> item;
+  final int? currentUserId;
 
-  const StockInDetailScreen({super.key, required this.item});
+  const StockInDetailScreen({super.key, required this.item, this.currentUserId});
+
+  bool get _canEdit => currentUserId != null && item['user_id'] == currentUserId;
 
   @override
   Widget build(BuildContext context) {
@@ -17,6 +21,22 @@ class StockInDetailScreen extends StatelessWidget {
         title: Text(item['invoice_no'] != null ? 'Invoice: ${item['invoice_no']}' : 'Stock In #${item['id']}'),
         backgroundColor: primaryColor,
         foregroundColor: Colors.white,
+        actions: [
+          if (_canEdit)
+            IconButton(
+              icon: const Icon(Icons.edit),
+              tooltip: 'Edit',
+              onPressed: () async {
+                final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => EditStockInScreen(item: item)),
+                );
+                if (result == true && context.mounted) {
+                  Navigator.pop(context, true); // Refresh parent list
+                }
+              },
+            ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -136,10 +156,7 @@ class StockInDetailScreen extends StatelessWidget {
             InteractiveViewer(
               maxScale: 4.0,
               child: Center(
-                child: Image.network(
-                  url,
-                  fit: BoxFit.contain,
-                ),
+                child: Image.network(url, fit: BoxFit.contain),
               ),
             ),
             Positioned(

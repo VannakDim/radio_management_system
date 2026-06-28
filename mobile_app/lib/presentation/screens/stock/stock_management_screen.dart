@@ -1,10 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/network/api_client.dart';
+import '../../bloc/auth_bloc.dart';
+import '../../bloc/auth_state.dart';
 import 'stock_in_detail_screen.dart';
 import 'stock_out_detail_screen.dart';
 import 'add_stock_in_screen.dart';
 import 'add_stock_out_screen.dart';
+import '../../widgets/profile_dropdown_action.dart';
 
 class StockManagementScreen extends StatefulWidget {
   const StockManagementScreen({super.key});
@@ -78,6 +82,10 @@ class _StockManagementScreenState extends State<StockManagementScreen> with Sing
   Widget build(BuildContext context) {
     final primaryColor = Colors.blue.shade800;
 
+    // Get current user ID from BLoC
+    final authState = context.watch<AuthBloc>().state;
+    final int? currentUserId = authState is Authenticated ? authState.user.id : null;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('គ្រប់គ្រងស្តុក / Stock Management'),
@@ -98,6 +106,7 @@ class _StockManagementScreenState extends State<StockManagementScreen> with Sing
             icon: const Icon(Icons.refresh),
             onPressed: _fetchStockData,
           ),
+          const ProfileDropdownAction(),
         ],
       ),
       body: _isLoading
@@ -124,8 +133,8 @@ class _StockManagementScreenState extends State<StockManagementScreen> with Sing
               : TabBarView(
                   controller: _tabController,
                   children: [
-                    _buildStockInList(),
-                    _buildStockOutList(),
+                    _buildStockInList(currentUserId),
+                    _buildStockOutList(currentUserId),
                   ],
                 ),
       floatingActionButton: FloatingActionButton(
@@ -149,7 +158,7 @@ class _StockManagementScreenState extends State<StockManagementScreen> with Sing
     );
   }
 
-  Widget _buildStockInList() {
+  Widget _buildStockInList(int? currentUserId) {
     if (_stockIns.isEmpty) {
       return const Center(child: Text('មិនមានទិន្នន័យនាំចូលទេ / No Stock In data'));
     }
@@ -159,19 +168,21 @@ class _StockManagementScreenState extends State<StockManagementScreen> with Sing
       itemCount: _stockIns.length,
       itemBuilder: (context, index) {
         final item = _stockIns[index];
+        final isOwner = currentUserId != null && item['user_id'] == currentUserId;
         return Card(
           margin: const EdgeInsets.only(bottom: 12),
           elevation: 1,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           child: InkWell(
             borderRadius: BorderRadius.circular(12),
-            onTap: () {
-              Navigator.push(
+            onTap: () async {
+              final result = await Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => StockInDetailScreen(item: item),
+                  builder: (context) => StockInDetailScreen(item: item, currentUserId: currentUserId),
                 ),
               );
+              if (result == true) _fetchStockData();
             },
             child: ListTile(
               leading: CircleAvatar(
@@ -189,12 +200,20 @@ class _StockManagementScreenState extends State<StockManagementScreen> with Sing
                   Text('Date: ${item['created_at'] != null ? item['created_at'].substring(0, 10) : "N/A"}'),
                 ],
               ),
-              trailing: Chip(
-                label: Text(
-                  '${item['detail']?.length ?? 0} items',
-                  style: const TextStyle(fontSize: 12),
-                ),
-                backgroundColor: Colors.grey.shade100,
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (isOwner)
+                    Icon(Icons.edit_note, size: 18, color: Colors.blue.shade400),
+                  const SizedBox(width: 4),
+                  Chip(
+                    label: Text(
+                      '${item['detail']?.length ?? 0} items',
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                    backgroundColor: Colors.grey.shade100,
+                  ),
+                ],
               ),
             ),
           ),
@@ -203,7 +222,7 @@ class _StockManagementScreenState extends State<StockManagementScreen> with Sing
     );
   }
 
-  Widget _buildStockOutList() {
+  Widget _buildStockOutList(int? currentUserId) {
     if (_stockOuts.isEmpty) {
       return const Center(child: Text('មិនមានទិន្នន័យនាំចេញទេ / No Stock Out data'));
     }
@@ -213,19 +232,21 @@ class _StockManagementScreenState extends State<StockManagementScreen> with Sing
       itemCount: _stockOuts.length,
       itemBuilder: (context, index) {
         final item = _stockOuts[index];
+        final isOwner = currentUserId != null && item['user_id'] == currentUserId;
         return Card(
           margin: const EdgeInsets.only(bottom: 12),
           elevation: 1,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           child: InkWell(
             borderRadius: BorderRadius.circular(12),
-            onTap: () {
-              Navigator.push(
+            onTap: () async {
+              final result = await Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => StockOutDetailScreen(item: item),
+                  builder: (context) => StockOutDetailScreen(item: item, currentUserId: currentUserId),
                 ),
               );
+              if (result == true) _fetchStockData();
             },
             child: ListTile(
               leading: CircleAvatar(
@@ -239,16 +260,24 @@ class _StockManagementScreenState extends State<StockManagementScreen> with Sing
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Type: ${item['type'] ?? "N/A"}'),
+                  Text('Purpose: ${item['type'] ?? "N/A"}'),
                   Text('Date: ${item['created_at'] != null ? item['created_at'].substring(0, 10) : "N/A"}'),
                 ],
               ),
-              trailing: Chip(
-                label: Text(
-                  '${(item['products']?.length ?? 0) + (item['stock_out_details']?.length ?? 0)} items',
-                  style: const TextStyle(fontSize: 12),
-                ),
-                backgroundColor: Colors.grey.shade100,
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (isOwner)
+                    Icon(Icons.edit_note, size: 18, color: Colors.blue.shade400),
+                  const SizedBox(width: 4),
+                  Chip(
+                    label: Text(
+                      '${(item['products']?.length ?? 0) + (item['stock_out_details']?.length ?? 0)} items',
+                      style: const TextStyle(fontSize: 12),
+                    ),
+                    backgroundColor: Colors.grey.shade100,
+                  ),
+                ],
               ),
             ),
           ),

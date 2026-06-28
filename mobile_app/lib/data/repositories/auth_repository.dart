@@ -69,4 +69,8 @@ class AuthRepository {
     final token = await _storage.read(key: AppConstants.tokenKey);
     return token != null;
   }
+
+  Future<void> updateCachedUser(UserModel user) async {
+    await _storage.write(key: AppConstants.userKey, value: jsonEncode(user.toJson()));
+  }
 }

@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import '../../../core/network/api_client.dart';
+import '../../widgets/profile_dropdown_action.dart';
 
 class SerialLookupScreen extends StatefulWidget {
   const SerialLookupScreen({super.key});
@@ -230,6 +231,9 @@ class _SerialLookupScreenState extends State<SerialLookupScreen> with SingleTick
         title: const Text('ស្វែងរកឧបករណ៍ / Device Lookup'),
         backgroundColor: primaryColor,
         foregroundColor: Colors.white,
+        actions: const [
+          ProfileDropdownAction(),
+        ],
         bottom: TabBar(
           controller: _tabController,
           indicatorColor: Colors.orange,

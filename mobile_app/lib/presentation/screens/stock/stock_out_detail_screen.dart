@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import '../../../core/constants/constants.dart';
+import 'edit_stock_out_screen.dart';
 
 class StockOutDetailScreen extends StatelessWidget {
   final Map<String, dynamic> item;
+  final int? currentUserId;
 
-  const StockOutDetailScreen({super.key, required this.item});
+  const StockOutDetailScreen({super.key, required this.item, this.currentUserId});
+
+  bool get _canEdit => currentUserId != null && item['user_id'] == currentUserId;
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +22,25 @@ class StockOutDetailScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Stock Out Details'),
+        title: const Text('Stock Out Details'),
         backgroundColor: primaryColor,
         foregroundColor: Colors.white,
+        actions: [
+          if (_canEdit)
+            IconButton(
+              icon: const Icon(Icons.edit),
+              tooltip: 'Edit',
+              onPressed: () async {
+                final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => EditStockOutScreen(item: item)),
+                );
+                if (result == true && context.mounted) {
+                  Navigator.pop(context, true); // Refresh parent list
+                }
+              },
+            ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -42,7 +62,7 @@ class StockOutDetailScreen extends StatelessWidget {
                     ),
                     const Divider(height: 24),
                     _buildInfoRow('Receiver / អ្នកទទួល:', item['receiver'] ?? 'Unknown'),
-                    _buildInfoRow('Type / ប្រភេទ:', item['type'] ?? 'N/A'),
+                    _buildInfoRow('Purpose / គោលបំណង:', item['type'] ?? 'N/A'),
                     _buildInfoRow('Date / កាលបរិច្ឆេទ:', item['created_at'] != null ? item['created_at'].substring(0, 10) : 'N/A'),
                     _buildInfoRow('Recorded by / ផ្ទេរដោយ:', item['user']?['name'] ?? 'Unknown'),
                     _buildInfoRow('Note / កំណត់សម្គាល់:', item['note'] ?? 'No notes.'),
@@ -133,7 +153,7 @@ class StockOutDetailScreen extends StatelessWidget {
                 itemCount: accessories.length,
                 itemBuilder: (context, index) {
                   final detail = accessories[index];
-                  final productModel = detail['product']; // Pointing to ProductModel
+                  final productModel = detail['product'];
                   return Card(
                     margin: const EdgeInsets.only(bottom: 8),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -177,10 +197,7 @@ class StockOutDetailScreen extends StatelessWidget {
             InteractiveViewer(
               maxScale: 4.0,
               child: Center(
-                child: Image.network(
-                  url,
-                  fit: BoxFit.contain,
-                ),
+                child: Image.network(url, fit: BoxFit.contain),
               ),
             ),
             Positioned(
