@@ -87,7 +87,7 @@ class _EditStockInScreenState extends State<EditStockInScreen> {
       }
 
       final formData = FormData.fromMap(payload);
-      final response = await _apiClient.dio.put('/stock-ins/$id', data: formData);
+      final response = await _apiClient.dio.post('/stock-ins/$id/update', data: formData);
 
       if (!mounted) return;
 
