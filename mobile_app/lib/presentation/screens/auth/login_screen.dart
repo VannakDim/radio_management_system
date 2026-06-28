@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../bloc/auth_bloc.dart';
 import '../../bloc/auth_event.dart';
 import '../../bloc/auth_state.dart';
@@ -16,6 +17,26 @@ class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
+  bool _rememberMe = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedCredentials();
+  }
+
+  Future<void> _loadSavedCredentials() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      setState(() {
+        _rememberMe = prefs.getBool('remember_me') ?? false;
+        if (_rememberMe) {
+          _emailController.text = prefs.getString('saved_email') ?? '';
+          _passwordController.text = prefs.getString('saved_password') ?? '';
+        }
+      });
+    } catch (_) {}
+  }
 
   @override
   void dispose() {
@@ -26,10 +47,25 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _onLogin() {
     if (_formKey.currentState!.validate()) {
+      final email = _emailController.text.trim();
+      final password = _passwordController.text;
+
+      SharedPreferences.getInstance().then((prefs) {
+        if (_rememberMe) {
+          prefs.setBool('remember_me', true);
+          prefs.setString('saved_email', email);
+          prefs.setString('saved_password', password);
+        } else {
+          prefs.setBool('remember_me', false);
+          prefs.remove('saved_email');
+          prefs.remove('saved_password');
+        }
+      }).catchError((_) {});
+
       context.read<AuthBloc>().add(
         LoginRequested(
-          email: _emailController.text.trim(),
-          password: _passwordController.text,
+          email: email,
+          password: password,
         ),
       );
     }
@@ -146,7 +182,24 @@ class _LoginScreenState extends State<LoginScreen> {
                       return null;
                     },
                   ),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Checkbox(
+                        value: _rememberMe,
+                        onChanged: (val) {
+                          setState(() {
+                            _rememberMe = val ?? false;
+                          });
+                        },
+                      ),
+                      const Text(
+                        'ចងចាំគណនី / Remember Me',
+                        style: TextStyle(fontSize: 14),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
                   
                   // Submit Button
                   BlocBuilder<AuthBloc, AuthState>(

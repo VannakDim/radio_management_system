@@ -12,6 +12,7 @@ import 'presentation/screens/scanner/serial_lookup_screen.dart';
 import 'presentation/screens/stock/stock_management_screen.dart';
 import 'presentation/screens/borrow/borrow_management_screen.dart';
 import 'presentation/screens/frequency/frequency_list_screen.dart';
+import 'presentation/screens/profile/profile_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -90,6 +91,7 @@ class _MainNavigationWrapperState extends State<MainNavigationWrapper> {
     SerialLookupScreen(),
     BorrowManagementScreen(),
     FrequencyListScreen(),
+    ProfileScreen(),
   ];
 
   @override
@@ -131,6 +133,10 @@ class _MainNavigationWrapperState extends State<MainNavigationWrapper> {
           BottomNavigationBarItem(
             icon: Icon(Icons.settings_input_antenna),
             label: 'ប្រេកង់ / Freq',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person),
+            label: 'គណនី / Profile',
           ),
         ],
       ),

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import '../../../core/network/api_client.dart';
+import '../utils/image_editor_screen.dart';
 
 class AddStockOutScreen extends StatefulWidget {
   const AddStockOutScreen({super.key});
@@ -112,10 +113,18 @@ class _AddStockOutScreenState extends State<AddStockOutScreen> {
         source: ImageSource.gallery,
         imageQuality: 80,
       );
-      if (image != null) {
-        setState(() {
-          _selectedImage = image;
-        });
+      if (image != null && mounted) {
+        final XFile? edited = await Navigator.push<XFile>(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ImageEditorScreen(imageFile: image),
+          ),
+        );
+        if (edited != null) {
+          setState(() {
+            _selectedImage = edited;
+          });
+        }
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(

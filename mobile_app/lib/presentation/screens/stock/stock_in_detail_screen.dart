@@ -128,19 +128,28 @@ class StockInDetailScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => Dialog(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+        backgroundColor: Colors.transparent,
+        insetPadding: const EdgeInsets.all(16),
+        child: Stack(
+          alignment: Alignment.topRight,
           children: [
-            Stack(
-              alignment: Alignment.topRight,
-              children: [
-                Image.network(url, fit: BoxFit.contain),
-                IconButton(
-                  icon: const Icon(Icons.close, color: Colors.white, size: 30),
-                  onPressed: () => Navigator.pop(context),
-                  style: IconButton.styleFrom(backgroundColor: Colors.black54),
+            InteractiveViewer(
+              maxScale: 4.0,
+              child: Center(
+                child: Image.network(
+                  url,
+                  fit: BoxFit.contain,
                 ),
-              ],
+              ),
+            ),
+            Positioned(
+              top: 16,
+              right: 16,
+              child: IconButton(
+                icon: const Icon(Icons.close, color: Colors.white, size: 30),
+                onPressed: () => Navigator.pop(context),
+                style: IconButton.styleFrom(backgroundColor: Colors.black54),
+              ),
             ),
           ],
         ),

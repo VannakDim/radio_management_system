@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../core/network/api_client.dart';
+import '../utils/image_editor_screen.dart';
 
 class AddStockInScreen extends StatefulWidget {
   const AddStockInScreen({super.key});
@@ -97,10 +98,18 @@ class _AddStockInScreenState extends State<AddStockInScreen> {
         source: ImageSource.gallery,
         imageQuality: 80,
       );
-      if (image != null) {
-        setState(() {
-          _selectedImage = image;
-        });
+      if (image != null && mounted) {
+        final XFile? edited = await Navigator.push<XFile>(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ImageEditorScreen(imageFile: image),
+          ),
+        );
+        if (edited != null) {
+          setState(() {
+            _selectedImage = edited;
+          });
+        }
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
