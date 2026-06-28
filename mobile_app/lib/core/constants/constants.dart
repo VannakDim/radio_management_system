@@ -2,14 +2,12 @@ import 'package:flutter/foundation.dart';
 
 class AppConstants {
   static String get baseUrl {
-    if (kIsWeb) {
-      // If using Laravel Sail on Docker (default port 80)
-      return 'http://localhost/api';
-      // If using php artisan serve (port 8000) on local host, uncomment below:
-      // return 'http://localhost:8000/api';
-    }
-    // Default for Android Emulator
-    return 'http://10.0.2.2:8000/api';
+    return 'https://stock-api.stpmtelecom.com/api';
+    // For local development:
+    // if (kIsWeb) {
+    //   return 'http://localhost/api';
+    // }
+    // return 'http://10.0.2.2:8000/api';
   }
   
   static const String tokenKey = 'auth_token';
